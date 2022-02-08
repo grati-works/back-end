@@ -1,8 +1,152 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "darwin"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Feedback {
+  id          Int        @id @default(autoincrement())
+  message     String
+  attachement String?
+  emoji       String?
+  deleted     Boolean    @default(false)
+  sender      Profile?   @relation("Send", fields: [sender_id], references: [id])
+  sender_id   Int?
+  receivers   Profile[]  @relation("Receive", references: [id])
+  created_at  DateTime   @default(now())
+  tags        Tag[]
+  Reaction    Reaction[]
+}
+
+model Profile {
+  id                  Int               @id @default(autoincrement())
+  name                String
+  username            String
+  email               String
+  password            String
+  profile_picture     String?
+  groups              Group[]
+  responsibility      String?
+  description         String?
+  skills              Skill[]
+  graduations         Graduation[]
+  vinculed_accounts   VinculedAccount[]
+  organizations       Organization[]
+  owned_organizations Organization[]    @relation("OwnedOrganizations")
+  sended_feedbacks    Feedback[]        @relation("Send")
+  received_feedbacks  Feedback[]        @relation("Receive")
+  Reaction            Reaction[]
+}
+
+model Organization {
+  id           Int           @id @default(autoincrement())
+  owner        Profile       @relation("OwnedOrganizations", fields: [owner_id], references: [id])
+  owner_id     Int
+  name         String
+  subscription Subscription?
+  groups       Group[]
+  users        Profile[]
+  color        String
+  color_mode   ColorMode     @relation(fields: [mode_id], references: [id])
+  mode_id      Int           @default(1)
+}
+
+model ColorMode {
+  id            Int            @id @default(autoincrement())
+  name          String
+  organizations Organization[]
+}
+
+model Subscription {
+  id              Int          @id @default(autoincrement())
+  acquired_at     DateTime
+  expires_in      DateTime
+  organization    Organization @relation(fields: [organization_id], references: [id])
+  organization_id Int          @unique
+  price           Int
+  status          String
+  payment_ref     String
+}
+
+model Group {
+  id              Int          @id @default(autoincrement())
+  users           Profile[]
+  organization    Organization @relation(fields: [organization_id], references: [id])
+  permissions     Permission[]
+  organization_id Int
+  objective       Objective?
+  privacy         Privacy[]
+}
+
+model Skill {
+  id             Int          @id @default(autoincrement())
+  user           Profile      @relation(fields: [user_id], references: [id])
+  user_id        Int
+  name           String
+  SkillStatus    SkillStatus? @relation(fields: [skillStatus_id], references: [id])
+  skillStatus_id Int?
+}
+
+model Tag {
+  id       Int        @id @default(autoincrement())
+  name     String
+  feedback Feedback[]
+}
+
+model Objective {
+  id         Int      @id @default(autoincrement())
+  name       String
+  goal       Int
+  group      Group    @relation(fields: [groupId], references: [id])
+  expires_in DateTime
+  groupId    Int      @unique
+}
+
+model Reaction {
+  id         Int      @id @default(autoincrement())
+  emoji      String
+  feedback   Feedback @relation(fields: [feedback_id], references: [id])
+  feedback_id Int
+  user       Profile  @relation(fields: [profile_id], references: [id])
+  profile_id  Int
+}
+
+model Graduation {
+  id                  Int               @id @default(autoincrement())
+  user                Profile           @relation(fields: [user_id], references: [id])
+  user_id             Int
+  GraduationStatus    GraduationStatus? @relation(fields: [graduationStatus_id], references: [id])
+  graduationStatus_id Int?
+}
+
+model SkillStatus {
+  id     Int     @id @default(autoincrement())
+  skills Skill[]
+}
+
+model GraduationStatus {
+  id          Int          @id @default(autoincrement())
+  graduations Graduation[]
+}
+
+model VinculedAccount {
+  id      Int     @id @default(autoincrement())
+  user    Profile @relation(fields: [user_id], references: [id])
+  user_id Int
+}
+
+model Privacy {
+  id     Int     @id @default(autoincrement())
+  name   String
+  groups Group[]
+}
+
+model Permission {
+  id     Int     @id @default(autoincrement())
+  name   String
+  groups Group[]
 }
