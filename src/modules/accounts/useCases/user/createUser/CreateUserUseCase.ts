@@ -1,8 +1,11 @@
 import { inject, injectable } from 'tsyringe';
 import { hash } from 'bcryptjs';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateuserDTO';
+import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { AppError } from '@shared/errors/AppError';
+
+import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/user/sendActivateAccountMail/SendActivateAccountMailUseCase';
+import { container } from 'tsyringe';
 
 @injectable()
 class CreateUserUseCase {
@@ -24,6 +27,9 @@ class CreateUserUseCase {
             username,
             email,
             password: hashedPassword
+        }).then(async () => {
+            const sendActivateAccountMailUseCase = container.resolve(SendActivateAccountMailUseCase);
+            await sendActivateAccountMailUseCase.execute(email);
         });
     }
 }
