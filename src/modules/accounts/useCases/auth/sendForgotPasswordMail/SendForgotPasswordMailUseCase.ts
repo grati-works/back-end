@@ -34,6 +34,7 @@ class SendForgotPasswordMailUseCase {
       token,
       user_id: user.id,
       expires_at: this.dateProvider.addHours(3),
+      type: 'forgot_password'
     });
 
     const variables = {

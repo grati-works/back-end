@@ -9,7 +9,7 @@ import { UpdateUserAvatarController } from '@modules/accounts/useCases/user/upda
 import { CreateUserController } from '@modules/accounts/useCases/user/createUser/CreateUserController';
 import { ActivateAccountController } from '@modules/accounts/useCases/user/activateAccount/ActivateAccountController';
 
-const usersRoutes = Router();
+const userRoutes = Router();
 
 const uploadAvatar = multer(uploadConfig);
 
@@ -18,10 +18,10 @@ const updateUserAvatarController = new UpdateUserAvatarController();
 const createUserController = new CreateUserController();
 const activateAccountController = new ActivateAccountController();
 
-usersRoutes.get('/:id', getUserProfileController.handle);
-usersRoutes.post('/', createUserController.handle);
-usersRoutes.patch('/avatar', ensureAuthenticated, uploadAvatar.single('avatar'), updateUserAvatarController.handle);
+userRoutes.get('/:id', getUserProfileController.handle);
+userRoutes.post('/', createUserController.handle);
+userRoutes.patch('/avatar', ensureAuthenticated, uploadAvatar.single('avatar'), updateUserAvatarController.handle);
 
-usersRoutes.post('/activate', activateAccountController.handle);
+userRoutes.post('/activate', activateAccountController.handle);
 
-export { usersRoutes };
+export { userRoutes };

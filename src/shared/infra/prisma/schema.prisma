@@ -52,7 +52,7 @@ model Organization {
   subscription Subscription?
   groups       Group[]
   users        Profile[]
-  color        String
+  color        String?
   color_mode   ColorMode     @relation(fields: [mode_id], references: [id])
   mode_id      Int           @default(1)
 }
@@ -160,4 +160,5 @@ model UserTokens {
   user_id    Int
   expires_at DateTime
   created_at DateTime @default(now())
+  type       String
 }

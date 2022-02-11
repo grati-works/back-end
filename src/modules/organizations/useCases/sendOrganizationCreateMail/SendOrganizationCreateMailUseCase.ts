@@ -6,10 +6,10 @@ import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTok
 import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
 import { AppError } from '@shared/errors/AppError';
-import { ActivateAccountTemplate } from '@modules/accounts/templates/ActivateAccountTemplate';
+import { OrganizationCreateTemplate } from '@modules/organizations/templates/OrganizationCreateTemplate';
 
 @injectable()
-class SendActivateAccountMailUseCase {
+class SendOrganizationCreateMailUseCase {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
@@ -21,7 +21,7 @@ class SendActivateAccountMailUseCase {
     private mailProvider: IMailProvider
   ) {}
 
-  async execute(email: string): Promise<void> {
+  async execute(email: string, organization_name: string): Promise<void> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
@@ -33,22 +33,23 @@ class SendActivateAccountMailUseCase {
     await this.usersTokensRepository.create({
       token,
       user_id: user.id,
-      expires_at: this.dateProvider.addHours(3),
-      type: 'activate_account'
+      expires_at: this.dateProvider.addHours(24 * 30), // 30 days
+      type: 'organization_create'
     });
 
     const variables = {
       name: user.name,
+      organization_name,
       link: `${process.env.ACTIVATE_ACCOUNT_MAIL_URL}${token}`,
     }
 
     this.mailProvider.sendMail(
       email,
-      'Ativação de conta',
+      'Organização criada com sucesso!',
       variables,
-      ActivateAccountTemplate
+      OrganizationCreateTemplate
     );
   }
 }
 
-export { SendActivateAccountMailUseCase };
+export { SendOrganizationCreateMailUseCase };

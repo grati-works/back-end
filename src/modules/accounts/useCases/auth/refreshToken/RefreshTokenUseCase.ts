@@ -48,7 +48,8 @@ class RefreshTokenUseCase {
     await this.usersTokensRepository.create({
       expires_at,
       token: refresh_token,
-      user_id: Number(user_id)
+      user_id: Number(user_id),
+      type: 'refresh_token',
     });
 
     const newToken = sign({}, auth.secret_token, {

@@ -44,7 +44,7 @@ class AuthenticateUserUseCase {
     if(!user.activated) {
       const vinculedTokens = await this.usersTokensRepository.findByUserId(user.id);
 
-      vinculedTokens.forEach(async vinculedToken => {
+      vinculedTokens.filter(token => token.type == "activate_account").forEach(async vinculedToken => {
         await this.usersTokensRepository.deleteById(Number(vinculedToken.token));
       });
 
@@ -79,7 +79,8 @@ class AuthenticateUserUseCase {
     await this.usersTokensRepository.create({
       user_id: user.id,
       token: refresh_token,
-      expires_at
+      expires_at,
+      type: 'refresh'
     })
 
     return {

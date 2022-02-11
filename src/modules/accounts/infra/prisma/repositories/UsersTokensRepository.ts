@@ -8,12 +8,14 @@ class UsersTokensRepository implements IUsersTokensRepository {
     expires_at,
     token,
     user_id,
+    type
   }: ICreateUserTokenDTO): Promise<UserTokens> {
     const userToken = await client.userTokens.create({
         data: {
             expires_at,
             token,
-            user_id
+            user_id,
+            type
         }
     });
 

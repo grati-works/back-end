@@ -1,12 +1,14 @@
 import { Router } from 'express';
 
-import { usersRoutes } from './users.routes';
+import { organizationRoutes } from './organization.routes';
+import { userRoutes } from './user.routes';
 import { passwordRoutes } from './password.routes';
 import { authenticationRoutes } from './authentication.routes';
 
 const router = Router();
 
-router.use('/user', usersRoutes);
+router.use('/user', userRoutes);
+router.use('/organization', organizationRoutes);
 router.use('/password', passwordRoutes);
 router.use(authenticationRoutes);
 
