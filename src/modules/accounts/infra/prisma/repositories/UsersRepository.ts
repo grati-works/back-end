@@ -1,7 +1,8 @@
 import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
-import { Profile } from '@prisma/client'
+import { Prisma, Profile } from '@prisma/client'
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { client } from '@shared/infra/prisma';
+import { IFindUserDTO } from '@modules/accounts/dtos/IFindUserDTO';
 
 class UsersRepository implements IUsersRepository {
   async create({ name, username, email, password }: ICreateUserDTO): Promise<Profile> {
@@ -31,18 +32,21 @@ class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  async findByEmail(email: string): Promise<Profile> {
+  async findByEmail(email: string, select?: Prisma.ProfileSelect): Promise<IFindUserDTO> {
     const user = await client.profile.findFirst({ 
-        where: { email }
-  });
-    return user;
+        where: { email },
+        select
+    });
+    return user as IFindUserDTO;
   }
 
-  async findById(id: number): Promise<Profile> {
+  async findById(id: number, select?: Prisma.ProfileSelect): Promise<IFindUserDTO> {
     const user = await client.profile.findFirst({
-        where: { id }
+        where: { id },
+        select
     });
-    return user;
+
+    return user as IFindUserDTO;
   }
 
   async activate(id: number): Promise<void> {

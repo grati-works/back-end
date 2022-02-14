@@ -32,7 +32,7 @@ class SendOrganizationCreateMailUseCase {
 
     await this.usersTokensRepository.create({
       token,
-      user_id: user.id,
+      user_id: Number(user.id),
       expires_at: this.dateProvider.addHours(24 * 30), // 30 days
       type: 'organization_create'
     });
@@ -40,7 +40,7 @@ class SendOrganizationCreateMailUseCase {
     const variables = {
       name: user.name,
       organization_name,
-      link: `${process.env.ACTIVATE_ACCOUNT_MAIL_URL}${token}`,
+      link: `${process.env.CREATE_ORGANIZATION_MAIL_URL}${token}`,
     }
 
     this.mailProvider.sendMail(

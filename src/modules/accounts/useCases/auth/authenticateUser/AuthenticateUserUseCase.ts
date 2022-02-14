@@ -9,7 +9,7 @@ import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTok
 import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 import auth from '@config/auth';
 
-import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/user/sendActivateAccountMail/SendActivateAccountMailUseCase';
+import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { container } from 'tsyringe';
 
 interface IRequest {

@@ -1,4 +1,4 @@
-import { ICreateUserTokenDTO } from '../dtos/ICreateUserTokenDTO';
+import { ICreateUserTokenDTO } from '@modules/accounts/dtos/ICreateUserTokenDTO';
 import { UserTokens } from '@prisma/client';
 
 interface IUsersTokensRepository {

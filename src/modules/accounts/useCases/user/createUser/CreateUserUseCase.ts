@@ -4,7 +4,7 @@ import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepositor
 import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { AppError } from '@shared/errors/AppError';
 
-import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/user/sendActivateAccountMail/SendActivateAccountMailUseCase';
+import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { container } from 'tsyringe';
 
 @injectable()
