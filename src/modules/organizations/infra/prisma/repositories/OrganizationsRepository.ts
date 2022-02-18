@@ -17,8 +17,6 @@ class OrganizationsRepository implements IOrganizationsRepository {
             where: { email: user.email }
         });
 
-        console.log({ profile })
-
         return await client.organization.update({
             where: { id: organization_id },
             data: {
@@ -28,6 +26,12 @@ class OrganizationsRepository implements IOrganizationsRepository {
                     }
                 }
             }
+        });
+    }
+
+    findById(id: number): Promise<Organization> {
+        return client.organization.findUnique({
+            where: { id }
         });
     }
 }

@@ -1,4 +1,4 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
+import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateuserDTO';
 import { Prisma, Profile } from '@prisma/client'
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { client } from '@shared/infra/prisma';

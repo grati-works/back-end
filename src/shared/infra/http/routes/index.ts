@@ -1,7 +1,8 @@
 import { Router } from 'express';
 
-import { organizationRoutes } from './organization.routes';
 import { userRoutes } from './user.routes';
+import { organizationRoutes } from './organization.routes';
+import { groupRoutes } from './group.routes';
 import { passwordRoutes } from './password.routes';
 import { authenticationRoutes } from './authentication.routes';
 
@@ -9,6 +10,7 @@ const router = Router();
 
 router.use('/user', userRoutes);
 router.use('/organization', organizationRoutes);
+router.use('/group', groupRoutes);
 router.use('/password', passwordRoutes);
 router.use(authenticationRoutes);
 
