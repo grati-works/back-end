@@ -1,5 +1,6 @@
 import { S3 } from 'aws-sdk';
 import fs from 'fs';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import mime from 'mime';
 import { resolve } from 'path';
 

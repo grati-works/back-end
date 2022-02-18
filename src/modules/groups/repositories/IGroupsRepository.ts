@@ -1,4 +1,3 @@
-import { IAddUserDTO } from '@modules/organizations/dtos/IAddUserDTO';
 import { Group } from '@prisma/client';
 
 interface IGroupsRepository {

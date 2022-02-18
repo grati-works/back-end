@@ -7,13 +7,13 @@ class AddUsersViaCSVController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { file, user } = request;
     const { organization_id } = request.body;
-    
+
     const addUsersUseCase = container.resolve(AddUsersUseCase);
 
     await addUsersUseCase.execute({
       organizationId: organization_id,
       authorId: user.id,
-      users: file
+      users: file,
     });
 
     return response.status(201).send();

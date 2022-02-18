@@ -19,7 +19,7 @@ class SESMailProvider implements IMailProvider {
     to: string,
     subject: string,
     variables: object,
-    template: ({}) => string
+    template: (_: unknown) => string,
   ): Promise<void> {
     const parsedTemplate = template(variables);
 

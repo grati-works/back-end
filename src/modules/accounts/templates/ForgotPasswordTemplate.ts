@@ -1,10 +1,10 @@
 interface ITemplate {
-    name: string;
-    link: string
-  }
-  
-  function ForgotPasswordTemplate({ name, link }: ITemplate) {
-    return `
+  name: string;
+  link: string;
+}
+
+function ForgotPasswordTemplate({ name, link }: ITemplate) {
+  return `
       <!DOCTYPE html>
       <html>
         <head>
@@ -118,6 +118,6 @@ interface ITemplate {
         </body>
       </html>
     `;
-  }
-  
-  export { ForgotPasswordTemplate }
+}
+
+export { ForgotPasswordTemplate };

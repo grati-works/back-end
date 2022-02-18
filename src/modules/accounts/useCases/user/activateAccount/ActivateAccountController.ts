@@ -7,9 +7,7 @@ class ActivateAccountController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { token } = request.query;
 
-    const activateAccountUseCase = container.resolve(
-      ActivateAccountUseCase
-    );
+    const activateAccountUseCase = container.resolve(ActivateAccountUseCase);
 
     await activateAccountUseCase.execute(`${token}`);
 

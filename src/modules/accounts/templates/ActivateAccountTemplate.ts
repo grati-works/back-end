@@ -1,10 +1,10 @@
 interface ITemplate {
-    name: string;
-    link: string
-  }
-  
-  function ActivateAccountTemplate({ name, link }: ITemplate) {
-    return `
+  name: string;
+  link: string;
+}
+
+function ActivateAccountTemplate({ name, link }: ITemplate) {
+  return `
       <!DOCTYPE html>
       <html>
         <head>
@@ -118,6 +118,6 @@ interface ITemplate {
         </body>
       </html>
     `;
-  }
-  
-  export { ActivateAccountTemplate }
+}
+
+export { ActivateAccountTemplate };

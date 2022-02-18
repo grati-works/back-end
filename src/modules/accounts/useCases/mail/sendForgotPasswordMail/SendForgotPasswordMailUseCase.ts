@@ -18,7 +18,7 @@ class SendForgotPasswordMailUseCase {
     @inject('DayjsDateProvider')
     private dateProvider: IDateProvider,
     @inject('MailProvider')
-    private mailProvider: IMailProvider
+    private mailProvider: IMailProvider,
   ) {}
 
   async execute(email: string): Promise<void> {
@@ -34,19 +34,19 @@ class SendForgotPasswordMailUseCase {
       token,
       user_id: user.id,
       expires_at: this.dateProvider.addHours(3),
-      type: 'forgot_password'
+      type: 'forgot_password',
     });
 
     const variables = {
       name: user.name,
       link: `${process.env.FORGOT_MAIL_URL}${token}`,
-    }
+    };
 
     this.mailProvider.sendMail(
       email,
       'Recuperação de senha',
       variables,
-      ForgotPasswordTemplate
+      ForgotPasswordTemplate,
     );
   }
 }

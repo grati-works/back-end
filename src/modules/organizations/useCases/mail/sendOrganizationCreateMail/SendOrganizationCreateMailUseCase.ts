@@ -18,7 +18,7 @@ class SendOrganizationCreateMailUseCase {
     @inject('DayjsDateProvider')
     private dateProvider: IDateProvider,
     @inject('MailProvider')
-    private mailProvider: IMailProvider
+    private mailProvider: IMailProvider,
   ) {}
 
   async execute(email: string, organization_name: string): Promise<void> {
@@ -34,20 +34,20 @@ class SendOrganizationCreateMailUseCase {
       token,
       user_id: Number(user.id),
       expires_at: this.dateProvider.addHours(24 * 30), // 30 days
-      type: 'organization_create'
+      type: 'organization_create',
     });
 
     const variables = {
       name: user.name,
       organization_name,
       link: `${process.env.CREATE_ORGANIZATION_MAIL_URL}${token}`,
-    }
+    };
 
     this.mailProvider.sendMail(
       email,
       'Organização criada com sucesso!',
       variables,
-      OrganizationCreateTemplate
+      OrganizationCreateTemplate,
     );
   }
 }

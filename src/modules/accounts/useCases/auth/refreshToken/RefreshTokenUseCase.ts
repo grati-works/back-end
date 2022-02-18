@@ -1,4 +1,3 @@
-
 import { inject, injectable } from 'tsyringe';
 import { verify, sign } from 'jsonwebtoken';
 
@@ -22,7 +21,7 @@ class RefreshTokenUseCase {
     @inject('UsersTokensRepository')
     private usersTokensRepository: IUsersTokensRepository,
     @inject('DayjsDateProvider')
-    private dateProvider: IDateProvider
+    private dateProvider: IDateProvider,
   ) {}
 
   async execute(token: string): Promise<ITokenResponse> {
@@ -30,9 +29,13 @@ class RefreshTokenUseCase {
 
     const user_id = sub;
 
-    const userToken = await this.usersTokensRepository.findByUserIdAndRefreshToken(Number(user_id), token);
+    const userToken =
+      await this.usersTokensRepository.findByUserIdAndRefreshToken(
+        Number(user_id),
+        token,
+      );
 
-    if(!userToken) {
+    if (!userToken) {
       throw new Error('Refresh Token does not exists');
     }
 
@@ -54,12 +57,12 @@ class RefreshTokenUseCase {
 
     const newToken = sign({}, auth.secret_token, {
       subject: user_id,
-      expiresIn: auth.expires_in_token
+      expiresIn: auth.expires_in_token,
     });
 
     return {
       token: newToken,
-      refresh_token
+      refresh_token,
     };
   }
 }

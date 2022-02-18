@@ -8,15 +8,15 @@ class UsersTokensRepository implements IUsersTokensRepository {
     expires_at,
     token,
     user_id,
-    type
+    type,
   }: ICreateUserTokenDTO): Promise<UserTokens> {
     const userToken = await client.userTokens.create({
-        data: {
-            expires_at,
-            token,
-            user_id,
-            type
-        }
+      data: {
+        expires_at,
+        token,
+        user_id,
+        type,
+      },
     });
 
     return userToken;
@@ -24,27 +24,30 @@ class UsersTokensRepository implements IUsersTokensRepository {
 
   async findByUserId(user_id: number): Promise<UserTokens[]> {
     const userTokens = await client.userTokens.findMany({
-        where: { user_id }
+      where: { user_id },
     });
     return userTokens;
   }
 
-  async findByUserIdAndRefreshToken(user_id: number, token: string): Promise<UserTokens> {
+  async findByUserIdAndRefreshToken(
+    user_id: number,
+    token: string,
+  ): Promise<UserTokens> {
     const userTokens = await client.userTokens.findFirst({
-      where: { user_id, token }
+      where: { user_id, token },
     });
     return userTokens;
   }
-  
+
   async deleteById(id: number): Promise<void> {
     await client.userTokens.delete({
-        where: { id }
+      where: { id },
     });
   }
 
   async findByRefreshToken(token: string): Promise<UserTokens> {
     const userToken = await client.userTokens.findFirst({
-        where: { token }
+      where: { token },
     });
     return userToken;
   }

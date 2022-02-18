@@ -9,8 +9,8 @@ class CreateGroupController {
     const { user } = request;
     const { organization_id, name, color } = request.body;
 
-    if(!organization_id) throw new AppError('Organization id is required');
-    if(!name) throw new AppError('Group name is required');
+    if (!organization_id) throw new AppError('Organization id is required');
+    if (!name) throw new AppError('Group name is required');
 
     const createGroupUseCase = container.resolve(CreateGroupUseCase);
 

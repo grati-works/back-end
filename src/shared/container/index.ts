@@ -15,21 +15,21 @@ import { IGroupsRepository } from '@modules/groups/repositories/IGroupsRepositor
 import { GroupsRepository } from '@modules/groups/infra/prisma/repositories/GroupsRepository';
 
 container.registerSingleton<IUsersRepository>(
-    'UsersRepository',
-    UsersRepository
+  'UsersRepository',
+  UsersRepository,
 );
 
 container.registerSingleton<IUsersTokensRepository>(
-    'UsersTokensRepository',
-    UsersTokensRepository
+  'UsersTokensRepository',
+  UsersTokensRepository,
 );
 
 container.registerSingleton<IOrganizationsRepository>(
-    'OrganizationsRepository',
-    OrganizationsRepository
+  'OrganizationsRepository',
+  OrganizationsRepository,
 );
 
 container.registerSingleton<IGroupsRepository>(
-    'GroupsRepository',
-    GroupsRepository
+  'GroupsRepository',
+  GroupsRepository,
 );

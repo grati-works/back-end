@@ -16,8 +16,21 @@ const createOrganizationController = new CreateOrganizationController();
 const addUsersController = new AddUsersController();
 const addUsersViaCsvController = new AddUsersViaCSVController();
 
-organizationRoutes.post('/', ensureAuthenticated, createOrganizationController.handle);
-organizationRoutes.post('/users', ensureAuthenticated, addUsersController.handle);
-organizationRoutes.post('/users/csv', uploadUsers.single('file'), ensureAuthenticated, addUsersViaCsvController.handle);
+organizationRoutes.post(
+  '/',
+  ensureAuthenticated,
+  createOrganizationController.handle,
+);
+organizationRoutes.post(
+  '/users',
+  ensureAuthenticated,
+  addUsersController.handle,
+);
+organizationRoutes.post(
+  '/users/csv',
+  uploadUsers.single('file'),
+  ensureAuthenticated,
+  addUsersViaCsvController.handle,
+);
 
 export { organizationRoutes };

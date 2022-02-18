@@ -1,11 +1,11 @@
 interface ITemplate {
-    name: string;
-    link: string
-    organization_name: string;
-  }
-  
-  function CreateAccountTemplate({ name, link, organization_name }: ITemplate) {
-    return `
+  name: string;
+  link: string;
+  organization_name: string;
+}
+
+function CreateAccountTemplate({ name, link, organization_name }: ITemplate) {
+  return `
       <!DOCTYPE html>
       <html>
         <head>
@@ -119,6 +119,6 @@ interface ITemplate {
         </body>
       </html>
     `;
-  }
-  
-  export { CreateAccountTemplate }
+}
+
+export { CreateAccountTemplate };

@@ -7,15 +7,15 @@ class AddUsersController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { user } = request;
     const { organization_id, users } = request.body;
-    
+
     const addUsersUseCase = container.resolve(AddUsersUseCase);
-    
+
     await addUsersUseCase.execute({
       organizationId: organization_id,
       authorId: user.id,
-      users
+      users,
     });
-  
+
     return response.status(201).send();
   }
 }

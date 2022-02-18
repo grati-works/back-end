@@ -18,7 +18,7 @@ class SendAddAccountToOrganizationMailUseCase {
     @inject('DayjsDateProvider')
     private dateProvider: IDateProvider,
     @inject('MailProvider')
-    private mailProvider: IMailProvider
+    private mailProvider: IMailProvider,
   ) {}
 
   async execute(email: string, organization_name: string): Promise<void> {
@@ -34,20 +34,20 @@ class SendAddAccountToOrganizationMailUseCase {
       token,
       user_id: Number(user.id),
       expires_at: this.dateProvider.addHours(24 * 30), // 30 days
-      type: 'organization_add_user'
+      type: 'organization_add_user',
     });
 
     const variables = {
       name: user.name,
       organization_name,
       link: `${process.env.ADDED_TO_ORGANIZATION_MAIL_URL}${token}`,
-    }
+    };
 
     this.mailProvider.sendMail(
       email,
       'Você foi adicionado à uma organização!',
       variables,
-      CreateAccountTemplate
+      CreateAccountTemplate,
     );
   }
 }

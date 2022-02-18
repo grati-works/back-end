@@ -20,7 +20,12 @@ const activateAccountController = new ActivateAccountController();
 
 userRoutes.get('/:id', getUserProfileController.handle);
 userRoutes.post('/', createUserController.handle);
-userRoutes.patch('/avatar', ensureAuthenticated, uploadAvatar.single('avatar'), updateUserAvatarController.handle);
+userRoutes.patch(
+  '/avatar',
+  ensureAuthenticated,
+  uploadAvatar.single('avatar'),
+  updateUserAvatarController.handle,
+);
 
 userRoutes.post('/activate', activateAccountController.handle);
 

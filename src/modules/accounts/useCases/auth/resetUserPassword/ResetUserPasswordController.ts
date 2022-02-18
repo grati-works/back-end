@@ -9,12 +9,12 @@ class ResetUserPasswordController {
     const { password } = request.body;
 
     const resetUserPasswordUseCase = container.resolve(
-      ResetUserPasswordUseCase
+      ResetUserPasswordUseCase,
     );
 
     await resetUserPasswordUseCase.execute({
       token: `${token}`,
-      password
+      password,
     });
 
     return response.send();

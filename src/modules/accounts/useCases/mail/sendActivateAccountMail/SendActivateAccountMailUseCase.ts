@@ -18,7 +18,7 @@ class SendActivateAccountMailUseCase {
     @inject('DayjsDateProvider')
     private dateProvider: IDateProvider,
     @inject('MailProvider')
-    private mailProvider: IMailProvider
+    private mailProvider: IMailProvider,
   ) {}
 
   async execute(email: string): Promise<void> {
@@ -34,19 +34,19 @@ class SendActivateAccountMailUseCase {
       token,
       user_id: user.id,
       expires_at: this.dateProvider.addHours(3),
-      type: 'activate_account'
+      type: 'activate_account',
     });
 
     const variables = {
       name: user.name,
       link: `${process.env.ACTIVATE_ACCOUNT_MAIL_URL}${token}`,
-    }
+    };
 
     this.mailProvider.sendMail(
       email,
       'Ativação de conta',
       variables,
-      ActivateAccountTemplate
+      ActivateAccountTemplate,
     );
   }
 }

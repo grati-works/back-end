@@ -1,7 +1,7 @@
 interface IAddUserDTO {
-    name: string;
-    username: string;
-    email: string;
+  name: string;
+  username: string;
+  email: string;
 }
 
 export { IAddUserDTO };

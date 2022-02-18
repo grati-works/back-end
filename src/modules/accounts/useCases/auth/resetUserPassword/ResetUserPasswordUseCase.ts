@@ -19,26 +19,33 @@ class ResetUserPasswordUseCase {
     @inject('DayjsDateProvider')
     private dateProvider: IDateProvider,
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
   ) {}
 
   async execute({ token, password }: IRequest): Promise<void> {
-    const userToken = await this.usersTokensRepository.findByRefreshToken(token);
+    const userToken = await this.usersTokensRepository.findByRefreshToken(
+      token,
+    );
 
-    if(!userToken) {
+    if (!userToken) {
       throw new AppError('Invalid token');
     }
 
-    if(this.dateProvider.compareIfExpired(userToken.expires_at, this.dateProvider.dateNow())) {
+    if (
+      this.dateProvider.compareIfExpired(
+        userToken.expires_at,
+        this.dateProvider.dateNow(),
+      )
+    ) {
       throw new AppError('Token expired');
     }
 
     const user = await this.usersRepository.findById(userToken.user_id);
 
-    if(!user) {
+    if (!user) {
       throw new AppError('User not found');
     }
-        
+
     const passwordHash = await hash(password, 8);
     user.password = passwordHash;
 
@@ -48,4 +55,4 @@ class ResetUserPasswordUseCase {
   }
 }
 
-export { ResetUserPasswordUseCase }
+export { ResetUserPasswordUseCase };

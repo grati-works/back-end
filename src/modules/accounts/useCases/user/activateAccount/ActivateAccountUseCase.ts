@@ -5,7 +5,6 @@ import { IDateProvider } from '@shared/container/providers/DateProvider/IDatePro
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { AppError } from '@shared/errors/AppError';
 
-
 @injectable()
 class ActivateAccountUseCase {
   constructor(
@@ -14,31 +13,38 @@ class ActivateAccountUseCase {
     @inject('DayjsDateProvider')
     private dateProvider: IDateProvider,
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
   ) {}
 
   async execute(token: string): Promise<void> {
-    const userToken = await this.usersTokensRepository.findByRefreshToken(token);
+    const userToken = await this.usersTokensRepository.findByRefreshToken(
+      token,
+    );
 
-    if(!userToken) {
+    if (!userToken) {
       throw new AppError('Invalid token');
     }
 
-    if(this.dateProvider.compareIfExpired(userToken.expires_at, this.dateProvider.dateNow())) {
-        this.usersTokensRepository.deleteById(userToken.id);
-        throw new AppError('Token expired');
+    if (
+      this.dateProvider.compareIfExpired(
+        userToken.expires_at,
+        this.dateProvider.dateNow(),
+      )
+    ) {
+      this.usersTokensRepository.deleteById(userToken.id);
+      throw new AppError('Token expired');
     }
 
     const user = await this.usersRepository.findById(userToken.user_id);
 
-    if(!user) {
+    if (!user) {
       throw new AppError('User not found');
     }
-        
+
     this.usersRepository.activate(userToken.user_id);
 
     await this.usersTokensRepository.deleteById(userToken.id);
   }
 }
 
-export { ActivateAccountUseCase }
+export { ActivateAccountUseCase };
