@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import checkColorModes from '@utils/functions/checkColorModes';
+import checkPermissions from '@utils/functions/checkPermissions';
 
 import upload from '@config/upload';
 
@@ -33,5 +34,6 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
 });
 
 checkColorModes();
+checkPermissions();
 
 export { app };

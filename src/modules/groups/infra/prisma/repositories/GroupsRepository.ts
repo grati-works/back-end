@@ -1,4 +1,4 @@
-import { Group } from '@prisma/client';
+import { Group, Prisma } from '@prisma/client';
 import { client } from '@shared/infra/prisma';
 import { IGroupsRepository } from '@modules/groups/repositories/IGroupsRepository';
 import { AppError } from '@shared/errors/AppError';
@@ -37,6 +37,13 @@ class GroupsRepository implements IGroupsRepository {
     });
 
     return createdGroup;
+  }
+
+  async edit(group_id: number, data: Prisma.GroupUpdateInput): Promise<void> {
+    await client.group.update({
+      where: { id: group_id },
+      data,
+    });
   }
 
   async addUser(group_id: number, email: string): Promise<Group> {
