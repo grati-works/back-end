@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import checkColorModes from '@utils/functions/checkColorModes';
 
@@ -18,7 +18,8 @@ app.use('/avatar', express.static(`${upload.tmpFolder}/avatar`));
 
 app.use(router);
 
-app.use((err: Error, request: Request, response: Response) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (err instanceof AppError) {
     return response.status(err.statusCode).json({
       message: err.message,
