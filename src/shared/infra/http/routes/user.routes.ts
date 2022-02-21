@@ -8,11 +8,13 @@ import { GetUserProfileController } from '@modules/accounts/useCases/user/getUse
 import { UpdateUserAvatarController } from '@modules/accounts/useCases/user/updateUserAvatar/UpdateUserAvatarController';
 import { CreateUserController } from '@modules/accounts/useCases/user/createUser/CreateUserController';
 import { ActivateAccountController } from '@modules/accounts/useCases/user/activateAccount/ActivateAccountController';
+import { EditUserController } from '@modules/accounts/useCases/user/editUser/EditUserController';
 
 const userRoutes = Router();
 
 const uploadAvatar = multer(uploadConfig);
 
+const editUserProfileController = new EditUserController();
 const getUserProfileController = new GetUserProfileController();
 const updateUserAvatarController = new UpdateUserAvatarController();
 const createUserController = new CreateUserController();
@@ -26,6 +28,8 @@ userRoutes.patch(
   uploadAvatar.single('avatar'),
   updateUserAvatarController.handle,
 );
+
+userRoutes.post('/edit', ensureAuthenticated, editUserProfileController.handle);
 
 userRoutes.post('/activate', activateAccountController.handle);
 
