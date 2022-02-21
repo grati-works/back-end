@@ -67,22 +67,18 @@ class AddUsersUseCase {
       parsedUsers = await this.loadUsers(users as Express.Multer.File);
     }
 
-    const owner = await this.usersRepository.findById(Number(authorId), {
-      owned_organizations: true,
-      email: true,
-    });
+    const user = await this.usersRepository.findById(Number(authorId));
+    const userIsOwner = await this.organizationsRepository.checkIfUserIsOwner(
+      Number(user.id),
+      Number(organizationId),
+    );
 
-    if (!owner) {
-      throw new AppError('Owner not found');
+    if (!userIsOwner) {
+      throw new AppError('This user is not the owner of this organization');
     }
 
-    if (owner.owned_organizations.length < 1) {
-      throw new AppError('Owner not found');
-    }
-
-    const ownedOrganizations = owner.owned_organizations as Organization[];
-    const organization = ownedOrganizations.find(
-      organization => organization.id === Number(organizationId),
+    const organization = await this.organizationsRepository.findById(
+      Number(organizationId),
     );
 
     if (!organization) {

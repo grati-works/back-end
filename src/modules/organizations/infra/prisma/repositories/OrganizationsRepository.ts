@@ -12,6 +12,16 @@ class OrganizationsRepository implements IOrganizationsRepository {
     return organization;
   }
 
+  async update(
+    organization_id: number,
+    data: Prisma.OrganizationUpdateInput,
+  ): Promise<void> {
+    await client.organization.update({
+      where: { id: organization_id },
+      data,
+    });
+  }
+
   async addUser(
     organization_id: number,
     user: IAddUserDTO,
@@ -38,6 +48,23 @@ class OrganizationsRepository implements IOrganizationsRepository {
     return client.organization.findUnique({
       where: { id },
     });
+  }
+
+  async checkIfUserIsOwner(
+    user_id: number,
+    organization_id: number,
+  ): Promise<boolean> {
+    console.log(user_id, organization_id);
+    const organization = await client.profile.findUnique({
+      where: { id: user_id },
+      include: {
+        owned_organizations: true,
+      },
+    });
+
+    return organization.owned_organizations.some(
+      organization => organization.id === organization_id,
+    );
   }
 }
 
