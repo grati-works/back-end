@@ -64,6 +64,11 @@ class GroupsRepository implements IGroupsRepository {
 
     return updatedGroup;
   }
+
+
+  async delete(group_id: number): Promise<void> {
+    await client.group.delete({ where: { id: group_id } });
+  }
 }
 
 export { GroupsRepository };
