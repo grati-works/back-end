@@ -44,6 +44,24 @@ class OrganizationsRepository implements IOrganizationsRepository {
     return addedUser;
   }
 
+  async removeUser(
+    organization_id: number,
+    user_id: number,
+  ): Promise<Organization> {
+    const removedUser = await client.organization.update({
+      where: { id: organization_id },
+      data: {
+        users: {
+          disconnect: {
+            id: user_id,
+          },
+        },
+      },
+    });
+
+    return removedUser;
+  }
+
   findById(id: number): Promise<Organization> {
     return client.organization.findUnique({
       where: { id },
@@ -54,7 +72,6 @@ class OrganizationsRepository implements IOrganizationsRepository {
     user_id: number,
     organization_id: number,
   ): Promise<boolean> {
-    console.log(user_id, organization_id);
     const organization = await client.profile.findUnique({
       where: { id: user_id },
       include: {

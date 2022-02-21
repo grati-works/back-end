@@ -62,8 +62,9 @@ class AddUsersUseCase {
 
   async execute({ organizationId, authorId, users }: IAddUsers): Promise<void> {
     let parsedUsers = users;
+    const file = users as Express.Multer.File;
 
-    if ((parsedUsers as unknown as Express.Multer.File).fieldname !== null) {
+    if (file.fieldname) {
       parsedUsers = await this.loadUsers(users as Express.Multer.File);
     }
 
@@ -94,7 +95,7 @@ class AddUsersUseCase {
         const temporaryPassword = `${uuidV4().substring(0, 5)}-${
           user.username
         }!`;
-        console.log(temporaryPassword);
+
         const hashedPassword = await hash(temporaryPassword, 8);
 
         this.usersRepository

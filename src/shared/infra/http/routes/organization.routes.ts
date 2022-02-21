@@ -8,6 +8,7 @@ import { CreateOrganizationController } from '@modules/organizations/useCases/cr
 import { EditOrganizationController } from '@modules/organizations/useCases/editOrganization/EditOrganizationController';
 import { AddUsersController } from '@modules/organizations/useCases/addUsers/AddUsersController';
 import { AddUsersViaCSVController } from '@modules/organizations/useCases/addUsers/AddUsersViaCSVController';
+import { RemoveUserController } from '@modules/organizations/useCases/removeUser/RemoveUserController';
 
 const organizationRoutes = Router();
 
@@ -17,6 +18,7 @@ const createOrganizationController = new CreateOrganizationController();
 const editOrganizationController = new EditOrganizationController();
 const addUsersController = new AddUsersController();
 const addUsersViaCsvController = new AddUsersViaCSVController();
+const removeUserController = new RemoveUserController();
 
 organizationRoutes.post(
   '/',
@@ -38,6 +40,11 @@ organizationRoutes.post(
   uploadUsers.single('file'),
   ensureAuthenticated,
   addUsersViaCsvController.handle,
+);
+organizationRoutes.delete(
+  '/users',
+  ensureAuthenticated,
+  removeUserController.handle,
 );
 
 export { organizationRoutes };
