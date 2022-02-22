@@ -1,0 +1,49 @@
+{
+  "Controller": {
+    "prefix": "controller",
+    "body": [
+      "import { Request, Response } from 'express';",
+      "import { container } from 'tsyringe';",
+      "",
+      "import { ${TM_FILENAME/(Controller.ts)//}UseCase } from './${TM_FILENAME/(Controller.ts)//}UseCase';",
+      "",
+      "class ${TM_FILENAME_BASE} {",
+      "  async handle(request: Request, response: Response): Promise<Response> {",
+      "    const { user } = request;",
+      "    const data = request.body;",
+      "",
+      "    const ${TM_DIRECTORY/^.+\\/(.*)$/$1/}UseCase = container.resolve(${TM_FILENAME/(Controller.ts)//}UseCase);",
+      "",
+      "    await ${TM_DIRECTORY/^.+\\/(.*)$/$1/}UseCase.execute();",
+      "",
+      "    return response.status(201).send();",
+      "  }",
+      "}",
+      "",
+      "export { ${TM_FILENAME_BASE} };",
+      ""
+    ]
+  },
+  "UseCase": {
+    "prefix": "usecase",
+    "body": [
+      "import { inject, injectable } from 'tsyringe';",
+      "import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';",
+      "",
+      "@injectable()",
+      "class ${TM_FILENAME_BASE} {",
+      "  constructor(",
+      "    @inject('UsersRepository')",
+      "    private usersRepository: IUsersRepository,",
+      "  ) {}",
+      "",
+      "  async execute($1): Promise<void> {",
+      "    $2",
+      "  }",
+      "}",
+      "",
+      "export { ${TM_FILENAME_BASE} };",
+      ""
+    ]
+  }
+}
