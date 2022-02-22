@@ -13,7 +13,8 @@ model Feedback {
   message     String
   attachement String?
   emoji       String?
-  deleted     Boolean    @default(false)
+  deleted     Profile?   @relation("Delete", fields: [deleted_by], references: [id])
+  deleted_by  Int?
   sender      Profile?   @relation("Send", fields: [sender_id], references: [id])
   sender_id   Int?
   receivers   Profile[]  @relation("Receive", references: [id])
@@ -40,6 +41,7 @@ model Profile {
   owned_organizations Organization[]    @relation("OwnedOrganizations")
   sended_feedbacks    Feedback[]        @relation("Send")
   received_feedbacks  Feedback[]        @relation("Receive")
+  deleted_feedbacks   Feedback[]        @relation("Delete")
   Reaction            Reaction[]
   UserTokens          UserTokens[]
 }

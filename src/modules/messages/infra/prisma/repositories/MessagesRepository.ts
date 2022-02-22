@@ -3,6 +3,7 @@ import {
   CreateOptionalArgs,
   IMessagesRepository,
 } from '@modules/messages/repositories/IMessagesRepository';
+import { Feedback, Prisma } from '@prisma/client';
 
 class MessagesRepository implements IMessagesRepository {
   async send(
@@ -14,7 +15,11 @@ class MessagesRepository implements IMessagesRepository {
   ): Promise<void> {
     await client.feedback.create({
       data: {
-        sender_id: author_id,
+        sender: {
+          connect: {
+            id: author_id,
+          },
+        },
         receivers: {
           connect: [
             ...receivers_ids.map(receiver_id => ({
@@ -36,12 +41,85 @@ class MessagesRepository implements IMessagesRepository {
     });
   }
 
-  react(author_id: number, feedback_id: number, emoji: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async addReaction(
+    author_id: number,
+    feedback_id: number,
+    emoji: string,
+  ): Promise<void> {
+    await client.feedback.update({
+      where: { id: feedback_id },
+      data: {
+        Reaction: {
+          create: {
+            emoji,
+            user: {
+              connect: {
+                id: author_id,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
-  delete(author_id: number, feedback_id: number): Promise<void> {
-    throw new Error('Method not implemented.');
+  async removeReaction(
+    author_id: number,
+    feedback_id: number,
+    emoji: string,
+  ): Promise<void> {
+    const reaction = await client.reaction.findFirst({
+      where: {
+        user: {
+          id: author_id,
+        },
+        feedback_id,
+        emoji,
+      },
+    });
+
+    await client.feedback.update({
+      where: { id: feedback_id },
+      data: {
+        Reaction: {
+          delete: {
+            id: reaction.id,
+          },
+        },
+      },
+    });
+  }
+
+  async delete(author_id: number, feedback_id: number): Promise<void> {
+    await client.feedback.update({
+      where: {
+        id: feedback_id,
+      },
+      data: {
+        deleted: {
+          connect: {
+            id: author_id,
+          },
+        },
+      },
+    });
+  }
+
+  async list(filter: Prisma.FeedbackWhereInput = null): Promise<Feedback[]> {
+    const feedbackList = await client.feedback.findMany({
+      where: {
+        deleted: null,
+        ...filter,
+      },
+      include: {
+        sender: true,
+        receivers: true,
+        tags: true,
+        Reaction: true,
+      },
+    });
+
+    return feedbackList;
   }
 }
 
