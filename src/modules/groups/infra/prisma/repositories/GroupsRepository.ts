@@ -65,8 +65,15 @@ class GroupsRepository implements IGroupsRepository {
     return updatedGroup;
   }
 
-
   async delete(group_id: number): Promise<void> {
+    await client.group.update({
+      where: { id: group_id },
+      data: {
+        permissions: {
+          disconnect: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        },
+      },
+    });
     await client.group.delete({ where: { id: group_id } });
   }
 }

@@ -18,6 +18,10 @@ groupRoutes.patch(
   ensureAuthenticated,
   editGroupController.handle,
 );
-groupRoutes.post('/delete', ensureAuthenticated, deleteGroupController.handle);
+groupRoutes.delete(
+  '/:group_id',
+  ensureAuthenticated,
+  deleteGroupController.handle,
+);
 
 export { groupRoutes };

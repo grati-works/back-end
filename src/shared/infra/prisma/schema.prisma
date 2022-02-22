@@ -105,7 +105,7 @@ model Objective {
   id         Int      @id @default(autoincrement())
   name       String
   goal       Int
-  group      Group    @relation(fields: [groupId], references: [id])
+  group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
   expires_in DateTime
   groupId    Int      @unique
 }

@@ -6,11 +6,11 @@ import { DeleteGroupUseCase } from './DeleteGroupUseCase';
 
 class DeleteGroupController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { groupId } = request.body;
+    const { group_id } = request.params;
 
     const deleteGroupUseCase = container.resolve(DeleteGroupUseCase);
 
-    await deleteGroupUseCase.execute(groupId);
+    await deleteGroupUseCase.execute(group_id);
 
     return response.status(201).send();
   }
