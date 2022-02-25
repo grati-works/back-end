@@ -16,7 +16,10 @@ class AddUsersController {
       users,
     });
 
-    return response.status(201).send();
+    return response.json({
+      status: 'success',
+      message: 'Users added successfully',
+    });
   }
 }
 

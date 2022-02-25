@@ -16,7 +16,10 @@ class EditOrganizationController {
       color_mode,
     });
 
-    return response.status(201).send();
+    return response.json({
+      status: 'success',
+      message: 'Organization edited successfully',
+    });
   }
 }
 

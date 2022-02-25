@@ -17,7 +17,10 @@ class ResetUserPasswordController {
       password,
     });
 
-    return response.send();
+    return response.status(202).json({
+      status: 'success',
+      message: 'Password reset successfully',
+    });
   }
 }
 

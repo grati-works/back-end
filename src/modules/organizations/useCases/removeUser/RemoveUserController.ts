@@ -12,7 +12,10 @@ class RemoveUserController {
 
     await removeUserUseCase.execute(author.id, organization_id, user_id);
 
-    return response.status(201).send();
+    return response.json({
+      status: 'success',
+      message: 'User removed successfully',
+    });
   }
 }
 

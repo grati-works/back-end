@@ -11,7 +11,10 @@ class ActivateAccountController {
 
     await activateAccountUseCase.execute(`${token}`);
 
-    return response.send();
+    return response.json({
+      status: 'success',
+      message: 'Account activated successfully',
+    });
   }
 }
 

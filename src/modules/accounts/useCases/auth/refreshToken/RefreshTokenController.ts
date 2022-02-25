@@ -14,7 +14,10 @@ class RefreshTokenController {
 
     const refresh_token = await refreshTokenUseCase.execute(token);
 
-    return response.json(refresh_token);
+    return response.json({
+      status: 'success',
+      data: refresh_token,
+    });
   }
 }
 

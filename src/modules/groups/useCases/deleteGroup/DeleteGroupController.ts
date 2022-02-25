@@ -12,7 +12,10 @@ class DeleteGroupController {
 
     await deleteGroupUseCase.execute(group_id);
 
-    return response.status(201).send();
+    return response.json({
+      status: 'success',
+      message: 'Group deleted successfully',
+    });
   }
 }
 

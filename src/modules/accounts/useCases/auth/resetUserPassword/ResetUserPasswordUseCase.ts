@@ -49,7 +49,9 @@ class ResetUserPasswordUseCase {
     const passwordHash = await hash(password, 8);
     user.password = passwordHash;
 
-    await this.usersRepository.update(user.id, user);
+    await this.usersRepository.update(user.id, {
+      password: passwordHash,
+    });
 
     await this.usersTokensRepository.deleteById(userToken.id);
   }

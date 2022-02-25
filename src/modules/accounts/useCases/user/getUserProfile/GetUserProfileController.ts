@@ -12,7 +12,10 @@ class GetUserProfileController {
 
     delete user.password;
 
-    return response.json(user);
+    return response.json({
+      status: 'success',
+      data: user,
+    });
   };
 }
 
