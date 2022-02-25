@@ -21,7 +21,7 @@ class UpdateUserAvatarUseCase {
 
     if (user.profile_picture)
       await this.storageProvider.delete(user.profile_picture, 'avatar');
-    await this.storageProvider.save(avatar_file, 'avatar');
+    await this.storageProvider.save(avatar_file, 'avatars');
 
     user.profile_picture = avatar_file;
 
