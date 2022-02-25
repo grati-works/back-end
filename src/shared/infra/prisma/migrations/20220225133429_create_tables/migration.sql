@@ -2,11 +2,12 @@
 CREATE TABLE "Feedback" (
     "id" SERIAL NOT NULL,
     "message" TEXT NOT NULL,
-    "attachement" TEXT,
+    "attachment" TEXT,
     "emoji" TEXT,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "deleted_by" INTEGER,
     "sender_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "organization_id" INTEGER NOT NULL,
 
     CONSTRAINT "Feedback_pkey" PRIMARY KEY ("id")
 );
@@ -21,6 +22,7 @@ CREATE TABLE "Profile" (
     "profile_picture" TEXT,
     "responsibility" TEXT,
     "description" TEXT,
+    "activated" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
@@ -30,7 +32,7 @@ CREATE TABLE "Organization" (
     "id" SERIAL NOT NULL,
     "owner_id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
-    "color" TEXT NOT NULL,
+    "color" TEXT,
     "mode_id" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "Organization_pkey" PRIMARY KEY ("id")
@@ -60,6 +62,8 @@ CREATE TABLE "Subscription" (
 -- CreateTable
 CREATE TABLE "Group" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "color" TEXT DEFAULT E'#000000',
     "organization_id" INTEGER NOT NULL,
 
     CONSTRAINT "Group_pkey" PRIMARY KEY ("id")
@@ -70,7 +74,7 @@ CREATE TABLE "Skill" (
     "id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
-    "skillStatus_id" INTEGER,
+    "skill_status_id" INTEGER,
 
     CONSTRAINT "Skill_pkey" PRIMARY KEY ("id")
 );
@@ -108,7 +112,7 @@ CREATE TABLE "Reaction" (
 CREATE TABLE "Graduation" (
     "id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
-    "graduationStatus_id" INTEGER,
+    "graduation_status_id" INTEGER,
 
     CONSTRAINT "Graduation_pkey" PRIMARY KEY ("id")
 );
@@ -152,6 +156,18 @@ CREATE TABLE "Permission" (
 );
 
 -- CreateTable
+CREATE TABLE "UserTokens" (
+    "id" SERIAL NOT NULL,
+    "token" TEXT NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "expires_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "type" TEXT NOT NULL,
+
+    CONSTRAINT "UserTokens_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_Receive" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -188,7 +204,16 @@ CREATE TABLE "_GroupToPrivacy" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Profile_username_key" ON "Profile"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_email_key" ON "Profile"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Subscription_organization_id_key" ON "Subscription"("organization_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Tag_name_key" ON "Tag"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Objective_groupId_key" ON "Objective"("groupId");
@@ -230,7 +255,13 @@ CREATE UNIQUE INDEX "_GroupToPrivacy_AB_unique" ON "_GroupToPrivacy"("A", "B");
 CREATE INDEX "_GroupToPrivacy_B_index" ON "_GroupToPrivacy"("B");
 
 -- AddForeignKey
+ALTER TABLE "Feedback" ADD CONSTRAINT "Feedback_deleted_by_fkey" FOREIGN KEY ("deleted_by") REFERENCES "Profile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Feedback" ADD CONSTRAINT "Feedback_sender_id_fkey" FOREIGN KEY ("sender_id") REFERENCES "Profile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Feedback" ADD CONSTRAINT "Feedback_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Organization" ADD CONSTRAINT "Organization_owner_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -248,10 +279,10 @@ ALTER TABLE "Group" ADD CONSTRAINT "Group_organization_id_fkey" FOREIGN KEY ("or
 ALTER TABLE "Skill" ADD CONSTRAINT "Skill_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Skill" ADD CONSTRAINT "Skill_skillStatus_id_fkey" FOREIGN KEY ("skillStatus_id") REFERENCES "SkillStatus"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Skill" ADD CONSTRAINT "Skill_skill_status_id_fkey" FOREIGN KEY ("skill_status_id") REFERENCES "SkillStatus"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Objective" ADD CONSTRAINT "Objective_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Objective" ADD CONSTRAINT "Objective_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Reaction" ADD CONSTRAINT "Reaction_feedback_id_fkey" FOREIGN KEY ("feedback_id") REFERENCES "Feedback"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -263,10 +294,13 @@ ALTER TABLE "Reaction" ADD CONSTRAINT "Reaction_profile_id_fkey" FOREIGN KEY ("p
 ALTER TABLE "Graduation" ADD CONSTRAINT "Graduation_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Graduation" ADD CONSTRAINT "Graduation_graduationStatus_id_fkey" FOREIGN KEY ("graduationStatus_id") REFERENCES "GraduationStatus"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Graduation" ADD CONSTRAINT "Graduation_graduation_status_id_fkey" FOREIGN KEY ("graduation_status_id") REFERENCES "GraduationStatus"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "VinculedAccount" ADD CONSTRAINT "VinculedAccount_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserTokens" ADD CONSTRAINT "UserTokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_Receive" ADD FOREIGN KEY ("A") REFERENCES "Feedback"("id") ON DELETE CASCADE ON UPDATE CASCADE;

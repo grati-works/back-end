@@ -20,7 +20,7 @@ model Feedback {
   receivers      Profile[]     @relation("Receive", references: [id])
   created_at     DateTime      @default(now())
   tags           Tag[]
-  Reaction       Reaction[]
+  reactions       Reaction[]
   organization   Organization @relation("Organization", fields: [organization_id], references: [id])
   organization_id Int
 }
@@ -44,8 +44,8 @@ model Profile {
   sended_feedbacks    Feedback[]        @relation("Send")
   received_feedbacks  Feedback[]        @relation("Receive")
   deleted_feedbacks   Feedback[]        @relation("Delete")
-  Reaction            Reaction[]
-  UserTokens          UserTokens[]
+  reactions            Reaction[]
+  user_tokens          UserTokens[]
 }
 
 model Organization {
@@ -96,8 +96,8 @@ model Skill {
   user           Profile      @relation(fields: [user_id], references: [id])
   user_id        Int
   name           String
-  SkillStatus    SkillStatus? @relation(fields: [skillStatus_id], references: [id])
-  skillStatus_id Int?
+  skill_status    SkillStatus? @relation(fields: [skill_status_id], references: [id])
+  skill_status_id Int?
 }
 
 model Tag {
@@ -128,8 +128,8 @@ model Graduation {
   id                  Int               @id @default(autoincrement())
   user                Profile           @relation(fields: [user_id], references: [id])
   user_id             Int
-  GraduationStatus    GraduationStatus? @relation(fields: [graduationStatus_id], references: [id])
-  graduationStatus_id Int?
+  graduation_status    GraduationStatus? @relation(fields: [graduation_status_id], references: [id])
+  graduation_status_id Int?
 }
 
 model SkillStatus {
