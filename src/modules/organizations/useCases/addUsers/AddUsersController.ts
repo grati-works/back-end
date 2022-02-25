@@ -6,7 +6,8 @@ import { AddUsersUseCase } from './AddUsersUseCase';
 class AddUsersController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { user } = request;
-    const { organization_id, users } = request.body;
+    const { users } = request.body;
+    const { organization_id } = request.params;
 
     const addUsersUseCase = container.resolve(AddUsersUseCase);
 

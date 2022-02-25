@@ -2,10 +2,18 @@ import { client } from '@shared/infra/prisma';
 import {
   SendArgs,
   IMessagesRepository,
+  ListArgs,
 } from '@modules/messages/repositories/IMessagesRepository';
 import { Feedback, Prisma } from '@prisma/client';
 import { AppError } from '@shared/errors/AppError';
 
+const userSelect = {
+  select: {
+    id: true,
+    name: true,
+    profile_picture: true,
+  },
+};
 class MessagesRepository implements IMessagesRepository {
   async send({
     author_id,
@@ -22,7 +30,7 @@ class MessagesRepository implements IMessagesRepository {
             id: author_id,
           },
         },
-        Organization: {
+        organization: {
           connect: {
             id: organization_id,
           },
@@ -61,7 +69,7 @@ class MessagesRepository implements IMessagesRepository {
     await client.feedback.update({
       where: { id: feedback_id },
       data: {
-        Reaction: {
+        reactions: {
           create: {
             emoji,
             user: {
@@ -93,7 +101,7 @@ class MessagesRepository implements IMessagesRepository {
     await client.feedback.update({
       where: { id: feedback_id },
       data: {
-        Reaction: {
+        reactions: {
           delete: {
             id: reaction.id,
           },
@@ -130,21 +138,42 @@ class MessagesRepository implements IMessagesRepository {
     });
   }
 
-  async list(filter: Prisma.FeedbackWhereInput = null): Promise<Feedback[]> {
+  async list({ filter, skip }: ListArgs): Promise<Feedback[]> {
     const feedbackList = await client.feedback.findMany({
       where: {
         deleted: null,
         ...filter,
       },
       include: {
-        sender: true,
-        receivers: true,
+        sender: userSelect,
+        receivers: userSelect,
         tags: true,
-        Reaction: true,
+        reactions: true,
       },
+      orderBy: {
+        created_at: 'desc',
+      },
+      skip,
+      take: 10,
     });
 
     return feedbackList;
+  }
+
+  async findById(feedback_id: number): Promise<Feedback> {
+    const feedback = await client.feedback.findUnique({
+      where: {
+        id: feedback_id,
+      },
+      include: {
+        sender: userSelect,
+        receivers: true,
+        tags: true,
+        reactions: true,
+      },
+    });
+
+    return feedback;
   }
 }
 

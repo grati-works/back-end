@@ -52,6 +52,7 @@ class AuthenticateUserUseCase {
       vinculedTokens
         .filter(token => token.type === 'activate_account')
         .forEach(async vinculedToken => {
+          if (Number.isNaN(Number(vinculedToken.token))) return;
           await this.usersTokensRepository.deleteById(
             Number(vinculedToken.token),
           );

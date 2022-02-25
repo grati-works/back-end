@@ -13,6 +13,11 @@ interface SendArgs {
   message: string;
   attachments?: CreateOptionalArgs;
 }
+
+interface ListArgs {
+  filter?: Prisma.FeedbackWhereInput;
+  skip?: number;
+}
 interface IMessagesRepository {
   send(args: SendArgs): Promise<void>;
   addReaction(
@@ -26,7 +31,8 @@ interface IMessagesRepository {
     emoji: string,
   ): Promise<void>;
   delete(author_id: number, feedback_id: number): Promise<void>;
-  list(filter: Prisma.FeedbackWhereInput): Promise<Feedback[]>;
+  list({ filter, skip }: ListArgs): Promise<Feedback[]>;
+  findById(feedback_id: number): Promise<Feedback>;
 }
 
-export { SendArgs, CreateOptionalArgs, IMessagesRepository };
+export { SendArgs, CreateOptionalArgs, ListArgs, IMessagesRepository };

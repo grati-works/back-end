@@ -30,18 +30,20 @@ class OrganizationsRepository implements IOrganizationsRepository {
       where: { email: user.email },
     });
 
-    const addedUser = await client.organization.update({
-      where: { id: organization_id },
-      data: {
-        users: {
-          connect: {
-            id: profile.id,
+    if(profile) {
+      const addedUser = await client.organization.update({
+        where: { id: organization_id },
+        data: {
+          users: {
+            connect: {
+              id: profile.id,
+            },
           },
         },
-      },
-    });
+      });
 
-    return addedUser;
+      return addedUser;
+    }
   }
 
   async removeUser(

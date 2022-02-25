@@ -31,12 +31,12 @@ organizationRoutes.patch(
   editOrganizationController.handle,
 );
 organizationRoutes.post(
-  '/users',
+  '/users/:organization_id',
   ensureAuthenticated,
   addUsersController.handle,
 );
 organizationRoutes.post(
-  '/users/csv',
+  '/users/:organization_id/csv',
   uploadUsers.single('file'),
   ensureAuthenticated,
   addUsersViaCsvController.handle,
