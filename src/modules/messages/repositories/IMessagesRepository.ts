@@ -1,17 +1,20 @@
 import { Prisma, Feedback } from '@prisma/client';
 
 interface CreateOptionalArgs {
-  attachement?: string;
+  attachment?: string;
   emoji?: string;
 }
+
+interface SendArgs {
+  author_id: number;
+  organization_id: number;
+  receivers_ids: number[];
+  tags: string[];
+  message: string;
+  attachments?: CreateOptionalArgs;
+}
 interface IMessagesRepository {
-  send(
-    author_id: number,
-    receivers_ids: number[],
-    tags: string[],
-    message: string,
-    { attachement, emoji }: CreateOptionalArgs,
-  ): Promise<void>;
+  send(args: SendArgs): Promise<void>;
   addReaction(
     author_id: number,
     feedback_id: number,
@@ -26,4 +29,4 @@ interface IMessagesRepository {
   list(filter: Prisma.FeedbackWhereInput): Promise<Feedback[]>;
 }
 
-export { CreateOptionalArgs, IMessagesRepository };
+export { SendArgs, CreateOptionalArgs, IMessagesRepository };

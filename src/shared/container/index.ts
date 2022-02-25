@@ -14,6 +14,9 @@ import { OrganizationsRepository } from '@modules/organizations/infra/prisma/rep
 import { IGroupsRepository } from '@modules/groups/repositories/IGroupsRepository';
 import { GroupsRepository } from '@modules/groups/infra/prisma/repositories/GroupsRepository';
 
+import { IMessagesRepository } from '@modules/messages/repositories/IMessagesRepository';
+import { MessagesRepository } from '@modules/messages/infra/prisma/repositories/MessagesRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
@@ -32,4 +35,9 @@ container.registerSingleton<IOrganizationsRepository>(
 container.registerSingleton<IGroupsRepository>(
   'GroupsRepository',
   GroupsRepository,
+);
+
+container.registerSingleton<IMessagesRepository>(
+  'MessagesRepository',
+  MessagesRepository,
 );

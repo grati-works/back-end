@@ -1,23 +1,30 @@
 import { client } from '@shared/infra/prisma';
 import {
-  CreateOptionalArgs,
+  SendArgs,
   IMessagesRepository,
 } from '@modules/messages/repositories/IMessagesRepository';
 import { Feedback, Prisma } from '@prisma/client';
+import { AppError } from '@shared/errors/AppError';
 
 class MessagesRepository implements IMessagesRepository {
-  async send(
-    author_id: number,
-    receivers_ids: number[],
-    tags: string[],
-    message: string,
-    { attachement, emoji }: CreateOptionalArgs,
-  ): Promise<void> {
+  async send({
+    author_id,
+    organization_id,
+    receivers_ids,
+    tags,
+    message,
+    attachments,
+  }: SendArgs): Promise<void> {
     await client.feedback.create({
       data: {
         sender: {
           connect: {
             id: author_id,
+          },
+        },
+        Organization: {
+          connect: {
+            id: organization_id,
           },
         },
         receivers: {
@@ -28,12 +35,17 @@ class MessagesRepository implements IMessagesRepository {
           ],
         },
         message,
-        attachement,
-        emoji,
+        attachment: attachments.attachment,
+        emoji: attachments.emoji,
         tags: {
-          connect: [
+          connectOrCreate: [
             ...tags.map(tag => ({
-              name: tag,
+              where: {
+                name: tag,
+              },
+              create: {
+                name: tag,
+              },
             })),
           ],
         },
@@ -91,6 +103,19 @@ class MessagesRepository implements IMessagesRepository {
   }
 
   async delete(author_id: number, feedback_id: number): Promise<void> {
+    const feedback = await client.feedback.findUnique({
+      where: {
+        id: feedback_id,
+      },
+      select: {
+        deleted_by: true,
+      },
+    });
+
+    if (feedback.deleted_by !== null) {
+      throw new AppError('Message already deleted');
+    }
+
     await client.feedback.update({
       where: {
         id: feedback_id,

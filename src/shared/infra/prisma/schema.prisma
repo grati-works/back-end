@@ -9,18 +9,20 @@ datasource db {
 }
 
 model Feedback {
-  id          Int        @id @default(autoincrement())
-  message     String
-  attachement String?
-  emoji       String?
-  deleted     Profile?   @relation("Delete", fields: [deleted_by], references: [id])
-  deleted_by  Int?
-  sender      Profile?   @relation("Send", fields: [sender_id], references: [id])
-  sender_id   Int?
-  receivers   Profile[]  @relation("Receive", references: [id])
-  created_at  DateTime   @default(now())
-  tags        Tag[]
-  Reaction    Reaction[]
+  id             Int           @id @default(autoincrement())
+  message        String
+  attachment     String?
+  emoji          String?
+  deleted        Profile?      @relation("Delete", fields: [deleted_by], references: [id])
+  deleted_by     Int?
+  sender         Profile?      @relation("Send", fields: [sender_id], references: [id])
+  sender_id      Int?
+  receivers      Profile[]     @relation("Receive", references: [id])
+  created_at     DateTime      @default(now())
+  tags           Tag[]
+  Reaction       Reaction[]
+  organization   Organization @relation("Organization", fields: [organization_id], references: [id])
+  organization_id Int
 }
 
 model Profile {
@@ -33,7 +35,7 @@ model Profile {
   groups              Group[]
   responsibility      String?
   description         String?
-  activated           Boolean          @default(false)
+  activated           Boolean           @default(false)
   skills              Skill[]
   graduations         Graduation[]
   vinculed_accounts   VinculedAccount[]
@@ -57,6 +59,7 @@ model Organization {
   color        String?
   color_mode   ColorMode     @relation(fields: [mode_id], references: [id])
   mode_id      Int           @default(1)
+  feedbacks    Feedback[]    @relation("Organization")
 }
 
 model ColorMode {
@@ -79,7 +82,7 @@ model Subscription {
 model Group {
   id              Int          @id @default(autoincrement())
   name            String
-  color           String? @default("#000000")
+  color           String?      @default("#000000")
   users           Profile[]
   organization    Organization @relation(fields: [organization_id], references: [id])
   permissions     Permission[]
