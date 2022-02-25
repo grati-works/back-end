@@ -4,7 +4,7 @@ import {
   IMessagesRepository,
   ListArgs,
 } from '@modules/messages/repositories/IMessagesRepository';
-import { Feedback, Prisma } from '@prisma/client';
+import { Feedback } from '@prisma/client';
 import { AppError } from '@shared/errors/AppError';
 
 const userSelect = {
@@ -138,8 +138,8 @@ class MessagesRepository implements IMessagesRepository {
     });
   }
 
-  async list({ filter, skip }: ListArgs): Promise<Feedback[]> {
-    const feedbackList = await client.feedback.findMany({
+  async list({ filter, skip }: ListArgs): Promise<unknown[]> {
+    const feedbackList = (await client.feedback.findMany({
       where: {
         deleted: null,
         ...filter,
@@ -155,6 +155,20 @@ class MessagesRepository implements IMessagesRepository {
       },
       skip,
       take: 10,
+    })) as any[];
+
+    feedbackList.forEach((feedback, index) => {
+      feedbackList[index].reactions = feedback.reactions.reduce(
+        (acc, reaction) => {
+          // eslint-disable-next-line no-unused-expressions
+          acc[reaction.emoji]
+            ? (acc[reaction.emoji] += 1)
+            : (acc[reaction.emoji] = 1);
+
+          return acc;
+        },
+        {},
+      );
     });
 
     return feedbackList;
@@ -169,7 +183,11 @@ class MessagesRepository implements IMessagesRepository {
         sender: userSelect,
         receivers: true,
         tags: true,
-        reactions: true,
+        reactions: {
+          select: {
+            emoji: true,
+          },
+        },
       },
     });
 

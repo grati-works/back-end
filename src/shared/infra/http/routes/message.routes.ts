@@ -7,6 +7,7 @@ import { ensureAuthenticated } from '@shared/infra/http/middlewares/ensureAuthen
 import { ListMessagesController } from '@modules/messages/useCases/listMessages/ListMessagesController';
 import { SendMessageController } from '@modules/messages/useCases/sendMessage/SendMessageController';
 import { DeleteMessageController } from '@modules/messages/useCases/deleteMessage/DeleteMessageController';
+import { AddReactionController } from '@modules/messages/useCases/reactions/addReaction/AddReactionController';
 
 const messageRoutes = Router();
 
@@ -15,6 +16,7 @@ const uploadAttachment = multer(uploadConfig);
 const listMessagesController = new ListMessagesController();
 const sendMessageController = new SendMessageController();
 const deleteMessageController = new DeleteMessageController();
+const addReactionController = new AddReactionController();
 
 messageRoutes.get(
   '/:organization_id',
@@ -33,6 +35,12 @@ messageRoutes.delete(
   '/:message_id',
   ensureAuthenticated,
   deleteMessageController.handle,
+);
+
+messageRoutes.patch(
+  '/:feedback_id/reaction/add',
+  ensureAuthenticated,
+  addReactionController.handle,
 );
 
 export { messageRoutes };
