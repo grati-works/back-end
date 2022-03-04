@@ -31,7 +31,7 @@ interface IMessagesRepository {
     emoji: string,
   ): Promise<void>;
   delete(author_id: number, feedback_id: number): Promise<void>;
-  list({ filter, skip }: ListArgs): Promise<unknown[]>;
+  list({ filter, skip }: ListArgs): Promise<Feedback[]>;
   findById(feedback_id: number): Promise<Feedback>;
 }
 

@@ -3,6 +3,7 @@ import { IFindUserDTO } from '@modules/accounts/dtos/IFindUserDTO';
 import { Prisma, Profile } from '@prisma/client';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { client } from '@shared/infra/prisma';
+import { AppError } from '@shared/errors/AppError';
 
 class UsersRepository implements IUsersRepository {
   async create({
@@ -68,12 +69,24 @@ class UsersRepository implements IUsersRepository {
       data: { activated: true },
     });
   }
-  
+
   async addPoints(id: number, points: number): Promise<void> {
     const user = await client.profile.findUnique({
       where: { id },
     });
 
+    if (!user) {
+      throw new AppError('User not found');
+    }
+
+    await client.profile.update({
+      where: { id },
+      data: {
+        points: {
+          increment: points,
+        },
+      },
+    });
   }
 }
 

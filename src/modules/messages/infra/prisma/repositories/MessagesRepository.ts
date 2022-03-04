@@ -66,6 +66,20 @@ class MessagesRepository implements IMessagesRepository {
     feedback_id: number,
     emoji: string,
   ): Promise<void> {
+    const reactionAlreadyAdded = await client.reaction.findFirst({
+      where: {
+        emoji,
+        feedback_id,
+        user: {
+          id: author_id,
+        },
+      },
+    });
+
+    if (reactionAlreadyAdded) {
+      throw new AppError('Reaction already added');
+    }
+
     await client.feedback.update({
       where: { id: feedback_id },
       data: {
@@ -88,26 +102,30 @@ class MessagesRepository implements IMessagesRepository {
     feedback_id: number,
     emoji: string,
   ): Promise<void> {
-    const reaction = await client.reaction.findFirst({
-      where: {
-        user: {
-          id: author_id,
+    try {
+      const reaction = await client.reaction.findFirst({
+        where: {
+          user: {
+            id: author_id,
+          },
+          feedback_id,
+          emoji,
         },
-        feedback_id,
-        emoji,
-      },
-    });
+      });
 
-    await client.feedback.update({
-      where: { id: feedback_id },
-      data: {
-        reactions: {
-          delete: {
-            id: reaction.id,
+      await client.feedback.update({
+        where: { id: feedback_id },
+        data: {
+          reactions: {
+            delete: {
+              id: reaction.id,
+            },
           },
         },
-      },
-    });
+      });
+    } catch (error) {
+      throw new AppError('Reaction not found');
+    }
   }
 
   async delete(author_id: number, feedback_id: number): Promise<void> {
@@ -138,7 +156,7 @@ class MessagesRepository implements IMessagesRepository {
     });
   }
 
-  async list({ filter, skip }: ListArgs): Promise<unknown[]> {
+  async list({ filter, skip }: ListArgs): Promise<Feedback[]> {
     const feedbackList = (await client.feedback.findMany({
       where: {
         deleted: null,

@@ -33,8 +33,11 @@ class SendMessageUseCase {
     }
 
     await this.messagesRepository.send(data).then(async () => {
-      await this.usersRepository.addPoints(author_id, 1);
-    })
+      await this.usersRepository.addPoints(author_id, 5);
+      data.receivers_ids.map(async receiver_id => {
+        await this.usersRepository.addPoints(receiver_id, 10);
+      });
+    });
   }
 }
 
