@@ -9,7 +9,7 @@ datasource db {
 }
 
 model Feedback {
-  id             Int           @id @default(autoincrement())
+  id             Int           @id @unique @default(autoincrement())
   message        String
   attachment     String?
   emoji          String?
@@ -26,11 +26,12 @@ model Feedback {
 }
 
 model Profile {
-  id                  Int               @id @default(autoincrement())
+  id                  Int               @id @unique @default(autoincrement())
   name                String
   username            String            @unique
   email               String            @unique
   password            String
+  points              Int               @default(0)
   profile_picture     String?
   groups              Group[]
   responsibility      String?
@@ -49,7 +50,7 @@ model Profile {
 }
 
 model Organization {
-  id           Int           @id @default(autoincrement())
+  id           Int           @id @unique @default(autoincrement())
   owner        Profile       @relation("OwnedOrganizations", fields: [owner_id], references: [id])
   owner_id     Int
   name         String
@@ -63,13 +64,13 @@ model Organization {
 }
 
 model ColorMode {
-  id            Int            @id @default(autoincrement())
+  id            Int            @id @unique @default(autoincrement())
   name          String
   organizations Organization[]
 }
 
 model Subscription {
-  id              Int          @id @default(autoincrement())
+  id              Int          @id @unique @default(autoincrement())
   acquired_at     DateTime
   expires_in      DateTime
   organization    Organization @relation(fields: [organization_id], references: [id])
@@ -80,7 +81,7 @@ model Subscription {
 }
 
 model Group {
-  id              Int          @id @default(autoincrement())
+  id              Int          @id @unique @default(autoincrement())
   name            String
   color           String?      @default("#000000")
   users           Profile[]
@@ -92,7 +93,7 @@ model Group {
 }
 
 model Skill {
-  id             Int          @id @default(autoincrement())
+  id             Int          @id @unique @default(autoincrement())
   user           Profile      @relation(fields: [user_id], references: [id])
   user_id        Int
   name           String
@@ -101,13 +102,13 @@ model Skill {
 }
 
 model Tag {
-  id       Int        @id @default(autoincrement())
+  id       Int        @id @unique @default(autoincrement())
   name     String     @unique
   feedback Feedback[]
 }
 
 model Objective {
-  id         Int      @id @default(autoincrement())
+  id         Int      @id @unique @default(autoincrement())
   name       String
   goal       Int
   group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
@@ -116,7 +117,7 @@ model Objective {
 }
 
 model Reaction {
-  id          Int      @id @default(autoincrement())
+  id          Int      @id @unique @default(autoincrement())
   emoji       String
   feedback    Feedback @relation(fields: [feedback_id], references: [id])
   feedback_id Int
@@ -125,7 +126,7 @@ model Reaction {
 }
 
 model Graduation {
-  id                  Int               @id @default(autoincrement())
+  id                  Int               @id @unique @default(autoincrement())
   user                Profile           @relation(fields: [user_id], references: [id])
   user_id             Int
   graduation_status    GraduationStatus? @relation(fields: [graduation_status_id], references: [id])
@@ -133,35 +134,35 @@ model Graduation {
 }
 
 model SkillStatus {
-  id     Int     @id @default(autoincrement())
+  id     Int     @id @unique @default(autoincrement())
   skills Skill[]
 }
 
 model GraduationStatus {
-  id          Int          @id @default(autoincrement())
+  id          Int          @id @unique @default(autoincrement())
   graduations Graduation[]
 }
 
 model VinculedAccount {
-  id      Int     @id @default(autoincrement())
+  id      Int     @id @unique @default(autoincrement())
   user    Profile @relation(fields: [user_id], references: [id])
   user_id Int
 }
 
 model Privacy {
-  id     Int     @id @default(autoincrement())
+  id     Int     @id @unique @default(autoincrement())
   name   String
   groups Group[]
 }
 
 model Permission {
-  id     Int     @id @default(autoincrement())
+  id     Int     @id @unique @default(autoincrement())
   name   String
   groups Group[]
 }
 
 model UserTokens {
-  id         Int      @id @default(autoincrement())
+  id         Int      @id @unique @default(autoincrement())
   token      String
   user       Profile  @relation(fields: [user_id], references: [id])
   user_id    Int
