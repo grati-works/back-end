@@ -14,6 +14,7 @@ interface IUsersRepository {
   ): Promise<IFindUserDTO>;
   findById(id: number, select?: Prisma.ProfileSelect): Promise<IFindUserDTO>;
   activate(id: number): Promise<void>;
+  addPoints(id: number, points: number): Promise<void>;
 }
 
 export { IUsersRepository };

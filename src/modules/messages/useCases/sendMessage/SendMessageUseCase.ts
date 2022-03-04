@@ -32,7 +32,9 @@ class SendMessageUseCase {
       );
     }
 
-    await this.messagesRepository.send(data);
+    await this.messagesRepository.send(data).then(async () => {
+      await this.usersRepository.addPoints(author_id, 1);
+    })
   }
 }
 

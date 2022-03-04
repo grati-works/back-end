@@ -68,6 +68,13 @@ class UsersRepository implements IUsersRepository {
       data: { activated: true },
     });
   }
+  
+  async addPoints(id: number, points: number): Promise<void> {
+    const user = await client.profile.findUnique({
+      where: { id },
+    });
+
+  }
 }
 
 export { UsersRepository };
