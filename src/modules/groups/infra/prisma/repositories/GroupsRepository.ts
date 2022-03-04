@@ -47,7 +47,7 @@ class GroupsRepository implements IGroupsRepository {
   }
 
   async addUser(group_id: number, email: string): Promise<Group> {
-    const profile = await client.profile.findUnique({
+    const profile = await client.user.findUnique({
       where: { email },
     });
 

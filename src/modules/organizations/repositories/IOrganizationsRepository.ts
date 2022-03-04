@@ -7,7 +7,10 @@ interface IOrganizationsRepository {
     organization_id: number,
     data: Prisma.OrganizationUpdateInput,
   ): Promise<void>;
-  addUser(organization_id: number, user: IAddUserDTO): Promise<Organization>;
+  addUser(
+    organization_id: number,
+    { email }: IAddUserDTO,
+  ): Promise<Organization>;
   removeUser(organization_id: number, user_id: number): Promise<Organization>;
   findById(id: number): Promise<Organization>;
   checkIfUserIsOwner(

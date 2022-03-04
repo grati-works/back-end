@@ -1,20 +1,17 @@
 import { inject, injectable } from 'tsyringe';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
-import { Profile } from '@prisma/client';
+import { User } from '@prisma/client';
 import { AppError } from '@shared/errors/AppError';
 
 @injectable()
-class GetUserProfileUseCase {
+class GetUserUseCase {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
   ) {}
 
-  async execute(organization_id: string, id: string): Promise<Profile> {
-    const user = await this.usersRepository.findProfileById(
-      Number(organization_id),
-      Number(id),
-    );
+  async execute(organization_id: string, id: string): Promise<User> {
+    const user = await this.usersRepository.findById(Number(id));
 
     if (!user) {
       throw new AppError('User not found.');
@@ -24,4 +21,4 @@ class GetUserProfileUseCase {
   }
 }
 
-export { GetUserProfileUseCase };
+export { GetUserUseCase };

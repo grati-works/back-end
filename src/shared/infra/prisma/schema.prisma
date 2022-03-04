@@ -34,10 +34,13 @@ model User {
   profile_picture     String?
   activated           Boolean        @default(false)
   owned_organizations Organization[] @relation("OwnedOrganizations")
+  organizations       Profile[]
 }
 
 model Profile {
   id                 Int               @id @unique @default(autoincrement())
+  user               User              @relation(fields: [user_id], references: [id])
+  user_id            Int
   groups             Group[]
   responsibility     String?
   description        String?
@@ -51,7 +54,7 @@ model Profile {
   deleted_feedbacks  Feedback[]        @relation("Delete")
   reactions          Reaction[]
   user_tokens        UserTokens[]
-  points             Int
+  points             Int              @default(0)
 }
 
 model Organization {

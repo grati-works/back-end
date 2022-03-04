@@ -1,14 +1,16 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { GetUserProfileUseCase } from './GetUserProfileUseCase';
+import { GetUserUseCase } from './GetUserUseCase';
 
-class GetUserProfileController {
+class GetUserController {
   handle = async (request: Request, response: Response): Promise<Response> => {
     const { organization_id, id } = request.params;
-    const getUserProfileUseCase = container.resolve(GetUserProfileUseCase);
+    const getUserUseCase = container.resolve(GetUserUseCase);
 
-    const user = await getUserProfileUseCase.execute(organization_id, id);
+    const user = await getUserUseCase.execute(organization_id, id);
+
+    delete user.password;
 
     return response.json({
       status: 'success',
@@ -17,4 +19,4 @@ class GetUserProfileController {
   };
 }
 
-export { GetUserProfileController };
+export { GetUserController };

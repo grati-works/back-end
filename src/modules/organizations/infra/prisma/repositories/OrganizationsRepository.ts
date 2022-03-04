@@ -2,6 +2,7 @@ import { Organization, Prisma } from '@prisma/client';
 import { IOrganizationsRepository } from '@modules/organizations/repositories/IOrganizationsRepository';
 import { client } from '@shared/infra/prisma';
 import { IAddUserDTO } from '@modules/organizations/dtos/IAddUserDTO';
+import { AppError } from '@shared/errors/AppError';
 
 class OrganizationsRepository implements IOrganizationsRepository {
   async create(data: Prisma.OrganizationCreateInput): Promise<Organization> {
@@ -24,19 +25,19 @@ class OrganizationsRepository implements IOrganizationsRepository {
 
   async addUser(
     organization_id: number,
-    user: IAddUserDTO,
+    { email }: IAddUserDTO,
   ): Promise<Organization> {
-    const profile = await client.profile.findUnique({
-      where: { email: user.email },
+    const user = await client.user.findUnique({
+      where: { email },
     });
 
-    if(profile) {
+    if (user) {
       const addedUser = await client.organization.update({
         where: { id: organization_id },
         data: {
           users: {
-            connect: {
-              id: profile.id,
+            create: {
+              user_id: user.id,
             },
           },
         },
@@ -44,18 +45,26 @@ class OrganizationsRepository implements IOrganizationsRepository {
 
       return addedUser;
     }
+    throw new AppError('User not found');
   }
 
   async removeUser(
     organization_id: number,
     user_id: number,
   ): Promise<Organization> {
+    const user = await client.profile.findFirst({
+      where: {
+        organization_id,
+        user_id,
+      },
+    });
+
     const removedUser = await client.organization.update({
       where: { id: organization_id },
       data: {
         users: {
           disconnect: {
-            id: user_id,
+            id: user.id,
           },
         },
       },
@@ -74,7 +83,7 @@ class OrganizationsRepository implements IOrganizationsRepository {
     user_id: number,
     organization_id: number,
   ): Promise<boolean> {
-    const organization = await client.profile.findUnique({
+    const organization = await client.user.findUnique({
       where: { id: user_id },
       include: {
         owned_organizations: true,
