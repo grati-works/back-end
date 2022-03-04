@@ -45,12 +45,13 @@ model Profile {
   graduations        Graduation[]
   vinculed_accounts  VinculedAccount[]
   organization       Organization      @relation(fields: [organization_id], references: [id])
-  organization_id     Int
+  organization_id    Int
   sended_feedbacks   Feedback[]        @relation("Send")
   received_feedbacks Feedback[]        @relation("Receive")
   deleted_feedbacks  Feedback[]        @relation("Delete")
   reactions          Reaction[]
   user_tokens        UserTokens[]
+  points             Int
 }
 
 model Organization {
@@ -117,7 +118,7 @@ model Objective {
   goal       Int
   group      Group    @relation(fields: [group_id], references: [id], onDelete: Cascade)
   expires_in DateTime
-  group_id    Int      @unique
+  group_id   Int      @unique
 }
 
 model Reaction {
