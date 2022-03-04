@@ -3,7 +3,7 @@ import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepositor
 import { IMessagesRepository } from '@modules/messages/repositories/IMessagesRepository';
 
 @injectable()
-class AddReactionUseCase {
+class RemoveReactionUseCase {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
@@ -28,7 +28,7 @@ class AddReactionUseCase {
       throw new Error('Message not found');
     }
 
-    await this.messagesRepository.addReaction(
+    await this.messagesRepository.removeReaction(
       Number(user_id),
       Number(feedback_id),
       emoji,
@@ -36,4 +36,4 @@ class AddReactionUseCase {
   }
 }
 
-export { AddReactionUseCase };
+export { RemoveReactionUseCase };
