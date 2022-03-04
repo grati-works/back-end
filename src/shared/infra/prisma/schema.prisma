@@ -9,49 +9,53 @@ datasource db {
 }
 
 model Feedback {
-  id             Int           @id @unique @default(autoincrement())
-  message        String
-  attachment     String?
-  emoji          String?
-  deleted        Profile?      @relation("Delete", fields: [deleted_by], references: [id])
-  deleted_by     Int?
-  sender         Profile?      @relation("Send", fields: [sender_id], references: [id])
-  sender_id      Int?
-  receivers      Profile[]     @relation("Receive", references: [id])
-  created_at     DateTime      @default(now())
-  tags           Tag[]
+  id              Int          @id @unique @default(autoincrement())
+  message         String
+  attachment      String?
+  emoji           String?
+  deleted         Profile?     @relation("Delete", fields: [deleted_by], references: [id])
+  deleted_by      Int?
+  sender          Profile?     @relation("Send", fields: [sender_id], references: [id])
+  sender_id       Int?
+  receivers       Profile[]    @relation("Receive", references: [id])
+  created_at      DateTime     @default(now())
+  tags            Tag[]
   reactions       Reaction[]
-  organization   Organization @relation("Organization", fields: [organization_id], references: [id])
+  organization    Organization @relation("Organization", fields: [organization_id], references: [id])
   organization_id Int
 }
 
-model Profile {
-  id                  Int               @id @unique @default(autoincrement())
+model User {
+  id                  Int            @id @unique @default(autoincrement())
   name                String
-  username            String            @unique
-  email               String            @unique
+  username            String         @unique
+  email               String         @unique
   password            String
-  points              Int               @default(0)
   profile_picture     String?
-  groups              Group[]
-  responsibility      String?
-  description         String?
-  activated           Boolean           @default(false)
-  skills              Skill[]
-  graduations         Graduation[]
-  vinculed_accounts   VinculedAccount[]
-  organizations       Organization[]
-  owned_organizations Organization[]    @relation("OwnedOrganizations")
-  sended_feedbacks    Feedback[]        @relation("Send")
-  received_feedbacks  Feedback[]        @relation("Receive")
-  deleted_feedbacks   Feedback[]        @relation("Delete")
-  reactions            Reaction[]
-  user_tokens          UserTokens[]
+  activated           Boolean        @default(false)
+  owned_organizations Organization[] @relation("OwnedOrganizations")
+}
+
+model Profile {
+  id                 Int               @id @unique @default(autoincrement())
+  groups             Group[]
+  responsibility     String?
+  description        String?
+  skills             Skill[]
+  graduations        Graduation[]
+  vinculed_accounts  VinculedAccount[]
+  organization       Organization      @relation(fields: [organization_id], references: [id])
+  organization_id     Int
+  sended_feedbacks   Feedback[]        @relation("Send")
+  received_feedbacks Feedback[]        @relation("Receive")
+  deleted_feedbacks  Feedback[]        @relation("Delete")
+  reactions          Reaction[]
+  user_tokens        UserTokens[]
 }
 
 model Organization {
   id           Int           @id @unique @default(autoincrement())
-  owner        Profile       @relation("OwnedOrganizations", fields: [owner_id], references: [id])
+  owner        User          @relation("OwnedOrganizations", fields: [owner_id], references: [id])
   owner_id     Int
   name         String
   subscription Subscription?
@@ -93,10 +97,10 @@ model Group {
 }
 
 model Skill {
-  id             Int          @id @unique @default(autoincrement())
-  user           Profile      @relation(fields: [user_id], references: [id])
-  user_id        Int
-  name           String
+  id              Int          @id @unique @default(autoincrement())
+  user            Profile      @relation(fields: [user_id], references: [id])
+  user_id         Int
+  name            String
   skill_status    SkillStatus? @relation(fields: [skill_status_id], references: [id])
   skill_status_id Int?
 }
@@ -111,9 +115,9 @@ model Objective {
   id         Int      @id @unique @default(autoincrement())
   name       String
   goal       Int
-  group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  group      Group    @relation(fields: [group_id], references: [id], onDelete: Cascade)
   expires_in DateTime
-  groupId    Int      @unique
+  group_id    Int      @unique
 }
 
 model Reaction {
@@ -126,9 +130,9 @@ model Reaction {
 }
 
 model Graduation {
-  id                  Int               @id @unique @default(autoincrement())
-  user                Profile           @relation(fields: [user_id], references: [id])
-  user_id             Int
+  id                   Int               @id @unique @default(autoincrement())
+  user                 Profile           @relation(fields: [user_id], references: [id])
+  user_id              Int
   graduation_status    GraduationStatus? @relation(fields: [graduation_status_id], references: [id])
   graduation_status_id Int?
 }
