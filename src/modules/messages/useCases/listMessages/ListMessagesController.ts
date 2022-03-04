@@ -14,7 +14,7 @@ class ListMessagesController {
     const messages = await listMessagesUseCase.execute(
       user.id,
       organization_id,
-      Number(page),
+      Number(page || 0),
     );
 
     return response.json(messages);
