@@ -9,6 +9,7 @@ import { EditOrganizationController } from '@modules/organizations/useCases/edit
 import { AddUsersController } from '@modules/organizations/useCases/addUsers/AddUsersController';
 import { AddUsersViaCSVController } from '@modules/organizations/useCases/addUsers/AddUsersViaCSVController';
 import { RemoveUserController } from '@modules/organizations/useCases/removeUser/RemoveUserController';
+import { ShowRankingController } from '@modules/organizations/useCases/showRanking/ShowRankingController';
 
 const organizationRoutes = Router();
 
@@ -19,6 +20,7 @@ const editOrganizationController = new EditOrganizationController();
 const addUsersController = new AddUsersController();
 const addUsersViaCsvController = new AddUsersViaCSVController();
 const removeUserController = new RemoveUserController();
+const showRankingController = new ShowRankingController();
 
 organizationRoutes.post(
   '/',
@@ -45,6 +47,11 @@ organizationRoutes.delete(
   '/:organization_id/users/:user_id',
   ensureAuthenticated,
   removeUserController.handle,
+);
+organizationRoutes.get(
+  '/:organization_id/ranking',
+  ensureAuthenticated,
+  showRankingController.handle,
 );
 
 export { organizationRoutes };

@@ -1,5 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 import { IOrganizationsRepository } from '@modules/organizations/repositories/IOrganizationsRepository';
+import { Profile } from '@prisma/client';
 
 @injectable()
 class ShowRankingUseCase {
@@ -8,8 +9,11 @@ class ShowRankingUseCase {
     private organizationsRepository: IOrganizationsRepository,
   ) {}
 
-  async execute(organization_id: string): Promise<void> {
-    await this.organizationsRepository.getRanking(Number(organization_id));
+  async execute(organization_id: string): Promise<Profile[]> {
+    const ranking = await this.organizationsRepository.getRanking(
+      Number(organization_id),
+    );
+    return ranking;
   }
 }
 

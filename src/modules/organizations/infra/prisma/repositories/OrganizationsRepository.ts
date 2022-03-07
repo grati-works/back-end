@@ -81,6 +81,49 @@ class OrganizationsRepository implements IOrganizationsRepository {
   }
 
   async getRanking(organization_id: number, page = 0): Promise<Profile[]> {
+    const receiversAppears = {};
+    const senderAppears = {};
+
+    const feedbacks = await client.feedback.findMany({
+      where: { organization_id },
+      select: {
+        sender_id: true,
+        receivers: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    feedbacks.forEach(feedback => {
+      feedback.receivers.forEach(receiver => {
+        if (receiversAppears[receiver.id]) {
+          receiversAppears[receiver.id] += 1;
+        } else {
+          receiversAppears[receiver.id] = 1;
+        }
+      });
+
+      if (senderAppears[feedback.sender_id]) {
+        senderAppears[feedback.sender_id] += 1;
+      } else {
+        senderAppears[feedback.sender_id] = 1;
+      }
+    });
+
+    Object.values(receiversAppears).forEach((appears, key) => {
+      receiversAppears[Object.keys(receiversAppears)[key]] =
+        Number(appears) * 10;
+    });
+
+    Object.values(senderAppears).forEach((appears, key) => {
+      receiversAppears[Object.keys(receiversAppears)[key]] +=
+        Number(appears) * 5;
+    });
+
+    // TODO: order by points
+
     const ranking = await client.profile.findMany({
       where: { organization_id },
       orderBy: { points: 'desc' },

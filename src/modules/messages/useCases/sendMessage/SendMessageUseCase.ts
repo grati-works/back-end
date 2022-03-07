@@ -18,8 +18,12 @@ class SendMessageUseCase {
   ) {}
 
   async execute(data: SendArgs): Promise<void> {
-    const { author_id } = data;
-    const author = await this.profilesRepository.findById(Number(author_id));
+    const { author_id, organization_id } = data;
+    const author =
+      await this.profilesRepository.findProfileByUserAndOrganizationId(
+        Number(organization_id),
+        Number(author_id),
+      );
 
     if (!author) {
       throw new Error('Author not found');

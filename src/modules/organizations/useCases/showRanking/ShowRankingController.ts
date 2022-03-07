@@ -9,9 +9,12 @@ class ShowRankingController {
 
     const showRankingUseCase = container.resolve(ShowRankingUseCase);
 
-    await showRankingUseCase.execute(organization_id);
+    const ranking = await showRankingUseCase.execute(organization_id);
 
-    return response.status(201).send();
+    return response.status(201).send({
+      status: 'success',
+      data: ranking,
+    });
   }
 }
 
