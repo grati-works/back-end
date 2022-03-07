@@ -9,9 +9,13 @@ import { AppError } from '@shared/errors/AppError';
 
 const userSelect = {
   select: {
-    id: true,
-    name: true,
-    profile_picture: true,
+    user: {
+      select: {
+        id: true,
+        name: true,
+        profile_picture: true,
+      },
+    },
   },
 };
 class MessagesRepository implements IMessagesRepository {

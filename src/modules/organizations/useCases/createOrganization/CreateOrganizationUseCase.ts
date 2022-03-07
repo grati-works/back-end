@@ -34,7 +34,8 @@ class CreateOrganizationUseCase {
           },
         },
       })
-      .then(async () => {
+      .then(async organization => {
+        this.organizationsRepository.addUser(organization.id, owner);
         const userMail = owner.email;
         const sendOrganizationCreateMailUseCase = container.resolve(
           SendOrganizationCreateMailUseCase,
