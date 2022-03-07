@@ -44,7 +44,7 @@ class SendActivateAccountMailUseCase {
 
     this.mailProvider.sendMail(
       email,
-      'Ativação de conta',
+      'Ativação de conta | Grati',
       variables,
       ActivateAccountTemplate,
     );

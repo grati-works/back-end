@@ -45,7 +45,7 @@ class SendCreateAccountMailUseCase {
 
     this.mailProvider.sendMail(
       email,
-      'Conta grati criada com sucesso!',
+      'Conta grati criada com sucesso! | Grati',
       variables,
       CreateAccountTemplate,
     );

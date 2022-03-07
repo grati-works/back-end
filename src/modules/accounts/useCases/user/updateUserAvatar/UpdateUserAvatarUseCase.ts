@@ -23,9 +23,9 @@ class UpdateUserAvatarUseCase {
       await this.storageProvider.delete(user.profile_picture, 'avatar');
     await this.storageProvider.save(avatar_file, 'avatars');
 
-    user.profile_picture = avatar_file;
-
-    await this.usersRepository.create(user);
+    await this.usersRepository.update(user.id, {
+      profile_picture: avatar_file,
+    });
   }
 }
 

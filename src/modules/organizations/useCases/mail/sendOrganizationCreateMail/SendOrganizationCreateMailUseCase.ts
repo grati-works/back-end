@@ -45,7 +45,7 @@ class SendOrganizationCreateMailUseCase {
 
     this.mailProvider.sendMail(
       email,
-      'Organização criada com sucesso!',
+      'Organização criada com sucesso! | Grati',
       variables,
       OrganizationCreateTemplate,
     );

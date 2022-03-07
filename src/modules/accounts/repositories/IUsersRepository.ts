@@ -1,23 +1,19 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateuserDTO';
 import { IFindUserDTO } from '@modules/accounts/dtos/IFindUserDTO';
-import { Prisma, Profile, User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 interface IUsersRepository {
-  create(data: ICreateUserDTO): Promise<User>;
-  update(
-    id: number,
-    { name, username, password }: Prisma.UserUpdateInput,
-  ): Promise<User>;
-  findByEmail(email: string, select?: Prisma.UserSelect): Promise<IFindUserDTO>;
-  findById(id: number, select?: Prisma.UserSelect): Promise<IFindUserDTO>;
-  findProfileById(
-    organization_id: number,
-    id: number,
-    select?: Prisma.ProfileSelect,
-  ): Promise<Profile>;
+  create(data: Prisma.UserCreateInput): Promise<User>;
+  update(id: number, data: Prisma.UserUpdateInput): Promise<User>;
+  findByEmail(
+    email: string,
+    include?: Prisma.UserInclude,
+  ): Promise<IFindUserDTO>;
+  findByUsername(
+    username: string,
+    include?: Prisma.UserInclude,
+  ): Promise<IFindUserDTO>;
+  findById(id: number, include?: Prisma.UserInclude): Promise<IFindUserDTO>;
   activate(id: number): Promise<void>;
-  addPoints(organization_id: number, id: number, points: number): Promise<void>;
-  getRanking(organization_id: number, page?: number): Promise<Profile[]>;
 }
 
 export { IUsersRepository };

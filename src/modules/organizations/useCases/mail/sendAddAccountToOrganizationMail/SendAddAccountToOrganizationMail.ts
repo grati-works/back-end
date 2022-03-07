@@ -45,7 +45,7 @@ class SendAddAccountToOrganizationMailUseCase {
 
     this.mailProvider.sendMail(
       email,
-      'Você foi adicionado à uma organização!',
+      'Você foi adicionado à uma organização! | Grati',
       variables,
       CreateAccountTemplate,
     );

@@ -5,6 +5,9 @@ import '@shared/container/providers';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
 
+import { IProfilesRepository } from '@modules/accounts/repositories/IProfilesRepository';
+import { ProfilesRepository } from '@modules/accounts/infra/prisma/repositories/ProfilesRepository';
+
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
 
@@ -20,6 +23,11 @@ import { MessagesRepository } from '@modules/messages/infra/prisma/repositories/
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
+);
+
+container.registerSingleton<IProfilesRepository>(
+  'ProfilesRepository',
+  ProfilesRepository,
 );
 
 container.registerSingleton<IUsersTokensRepository>(

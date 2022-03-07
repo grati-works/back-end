@@ -13,18 +13,22 @@ class CreateGroupUseCase {
   ) {}
 
   async execute(
-    authorId: string,
-    organizationId: string,
+    author_id: string,
+    organization_id: string,
     groupName: string,
     color?: string,
   ): Promise<void> {
-    const author = await this.usersRepository.findById(Number(authorId));
+    const author = await this.usersRepository.findById(Number(author_id));
     const group = await this.groupsRepository.create(
-      Number(organizationId),
+      Number(organization_id),
       groupName,
       color,
     );
-    await this.groupsRepository.addUser(group.id, author.email);
+    await this.groupsRepository.addUser(
+      Number(organization_id),
+      group.id,
+      author.email,
+    );
   }
 }
 

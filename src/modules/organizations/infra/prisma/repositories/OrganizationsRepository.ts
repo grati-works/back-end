@@ -1,4 +1,4 @@
-import { Organization, Prisma } from '@prisma/client';
+import { Organization, Prisma, Profile } from '@prisma/client';
 import { IOrganizationsRepository } from '@modules/organizations/repositories/IOrganizationsRepository';
 import { client } from '@shared/infra/prisma';
 import { IAddUserDTO } from '@modules/organizations/dtos/IAddUserDTO';
@@ -48,29 +48,14 @@ class OrganizationsRepository implements IOrganizationsRepository {
     throw new AppError('User not found');
   }
 
-  async removeUser(
-    organization_id: number,
-    user_id: number,
-  ): Promise<Organization> {
-    const user = await client.profile.findFirst({
-      where: {
-        organization_id,
-        user_id,
-      },
+  async removeUser(organization_id: number, user_id: number): Promise<void> {
+    const profile = await client.profile.findFirst({
+      where: { user_id, organization_id },
     });
 
-    const removedUser = await client.organization.update({
-      where: { id: organization_id },
-      data: {
-        users: {
-          disconnect: {
-            id: user.id,
-          },
-        },
-      },
+    await client.profile.delete({
+      where: { id: profile.id },
     });
-
-    return removedUser;
   }
 
   findById(id: number): Promise<Organization> {
@@ -93,6 +78,17 @@ class OrganizationsRepository implements IOrganizationsRepository {
     return organization.owned_organizations.some(
       organization => organization.id === organization_id,
     );
+  }
+
+  async getRanking(organization_id: number, page = 0): Promise<Profile[]> {
+    const ranking = await client.profile.findMany({
+      where: { organization_id },
+      orderBy: { points: 'desc' },
+      skip: page * 10,
+      take: 10,
+    });
+
+    return ranking;
   }
 }
 

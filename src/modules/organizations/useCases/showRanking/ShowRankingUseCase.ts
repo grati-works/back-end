@@ -1,15 +1,15 @@
 import { inject, injectable } from 'tsyringe';
-import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
+import { IOrganizationsRepository } from '@modules/organizations/repositories/IOrganizationsRepository';
 
 @injectable()
 class ShowRankingUseCase {
   constructor(
-    @inject('UsersRepository')
-    private usersRepository: IUsersRepository,
+    @inject('OrganizationsRepository')
+    private organizationsRepository: IOrganizationsRepository,
   ) {}
 
   async execute(organization_id: string): Promise<void> {
-    await this.usersRepository.getRanking(Number(organization_id));
+    await this.organizationsRepository.getRanking(Number(organization_id));
   }
 }
 

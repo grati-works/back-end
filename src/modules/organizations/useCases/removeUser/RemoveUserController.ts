@@ -6,7 +6,7 @@ import { RemoveUserUseCase } from './RemoveUserUseCase';
 class RemoveUserController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { user: author } = request;
-    const { organization_id, user_id } = request.body;
+    const { organization_id, user_id } = request.params;
 
     const removeUserUseCase = container.resolve(RemoveUserUseCase);
 

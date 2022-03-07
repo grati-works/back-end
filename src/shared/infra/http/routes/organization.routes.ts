@@ -31,18 +31,18 @@ organizationRoutes.patch(
   editOrganizationController.handle,
 );
 organizationRoutes.post(
-  '/users/:organization_id',
+  '/:organization_id/users',
   ensureAuthenticated,
   addUsersController.handle,
 );
 organizationRoutes.post(
-  '/users/:organization_id/csv',
+  '/:organization_id/users/csv',
   uploadUsers.single('file'),
   ensureAuthenticated,
   addUsersViaCsvController.handle,
 );
 organizationRoutes.delete(
-  '/users',
+  '/:organization_id/users/:user_id',
   ensureAuthenticated,
   removeUserController.handle,
 );

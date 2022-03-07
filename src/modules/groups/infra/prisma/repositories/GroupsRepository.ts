@@ -46,10 +46,27 @@ class GroupsRepository implements IGroupsRepository {
     });
   }
 
-  async addUser(group_id: number, email: string): Promise<Group> {
-    const profile = await client.user.findUnique({
+  async addUser(
+    organization_id: number,
+    group_id: number,
+    email: string,
+  ): Promise<Group> {
+    const user = await client.user.findUnique({
       where: { email },
     });
+
+    let profile = await client.profile.findFirst({
+      where: { user_id: user.id, organization_id },
+    });
+
+    if (profile === null) {
+      profile = await client.profile.create({
+        data: {
+          organization_id,
+          user_id: user.id,
+        },
+      });
+    }
 
     const updatedGroup = await client.group.update({
       where: { id: group_id },

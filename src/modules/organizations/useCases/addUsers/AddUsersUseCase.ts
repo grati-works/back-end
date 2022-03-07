@@ -1,6 +1,6 @@
 import { inject, injectable, container } from 'tsyringe';
-import { Organization } from '@prisma/client';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
+import { IProfilesRepository } from '@modules/accounts/repositories/IProfilesRepository';
 import { IOrganizationsRepository } from '@modules/organizations/repositories/IOrganizationsRepository';
 import { AppError } from '@shared/errors/AppError';
 import { hash } from 'bcryptjs';
@@ -12,8 +12,6 @@ import { IAddUserDTO } from '@modules/organizations/dtos/IAddUserDTO';
 import { v4 as uuidV4 } from 'uuid';
 import { SendCreateAccountMailUseCase } from '@modules/organizations/useCases/mail/sendCreateAccountMail/SendOrganizationCreateMailUseCase';
 import { SendAddAccountToOrganizationMailUseCase } from '@modules/organizations/useCases/mail/sendAddAccountToOrganizationMail/SendAddAccountToOrganizationMail';
-
-import { Express } from 'express';
 
 interface IAddUsers {
   organizationId: string;
@@ -28,6 +26,8 @@ class AddUsersUseCase {
     private organizationsRepository: IOrganizationsRepository,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+    @inject('ProfilesRepository')
+    private profilesRepository: IProfilesRepository,
   ) {}
 
   loadUsers(file: Express.Multer.File): Promise<IAddUserDTO[]> {
@@ -89,7 +89,16 @@ class AddUsersUseCase {
     (parsedUsers as IAddUserDTO[]).map(async user => {
       const userAlreadyHaveAccount = await this.usersRepository.findByEmail(
         user.email,
+        {
+          organizations: true,
+        },
       );
+
+      const userAlreadyInOrganization =
+        userAlreadyHaveAccount &&
+        userAlreadyHaveAccount.organizations.some(
+          organization => organization.id === Number(organizationId),
+        );
 
       if (!userAlreadyHaveAccount) {
         const temporaryPassword = `${uuidV4().substring(0, 5)}-${
@@ -104,6 +113,11 @@ class AddUsersUseCase {
             username: user.username,
             email: user.email,
             password: hashedPassword,
+            organizations: {
+              connect: {
+                id: Number(organizationId),
+              },
+            },
           })
           .then(async () => {
             const sendCreateAccountMailUseCase = container.resolve(
@@ -114,7 +128,9 @@ class AddUsersUseCase {
               organization.name,
             );
           });
-      } else {
+      }
+
+      if (!userAlreadyInOrganization) {
         const sendAddAccountToOrganizationMailUseCase = container.resolve(
           SendAddAccountToOrganizationMailUseCase,
         );
@@ -122,9 +138,9 @@ class AddUsersUseCase {
           user.email,
           organization.name,
         );
-      }
 
-      this.organizationsRepository.addUser(organization.id, user);
+        this.organizationsRepository.addUser(organization.id, user);
+      }
     });
   }
 }
