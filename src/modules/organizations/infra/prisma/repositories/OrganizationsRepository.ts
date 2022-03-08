@@ -80,55 +80,91 @@ class OrganizationsRepository implements IOrganizationsRepository {
     );
   }
 
-  async getRanking(organization_id: number, page = 0): Promise<Profile[]> {
-    const receiversAppears = {};
-    const senderAppears = {};
-
-    const feedbacks = await client.feedback.findMany({
-      where: { organization_id },
+  async getRanking(
+    organization_id: number,
+    { page = 0, start_date, end_date },
+  ): Promise<Profile[]> {
+    const users = await client.profile.findMany({
+      where: {
+        organization_id,
+        OR: [
+          {
+            received_feedbacks: {
+              every: {
+                created_at: {
+                  gte: start_date,
+                  lte: end_date,
+                },
+              },
+            },
+          },
+          {
+            sended_feedbacks: {
+              every: {
+                created_at: {
+                  gte: start_date,
+                  lte: end_date,
+                },
+              },
+            },
+          },
+        ],
+      },
       select: {
-        sender_id: true,
-        receivers: {
+        user_id: true,
+        sended_feedbacks: {
+          where: {
+            created_at: {
+              gte: start_date,
+              lte: end_date,
+            },
+          },
+          select: {
+            id: true,
+          },
+        },
+        received_feedbacks: {
+          where: {
+            created_at: {
+              gte: start_date,
+              lte: end_date,
+            },
+          },
           select: {
             id: true,
           },
         },
       },
+      orderBy: {
+        received_feedbacks: {
+          _count: 'desc',
+        },
+      },
     });
 
-    feedbacks.forEach(feedback => {
-      feedback.receivers.forEach(receiver => {
-        if (receiversAppears[receiver.id]) {
-          receiversAppears[receiver.id] += 1;
-        } else {
-          receiversAppears[receiver.id] = 1;
-        }
-      });
+    const userPoints = {};
 
-      if (senderAppears[feedback.sender_id]) {
-        senderAppears[feedback.sender_id] += 1;
-      } else {
-        senderAppears[feedback.sender_id] = 1;
-      }
+    users.forEach(user => {
+      userPoints[user.user_id] =
+        user.received_feedbacks.length * 10 + user.sended_feedbacks.length * 5;
     });
 
-    Object.values(receiversAppears).forEach((appears, key) => {
-      receiversAppears[Object.keys(receiversAppears)[key]] =
-        Number(appears) * 10;
-    });
-
-    Object.values(senderAppears).forEach((appears, key) => {
-      receiversAppears[Object.keys(receiversAppears)[key]] +=
-        Number(appears) * 5;
-    });
-
-    // TODO: order by points
+    const sortedUsers = Object.keys(userPoints).sort(
+      (a, b) => userPoints[b] - userPoints[a],
+    );
 
     const ranking = await client.profile.findMany({
-      where: { organization_id },
-      orderBy: { points: 'desc' },
-      skip: page * 10,
-      take: 10,
+      where: {
+        organization_id,
+        user_id: {
+          in: sortedUsers.slice(page * 10, page * 10 + 10).map(Number),
+        },
+      },
+    });
+
+    ranking.map(user => {
+      user.points = userPoints[user.user_id];
+      return user;
     });
 
     return ranking;

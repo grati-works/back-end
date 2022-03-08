@@ -1,6 +1,11 @@
 import { Organization, Prisma, Profile } from '@prisma/client';
 import { IAddUserDTO } from '@modules/organizations/dtos/IAddUserDTO';
 
+interface IRankingFilter {
+  page?: number;
+  start_date?: Date;
+  end_date?: Date;
+}
 interface IOrganizationsRepository {
   create(data: Prisma.OrganizationCreateInput): Promise<Organization>;
   update(
@@ -17,7 +22,10 @@ interface IOrganizationsRepository {
     user_id: number,
     organization_id: number,
   ): Promise<boolean>;
-  getRanking(organization_id: number, page?: number): Promise<Profile[]>;
+  getRanking(
+    organization_id: number,
+    { page, start_date, end_date }?: IRankingFilter,
+  ): Promise<Profile[]>;
 }
 
-export { IOrganizationsRepository };
+export { IOrganizationsRepository, IRankingFilter };

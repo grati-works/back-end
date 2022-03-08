@@ -6,10 +6,21 @@ import { ShowRankingUseCase } from './ShowRankingUseCase';
 class ShowRankingController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { organization_id } = request.params;
+    const { page, start_date, end_date } = request.query;
 
     const showRankingUseCase = container.resolve(ShowRankingUseCase);
 
-    const ranking = await showRankingUseCase.execute(organization_id);
+    const nowDate = new Date();
+
+    const ranking = await showRankingUseCase.execute(organization_id, {
+      page: Number(page) || 0,
+      start_date: start_date
+        ? new Date(start_date.toString())
+        : new Date(nowDate.getFullYear(), nowDate.getMonth(), 1),
+      end_date: end_date
+        ? new Date(end_date.toString())
+        : new Date(nowDate.getFullYear(), nowDate.getMonth(), 31),
+    });
 
     return response.status(201).send({
       status: 'success',
