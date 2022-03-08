@@ -18,8 +18,8 @@ class ShowRankingController {
         ? new Date(start_date.toString())
         : new Date(nowDate.getFullYear(), nowDate.getMonth(), 1),
       end_date: end_date
-        ? new Date(end_date.toString())
-        : new Date(nowDate.getFullYear(), nowDate.getMonth(), 31),
+        ? new Date(`${end_date.toString()}T23:59:59`)
+        : new Date(nowDate.getFullYear(), nowDate.getMonth(), 31, 23, 59, 59),
     });
 
     return response.status(201).send({
