@@ -84,7 +84,6 @@ class OrganizationsRepository implements IOrganizationsRepository {
     organization_id: number,
     { page = 0, start_date, end_date },
   ): Promise<Profile[]> {
-    console.log(start_date, end_date);
     const users = await client.profile.findMany({
       where: {
         organization_id,
