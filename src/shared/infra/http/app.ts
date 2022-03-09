@@ -15,7 +15,9 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/avatar', express.static(`${upload.tmpFolder}/avatar`));
+app.use('/avatars', express.static(`${upload.tmpFolder}/avatars`));
+app.use('/attachments', express.static(`${upload.tmpFolder}/attachments`));
+app.use('/reports', express.static(`${upload.tmpFolder}/reports`));
 
 app.use(router);
 
