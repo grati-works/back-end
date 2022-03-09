@@ -10,6 +10,7 @@ import { AddUsersController } from '@modules/organizations/useCases/addUsers/Add
 import { AddUsersViaCSVController } from '@modules/organizations/useCases/addUsers/AddUsersViaCSVController';
 import { RemoveUserController } from '@modules/organizations/useCases/removeUser/RemoveUserController';
 import { ShowRankingController } from '@modules/organizations/useCases/showRanking/ShowRankingController';
+import { GenerateMonthReportsController } from '@modules/organizations/useCases/generateMonthReports/GenerateMonthReportsController';
 
 const organizationRoutes = Router();
 
@@ -21,6 +22,7 @@ const addUsersController = new AddUsersController();
 const addUsersViaCsvController = new AddUsersViaCSVController();
 const removeUserController = new RemoveUserController();
 const showRankingController = new ShowRankingController();
+const generateMonthReportsController = new GenerateMonthReportsController();
 
 organizationRoutes.post(
   '/',
@@ -52,6 +54,11 @@ organizationRoutes.get(
   '/:organization_id/ranking',
   ensureAuthenticated,
   showRankingController.handle,
+);
+organizationRoutes.get(
+  '/:organization_id/reports',
+  ensureAuthenticated,
+  generateMonthReportsController.handle,
 );
 
 export { organizationRoutes };

@@ -25,7 +25,13 @@ interface IOrganizationsRepository {
   getRanking(
     organization_id: number,
     { page, start_date, end_date }?: IRankingFilter,
-  ): Promise<Profile[]>;
+    getUser?: true,
+  ): Promise<{
+    sended_feedbacks: number;
+    received_feedbacks: number;
+    ranking: Profile[];
+  }>;
+  getLevel(points: number): number;
 }
 
 export { IOrganizationsRepository, IRankingFilter };

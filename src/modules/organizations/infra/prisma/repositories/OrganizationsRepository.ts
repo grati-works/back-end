@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Organization, Prisma, Profile } from '@prisma/client';
 import { IOrganizationsRepository } from '@modules/organizations/repositories/IOrganizationsRepository';
 import { client } from '@shared/infra/prisma';
@@ -83,7 +85,12 @@ class OrganizationsRepository implements IOrganizationsRepository {
   async getRanking(
     organization_id: number,
     { page = 0, start_date, end_date },
-  ): Promise<Profile[]> {
+    getUser = false,
+  ): Promise<{
+    sended_feedbacks: number;
+    received_feedbacks: number;
+    ranking: Profile[];
+  }> {
     const users = await client.profile.findMany({
       where: {
         organization_id,
@@ -137,6 +144,16 @@ class OrganizationsRepository implements IOrganizationsRepository {
       },
     });
 
+    const sended_feedbacks = users.reduce(
+      (acc, user) => acc + user.sended_feedbacks.length,
+      0,
+    );
+
+    const received_feedbacks = users.reduce(
+      (acc, user) => acc + user.received_feedbacks.length,
+      0,
+    );
+
     const userPoints = {};
 
     users.forEach(user => {
@@ -155,14 +172,67 @@ class OrganizationsRepository implements IOrganizationsRepository {
           in: sortedUsers.slice(page * 10, page * 10 + 10).map(Number),
         },
       },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: getUser,
+            profile_picture: getUser,
+            username: getUser,
+          },
+        },
+      },
     });
 
     ranking.map(user => {
-      user.points = userPoints[user.user_id];
+      const points = userPoints[user.user.id];
+      user.points = points;
+      user.level = this.getLevel(points);
+      user.received_feedbacks = users.find(
+        profile => user.user.id === profile.user_id,
+      ).received_feedbacks.length;
       return user;
     });
 
-    return ranking;
+    return {
+      sended_feedbacks,
+      received_feedbacks,
+      ranking: ranking.sort((a, b) => b.points - a.points),
+    };
+  }
+
+  getLevel(points: number): number {
+    if (points >= 0 && points < 100) {
+      return 1;
+    }
+    if (points >= 100 && points < 200) {
+      return 2;
+    }
+    if (points >= 200 && points < 300) {
+      return 3;
+    }
+    if (points >= 300 && points < 400) {
+      return 4;
+    }
+    if (points >= 400 && points < 500) {
+      return 5;
+    }
+    if (points >= 500 && points < 600) {
+      return 6;
+    }
+    if (points >= 600 && points < 700) {
+      return 7;
+    }
+    if (points >= 700 && points < 800) {
+      return 8;
+    }
+    if (points >= 800 && points < 900) {
+      return 9;
+    }
+    if (points >= 900 && points < 1000) {
+      return 10;
+    }
+    return 1;
   }
 }
 
