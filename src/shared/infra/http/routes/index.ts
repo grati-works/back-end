@@ -7,6 +7,7 @@ import { organizationRoutes } from './organization.routes';
 import { groupRoutes } from './group.routes';
 import { passwordRoutes } from './password.routes';
 import { authenticationRoutes } from './authentication.routes';
+import { paymentRoutes } from './payment.routes';
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.use('/message', messageRoutes);
 router.use('/organization', organizationRoutes);
 router.use('/group', groupRoutes);
 router.use('/password', passwordRoutes);
+router.use('/payment', paymentRoutes);
 router.use(authenticationRoutes);
 
 export { router };

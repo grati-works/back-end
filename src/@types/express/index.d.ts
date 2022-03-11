@@ -3,5 +3,9 @@ declare namespace Express {
     user: {
       id: string;
     };
+    rawBody: Buffer;
+  }
+  export interface IncomingMessage {
+    rawBody: Buffer;
   }
 }

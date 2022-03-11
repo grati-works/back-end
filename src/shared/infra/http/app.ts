@@ -13,7 +13,13 @@ import { router } from './routes';
 
 const app = express();
 
-app.use(express.json());
+app.use(
+  express.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf;
+    },
+  }),
+);
 
 app.use('/avatars', express.static(`${upload.tmpFolder}/avatars`));
 app.use('/attachments', express.static(`${upload.tmpFolder}/attachments`));

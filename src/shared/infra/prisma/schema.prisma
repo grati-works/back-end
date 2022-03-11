@@ -33,9 +33,11 @@ model User {
   password            String
   profile_picture     String?
   activated           Boolean        @default(false)
+  stripe_customer_id  String?        @unique
   owned_organizations Organization[] @relation("OwnedOrganizations")
   organizations       Profile[]
-  user_tokens        UserTokens[]
+  user_tokens         UserTokens[]
+  subscriptions       Subscription[]
 }
 
 model Profile {
@@ -54,7 +56,7 @@ model Profile {
   received_feedbacks Feedback[]        @relation("Receive")
   deleted_feedbacks  Feedback[]        @relation("Delete")
   reactions          Reaction[]
-  points             Int              @default(0)
+  points             Int               @default(0)
 }
 
 model Organization {
@@ -79,13 +81,15 @@ model ColorMode {
 
 model Subscription {
   id              Int          @id @unique @default(autoincrement())
-  acquired_at     DateTime
-  expires_in      DateTime
-  organization    Organization @relation(fields: [organization_id], references: [id])
-  organization_id Int          @unique
-  price           Int
+  acquired_at     DateTime     @default(now())
+  acquired_by     User         @relation(fields: [user_id], references: [id])
+  organization    Organization? @relation(fields: [organization_id], references: [id])
+  organization_id Int?         @unique
+  price_id        String
   status          String
-  payment_ref     String
+  payment_ref     String       @unique
+  user_id         Int
+  max_users       Int
 }
 
 model Group {
@@ -172,7 +176,7 @@ model Permission {
 model UserTokens {
   id         Int      @id @unique @default(autoincrement())
   token      String
-  user       User  @relation(fields: [user_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
   user_id    Int
   expires_at DateTime
   created_at DateTime @default(now())

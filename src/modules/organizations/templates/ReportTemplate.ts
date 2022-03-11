@@ -245,7 +245,6 @@ function OrganizationCreateTemplate({
         '.rankingContainer tbody',
       );
       const users = JSON.parse('${JSON.stringify(ranking)}');
-      console.log(users)
       users.forEach((profile, position) => {
         const rankingCard = document.createElement('tr');
         rankingCard.classList.add('cardContainer');
