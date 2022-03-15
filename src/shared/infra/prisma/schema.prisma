@@ -38,6 +38,7 @@ model User {
   organizations       Profile[]
   user_tokens         UserTokens[]
   subscriptions       Subscription[]
+  Notification        Notification[]
 }
 
 model Profile {
@@ -80,14 +81,14 @@ model ColorMode {
 }
 
 model Subscription {
-  id              Int          @id @unique @default(autoincrement())
-  acquired_at     DateTime     @default(now())
-  acquired_by     User         @relation(fields: [user_id], references: [id])
+  id              Int           @id @unique @default(autoincrement())
+  acquired_at     DateTime      @default(now())
+  acquired_by     User          @relation(fields: [user_id], references: [id])
   organization    Organization? @relation(fields: [organization_id], references: [id])
-  organization_id Int?         @unique
+  organization_id Int?          @unique
   price_id        String
   status          String
-  payment_ref     String       @unique
+  payment_ref     String        @unique
   user_id         Int
   max_users       Int
 }
@@ -181,4 +182,12 @@ model UserTokens {
   expires_at DateTime
   created_at DateTime @default(now())
   type       String
+}
+
+model Notification {
+  id         Int      @id @unique @default(autoincrement())
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    Int
+  visualized Boolean  @default(false)
 }

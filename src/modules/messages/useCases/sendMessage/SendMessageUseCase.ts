@@ -4,6 +4,7 @@ import {
   SendArgs,
   IMessagesRepository,
 } from '@modules/messages/repositories/IMessagesRepository';
+import { INotificationsRepository } from '@modules/notifications/repositories/INotificationsRepository';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/IStorageProvider';
 
 @injectable()
@@ -15,6 +16,8 @@ class SendMessageUseCase {
     private messagesRepository: IMessagesRepository,
     @inject('StorageProvider')
     private storageProvider: IStorageProvider,
+    @inject('NotificationsRepository')
+    private notificationsRepository: INotificationsRepository,
   ) {}
 
   async execute(data: SendArgs): Promise<void> {
@@ -40,6 +43,7 @@ class SendMessageUseCase {
       await this.profilesRepository.addPoints(author_id, 5);
       data.receivers_ids.map(async receiver_id => {
         await this.profilesRepository.addPoints(receiver_id, 10);
+        await this.notificationsRepository.create(receiver_id);
       });
     });
   }
