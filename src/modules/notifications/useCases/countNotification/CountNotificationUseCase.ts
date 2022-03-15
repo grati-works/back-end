@@ -8,9 +8,7 @@ class CountNotificationUseCase {
     private notificationsRepository: INotificationsRepository,
   ) {}
 
-  // user_id: number arg
-
-  async execute(user_id): Promise<number> {
+  async execute(user_id: number): Promise<number> {
     const count = await this.notificationsRepository.count(user_id);
     return count;
   }
