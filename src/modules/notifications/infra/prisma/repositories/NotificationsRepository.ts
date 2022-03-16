@@ -11,7 +11,7 @@ class NotificationsRepository implements INotificationsRepository {
     });
   }
 
-  async count(receiver_id): Promise<number> {
+  async count(receiver_id: number): Promise<number> {
     const count = await client.notification.count({
       where: {
         user_id: receiver_id,
@@ -19,6 +19,18 @@ class NotificationsRepository implements INotificationsRepository {
       },
     });
     return count;
+  }
+
+  async visualize(receiver_id: number): Promise<void> {
+    await client.notification.updateMany({
+      where: {
+        user_id: receiver_id,
+        visualized: false,
+      },
+      data: {
+        visualized: true,
+      },
+    });
   }
 }
 
