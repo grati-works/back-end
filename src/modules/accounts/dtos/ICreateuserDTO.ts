@@ -3,6 +3,7 @@ interface ICreateUserDTO {
   username: string;
   email: string;
   password: string;
+  activated?: boolean;
 }
 
 export { ICreateUserDTO };

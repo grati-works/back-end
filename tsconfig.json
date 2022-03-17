@@ -9,7 +9,8 @@
         "@modules/*": ["modules/*"],
         "@config/*": ["config/*"],
         "@shared/*": ["shared/*"],
-        "@utils/*": ["utils/*"]
+        "@utils/*": ["utils/*"],
+        "@tests/*": ["__tests__/*"]
       },
       "resolveJsonModule": true,
       "outDir": "./dist",

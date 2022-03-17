@@ -1,4 +1,4 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateuserDTO';
+import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { IFindUserDTO } from '@modules/accounts/dtos/IFindUserDTO';
 import { Prisma, User } from '@prisma/client';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
@@ -10,6 +10,7 @@ class UsersRepository implements IUsersRepository {
     username,
     email,
     password,
+    activated = false,
   }: ICreateUserDTO): Promise<User> {
     const user = await client.user.create({
       data: {
@@ -17,6 +18,7 @@ class UsersRepository implements IUsersRepository {
         username,
         email,
         password,
+        activated,
       },
     });
 

@@ -16,6 +16,7 @@ const app = express();
 app.use(
   express.json({
     verify: (req, res, buf) => {
+      // @ts-ignore
       req.rawBody = buf;
     },
   }),
@@ -27,7 +28,6 @@ app.use('/reports', express.static(`${upload.tmpFolder}/reports`));
 
 app.use(router);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (err instanceof AppError) {
     return response.status(err.statusCode).json({

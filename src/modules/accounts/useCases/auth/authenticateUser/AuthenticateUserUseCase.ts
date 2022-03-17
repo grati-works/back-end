@@ -17,6 +17,7 @@ interface IRequest {
 
 interface IResponse {
   user: {
+    id: number;
     name: string;
     email: string;
   };
@@ -33,7 +34,13 @@ class AuthenticateUserUseCase {
     private usersTokensRepository: IUsersTokensRepository,
     @inject('DayjsDateProvider')
     private dateProvider: IDateProvider,
-  ) {}
+    private mailProvider?: SendActivateAccountMailUseCase,
+  ) {
+    this.mailProvider =
+      mailProvider !== null
+        ? container.resolve(SendActivateAccountMailUseCase)
+        : null;
+  }
 
   async execute({ email, password }: IRequest): Promise<IResponse> {
     const user = await this.usersRepository.findByEmail(email);
@@ -44,30 +51,20 @@ class AuthenticateUserUseCase {
       expires_in_refresh_token,
     } = auth;
 
+    if (!user) {
+      throw new AppError('Email or password incorrect', 401);
+    }
+
     if (!user.activated) {
       const vinculedTokens = await this.usersTokensRepository.findByUserId(
         user.id,
       );
 
-      vinculedTokens
-        .filter(token => token.type === 'activate_account')
-        .forEach(async vinculedToken => {
-          if (Number.isNaN(Number(vinculedToken.token))) return;
-          await this.usersTokensRepository.deleteById(
-            Number(vinculedToken.token),
-          );
-        });
+      await this.deleteActivateAccountTokens(vinculedTokens);
 
-      const sendActivateAccountMailUseCase = container.resolve(
-        SendActivateAccountMailUseCase,
-      );
-      await sendActivateAccountMailUseCase.execute(email);
+      if (this.mailProvider !== null) await this.mailProvider.execute(email);
 
       throw new AppError('User not activated', 401);
-    }
-
-    if (!user) {
-      throw new AppError('Email or password incorrect', 401);
     }
 
     const passwordMatch = await compare(password, user.password);
@@ -98,11 +95,20 @@ class AuthenticateUserUseCase {
     return {
       token,
       user: {
+        id: user.id,
         name: user.name,
         email: user.email,
       },
       refresh_token,
     };
+  }
+
+  async deleteActivateAccountTokens(tokens) {
+    tokens
+      .filter(token => token.type === 'activate_account')
+      .forEach(async vinculedToken => {
+        await this.usersTokensRepository.deleteById(vinculedToken.token);
+      });
   }
 }
 
