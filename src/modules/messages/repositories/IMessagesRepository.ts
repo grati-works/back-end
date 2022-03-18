@@ -19,7 +19,7 @@ interface ListArgs {
   skip?: number;
 }
 interface IMessagesRepository {
-  send(args: SendArgs): Promise<void>;
+  send(args: SendArgs): Promise<number>;
   addReaction(
     author_id: number,
     feedback_id: number,

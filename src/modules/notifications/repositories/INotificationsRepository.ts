@@ -1,11 +1,14 @@
+import { Notification } from '@prisma/client';
+
 interface SendArgs {
-  receiver_id: number;
+  user_id: number;
+  feedback_receiver_id: number;
 }
 
 interface INotificationsRepository {
-  create(receiver_id: number): Promise<void>;
-  count(receiver_id: number): Promise<number>;
-  visualize(receiver_id: number): Promise<void>;
+  create(user_id: number, feedback_id: number): Promise<void>;
+  count(user_id: number): Promise<number>;
+  visualize(user_id: number): Promise<Notification[]>;
 }
 
 export { SendArgs, INotificationsRepository };

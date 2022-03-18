@@ -1,5 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 import { INotificationsRepository } from '@modules/notifications/repositories/INotificationsRepository';
+import { Notification } from '@prisma/client';
 
 @injectable()
 class VisualizeNotificationUseCase {
@@ -8,8 +9,9 @@ class VisualizeNotificationUseCase {
     private notificationsRepository: INotificationsRepository,
   ) {}
 
-  async execute(user_id): Promise<void> {
-    await this.notificationsRepository.visualize(user_id);
+  async execute(user_id): Promise<Notification[]> {
+    const notifications = await this.notificationsRepository.visualize(user_id);
+    return notifications;
   }
 }
 

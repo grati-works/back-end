@@ -26,8 +26,8 @@ class MessagesRepository implements IMessagesRepository {
     tags,
     message,
     attachments,
-  }: SendArgs): Promise<void> {
-    await client.feedback.create({
+  }: SendArgs): Promise<number> {
+    const feedback = await client.feedback.create({
       data: {
         sender: {
           connect: {
@@ -63,6 +63,8 @@ class MessagesRepository implements IMessagesRepository {
         },
       },
     });
+
+    return feedback.id;
   }
 
   async addReaction(

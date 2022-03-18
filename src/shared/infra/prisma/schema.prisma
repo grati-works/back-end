@@ -9,20 +9,21 @@ datasource db {
 }
 
 model Feedback {
-  id              Int          @id @unique @default(autoincrement())
+  id              Int            @id @unique @default(autoincrement())
   message         String
   attachment      String?
   emoji           String?
-  deleted         Profile?     @relation("Delete", fields: [deleted_by], references: [id])
+  deleted         Profile?       @relation("Delete", fields: [deleted_by], references: [id])
   deleted_by      Int?
-  sender          Profile?     @relation("Send", fields: [sender_id], references: [id])
+  sender          Profile?       @relation("Send", fields: [sender_id], references: [id])
   sender_id       Int?
-  receivers       Profile[]    @relation("Receive", references: [id])
-  created_at      DateTime     @default(now())
+  receivers       Profile[]      @relation("Receive", references: [id])
+  created_at      DateTime       @default(now())
   tags            Tag[]
   reactions       Reaction[]
-  organization    Organization @relation("Organization", fields: [organization_id], references: [id])
+  organization    Organization   @relation("Organization", fields: [organization_id], references: [id])
   organization_id Int
+  Notification    Notification[]
 }
 
 model User {
@@ -38,7 +39,7 @@ model User {
   organizations       Profile[]
   user_tokens         UserTokens[]
   subscriptions       Subscription[]
-  Notification        Notification[]
+  notifications       Notification[]
 }
 
 model Profile {
@@ -185,9 +186,11 @@ model UserTokens {
 }
 
 model Notification {
-  id         Int      @id @unique @default(autoincrement())
-  created_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id])
-  user_id    Int
-  visualized Boolean  @default(false)
+  id          Int      @id @unique @default(autoincrement())
+  created_at  DateTime @default(now())
+  visualized  Boolean  @default(false)
+  user        User     @relation(fields: [user_id], references: [id])
+  user_id     Int
+  feedback    Feedback @relation(fields: [feedback_id], references: [id])
+  feedback_id Int     
 }

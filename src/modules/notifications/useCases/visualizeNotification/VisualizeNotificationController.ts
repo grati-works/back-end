@@ -12,10 +12,13 @@ class VisualizeNotificationController {
       VisualizeNotificationUseCase,
     );
 
-    await visualizeNotificationUseCase.execute(user_id);
+    const visualize = await visualizeNotificationUseCase.execute(user_id);
 
     return response.json({
       status: 'success',
+      data: {
+        visualize,
+      },
     });
   }
 }

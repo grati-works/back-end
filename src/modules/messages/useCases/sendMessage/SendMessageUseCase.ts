@@ -39,11 +39,11 @@ class SendMessageUseCase {
       );
     }
 
-    await this.messagesRepository.send(data).then(async () => {
+    await this.messagesRepository.send(data).then(async feedback_id => {
       await this.profilesRepository.addPoints(author_id, 5);
       data.receivers_ids.map(async receiver_id => {
         await this.profilesRepository.addPoints(receiver_id, 10);
-        await this.notificationsRepository.create(receiver_id);
+        await this.notificationsRepository.create(receiver_id, feedback_id);
       });
     });
   }
