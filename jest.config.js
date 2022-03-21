@@ -25,5 +25,5 @@ module.exports = {
   },
   watchPathIgnorePatterns: ["/node_modules/"],
   transformIgnorePatterns: ["/node_modules/"],
-  collectCoverageFrom: ["src/modules/**/useCases/**/**/*.ts", "src/modules/**/useCases/**/*.ts"],
+  collectCoverageFrom: ["src/modules/**/useCases/**/**/*UseCase.ts", "src/modules/**/useCases/**/*UseCase.ts"],
 };

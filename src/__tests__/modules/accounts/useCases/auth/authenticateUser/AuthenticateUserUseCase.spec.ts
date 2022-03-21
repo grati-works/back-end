@@ -7,6 +7,7 @@ import { AuthenticateUserUseCase } from '@modules/accounts/useCases/auth/authent
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { AppError } from '@shared/errors/AppError';
+import { client } from '@shared/infra/prisma';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let createUserUseCase: CreateUserUseCase;
@@ -28,6 +29,11 @@ describe('Authenticate User', () => {
     );
 
     createUserUseCase = new CreateUserUseCase(usersRepository, null);
+  });
+
+  afterAll(async () => {
+    await client.userTokens.deleteMany();
+    await client.user.deleteMany();
   });
 
   it('should be able to authenticate a user', async () => {
@@ -86,7 +92,21 @@ describe('Authenticate User', () => {
       activated: false,
     };
 
-    await createUserUseCase.execute(user);
+    const createdUser = await createUserUseCase.execute(user);
+
+    const vinculedTokens = await usersTokensRepository.findByUserId(
+      createdUser.id,
+    );
+
+    await authenticateUserUseCase.deleteActivateAccountTokens(vinculedTokens);
+
+    const newVinculedTokens = await usersTokensRepository.findByUserId(
+      createdUser.id,
+    );
+
+    expect(
+      newVinculedTokens.filter(token => token.type === 'activate_account'),
+    ).toHaveLength(0);
 
     await expect(
       authenticateUserUseCase.execute({

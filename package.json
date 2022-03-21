@@ -7,8 +7,8 @@
     "build": "tsc",
     "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn --exit-child --poll .",
     "lint": "npx eslint . --fix",
-    "test": "export DATABASE_URL='postgresql://postgres:docker@localhost:5432/grati_test?schema=public'&& prisma migrate reset --force&& jest --runInBand",
-    "test:cov": "export DATABASE_URL='postgresql://postgres:docker@localhost:5432/grati_test?schema=public'&& prisma migrate reset --force&& jest --coverage"
+    "test": "export ENVIRONMENT=test&& export DATABASE_URL='postgresql://postgres:docker@localhost:5432/grati_test?schema=public'&& prisma migrate reset --force&& jest --runInBand",
+    "test:cov": "export ENVIRONMENT=test&& export DATABASE_URL='postgresql://postgres:docker@localhost:5432/grati_test?schema=public'&& prisma migrate reset --force&& jest --coverage"
   },
   "repository": {
     "type": "git",

@@ -4,6 +4,7 @@ import { verify, sign } from 'jsonwebtoken';
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 import auth from '@config/auth';
+import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 
 interface IPayload {
   sub: string;
@@ -13,6 +14,12 @@ interface IPayload {
 interface ITokenResponse {
   token: string;
   refresh_token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    profile_picture: string;
+  };
 }
 
 @injectable()
@@ -20,6 +27,8 @@ class RefreshTokenUseCase {
   constructor(
     @inject('UsersTokensRepository')
     private usersTokensRepository: IUsersTokensRepository,
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
     @inject('DayjsDateProvider')
     private dateProvider: IDateProvider,
   ) {}
@@ -60,17 +69,19 @@ class RefreshTokenUseCase {
       expiresIn: auth.expires_in_token,
     });
 
-    const { id, name, email, profile_picture } = await this.usersRepository.findByEmail(email);
+    const { name, profile_picture } = await this.usersRepository.findByEmail(
+      email,
+    );
 
     return {
       token: newToken,
       refresh_token,
       user: {
-        id,
+        id: user_id,
         name,
         email,
-        profile_picture 
-      }
+        profile_picture,
+      },
     };
   }
 }

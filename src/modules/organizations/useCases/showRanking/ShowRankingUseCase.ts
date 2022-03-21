@@ -16,13 +16,13 @@ class ShowRankingUseCase {
     organization_id: string,
     filter: IRankingFilter,
   ): Promise<Profile[]> {
-    const ranking = await this.organizationsRepository.getRanking(
+    const classification = await this.organizationsRepository.getRanking(
       Number(organization_id),
       {
         ...filter,
       },
     );
-    return ranking;
+    return classification.ranking;
   }
 }
 

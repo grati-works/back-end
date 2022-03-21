@@ -5,6 +5,7 @@ import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { AppError } from '@shared/errors/AppError';
 
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
+import { User } from '@prisma/client';
 
 @injectable()
 class CreateUserUseCase {
@@ -25,7 +26,7 @@ class CreateUserUseCase {
     email,
     password,
     activated = false,
-  }: ICreateUserDTO): Promise<void> {
+  }: ICreateUserDTO): Promise<User> {
     const userAlreadyExists = await this.usersRepository.findByEmail(email);
 
     if (userAlreadyExists) {
@@ -34,17 +35,17 @@ class CreateUserUseCase {
 
     const hashedPassword = await hash(password, 8);
 
-    await this.usersRepository
-      .create({
-        name,
-        username,
-        email,
-        password: hashedPassword,
-        activated,
-      })
-      .then(async () => {
-        if (this.mailProvider !== null) await this.mailProvider.execute(email);
-      });
+    const user = await this.usersRepository.create({
+      name,
+      username,
+      email,
+      password: hashedPassword,
+      activated,
+    });
+
+    if (this.mailProvider !== null) await this.mailProvider.execute(email);
+
+    return user;
   }
 }
 
