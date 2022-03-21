@@ -60,9 +60,17 @@ class RefreshTokenUseCase {
       expiresIn: auth.expires_in_token,
     });
 
+    const { id, name, email, profile_picture } = await this.usersRepository.findByEmail(email);
+
     return {
       token: newToken,
       refresh_token,
+      user: {
+        id,
+        name,
+        email,
+        profile_picture 
+      }
     };
   }
 }

@@ -20,6 +20,7 @@ interface IResponse {
     id: number;
     name: string;
     email: string;
+    profile_picture: string;
   };
   token: string;
   refresh_token: string;
@@ -98,6 +99,7 @@ class AuthenticateUserUseCase {
         id: user.id,
         name: user.name,
         email: user.email,
+        profile_picture: user.profile_picture
       },
       refresh_token,
     };
