@@ -7,8 +7,8 @@
     "build": "tsc",
     "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn --exit-child --poll .",
     "lint": "npx eslint . --fix",
-    "test": "export DATABASE_URL='postgresql://postgres:docker@localhost:5432/grati_test?schema=public'&& prisma migrate reset --force&& jest --runInBand",
-    "test:cov": "export DATABASE_URL='postgresql://postgres:docker@localhost:5432/grati_test?schema=public'&& prisma migrate reset --force&& jest --coverage"
+    "test": "set DATABASE_URL=postgresql://szgzmufhephxfs:178cefaeb731e2a40b768bc926714469b1b13f90aae67b336144ccc7899cbe96@ec2-3-216-221-31.compute-1.amazonaws.com:5432/d445ldvva3a56q?schema=public&& prisma migrate reset --force&& jest --runInBand",
+    "test:cov": "set DATABASE_URL=postgresql://szgzmufhephxfs:178cefaeb731e2a40b768bc926714469b1b13f90aae67b336144ccc7899cbe96@ec2-3-216-221-31.compute-1.amazonaws.com:5432/d445ldvva3a56q?schema=public&& prisma migrate reset --force&& jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -22,10 +22,12 @@
   },
   "homepage": "https://github.com/grati-platform/back-end#readme",
   "dependencies": {
+    "@jest/globals": "^27.5.1",
     "@prisma/client": "^3.10.0",
     "aws-sdk": "^2.1086.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
+    "cors": "^2.8.5",
     "csv-parse": "^5.0.4",
     "dayjs": "^1.10.8",
     "dotenv": "^16.0.0",

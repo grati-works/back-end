@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
+import cors from 'cors';
 import 'express-async-errors';
 import checkColorModes from '@utils/functions/checkColorModes';
 import checkPermissions from '@utils/functions/checkPermissions';
@@ -12,6 +13,8 @@ import { AppError } from '@shared/errors/AppError';
 import { router } from './routes';
 
 const app = express();
+
+app.use(cors());
 
 app.use(
   express.json({
