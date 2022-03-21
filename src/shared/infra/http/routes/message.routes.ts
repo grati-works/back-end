@@ -26,6 +26,12 @@ messageRoutes.get(
   listMessagesController.handle,
 );
 
+messageRoutes.get(
+  '/:organization_id/:group_id',
+  ensureAuthenticated,
+  listMessagesController.handle,
+);
+
 messageRoutes.post(
   '/:organization_id',
   ensureAuthenticated,

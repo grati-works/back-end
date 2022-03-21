@@ -7,6 +7,7 @@ interface CreateOptionalArgs {
 
 interface SendArgs {
   author_id: number;
+  groups: number[];
   organization_id: number;
   receivers_ids: number[];
   tags: string[];

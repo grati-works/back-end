@@ -22,6 +22,7 @@ class MessagesRepository implements IMessagesRepository {
   async send({
     author_id,
     organization_id,
+    groups,
     receivers_ids,
     tags,
     message,
@@ -38,6 +39,9 @@ class MessagesRepository implements IMessagesRepository {
           connect: {
             id: organization_id,
           },
+        },
+        groups: {
+          connect: groups.map(group => ({ id: group })),
         },
         receivers: {
           connect: [

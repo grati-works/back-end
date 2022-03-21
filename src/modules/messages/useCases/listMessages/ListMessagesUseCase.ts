@@ -1,27 +1,37 @@
 import { inject, injectable } from 'tsyringe';
 import { IMessagesRepository } from '@modules/messages/repositories/IMessagesRepository';
 import { IProfilesRepository } from '@modules/accounts/repositories/IProfilesRepository';
-import { AppError } from '@shared/errors/AppError';
-import { Feedback, Organization } from '@prisma/client';
+import { Feedback } from '@prisma/client';
 
 @injectable()
 class ListMessagesUseCase {
   constructor(
-    @inject('ProfilesRepository')
-    private profilesRepository: IProfilesRepository,
     @inject('MessagesRepository')
     private messagesRepository: IMessagesRepository,
   ) {}
 
   async execute(
-    user_id: string,
     organization_id: string,
+    group_id: number,
     page = 0,
   ): Promise<Feedback[]> {
+    const filter: {
+      organization_id: number;
+      groups?: any;
+    } = {
+      organization_id: Number(organization_id),
+    };
+
+    if (group_id) {
+      filter.groups = {
+        some: {
+          id: group_id,
+        },
+      };
+    }
+
     const feedbacks = await this.messagesRepository.list({
-      filter: {
-        organization_id: Number(organization_id),
-      },
+      filter,
       skip: page * 10,
     });
 
