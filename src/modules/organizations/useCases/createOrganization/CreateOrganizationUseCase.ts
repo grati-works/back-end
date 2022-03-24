@@ -4,6 +4,7 @@ import { IOrganizationsRepository } from '@modules/organizations/repositories/IO
 import { AppError } from '@shared/errors/AppError';
 
 import { SendOrganizationCreateMailUseCase } from '@modules/organizations/useCases/mail/sendOrganizationCreateMail/SendOrganizationCreateMailUseCase';
+import { Organization } from '@prisma/client';
 
 @injectable()
 class CreateOrganizationUseCase {
@@ -14,7 +15,7 @@ class CreateOrganizationUseCase {
     private usersRepository: IUsersRepository,
   ) {}
 
-  async execute(authorId: string, name: string): Promise<void> {
+  async execute(authorId: string, name: string): Promise<Organization | void> {
     if (!authorId) {
       throw new AppError('Author id is required');
     }
@@ -35,12 +36,14 @@ class CreateOrganizationUseCase {
         },
       })
       .then(async organization => {
-        this.organizationsRepository.addUser(organization.id, owner);
+        await this.organizationsRepository.addUser(organization.id, owner);
         const userMail = owner.email;
         const sendOrganizationCreateMailUseCase = container.resolve(
           SendOrganizationCreateMailUseCase,
         );
         await sendOrganizationCreateMailUseCase.execute(userMail, name);
+
+        return organization;
       })
       .catch(err => {
         throw new AppError(err.message);

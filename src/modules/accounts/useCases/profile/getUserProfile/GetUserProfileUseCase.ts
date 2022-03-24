@@ -13,7 +13,7 @@ class GetUserProfileUseCase {
   async execute(
     organization_id: string,
     id: string,
-  ): Promise<Prisma.Prisma__ProfileClient<object>> {
+  ): Promise<Prisma.Prisma__ProfileClient<any>> {
     const profile =
       await this.profilesRepository.findProfileByUserAndOrganizationId(
         Number(organization_id),
@@ -21,7 +21,7 @@ class GetUserProfileUseCase {
       );
 
     if (!profile) {
-      throw new AppError('Profile not found.');
+      throw new AppError('Profile not found', 404);
     }
 
     return profile;

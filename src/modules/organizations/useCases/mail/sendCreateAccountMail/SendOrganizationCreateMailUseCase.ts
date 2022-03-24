@@ -25,7 +25,7 @@ class SendCreateAccountMailUseCase {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('User not found', 404);
     }
 
     const token = uuidV4();

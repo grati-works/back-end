@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { IMessagesRepository } from '@modules/messages/repositories/IMessagesRepository';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 class RemoveReactionUseCase {
@@ -19,13 +20,13 @@ class RemoveReactionUseCase {
     const user = await this.usersRepository.findById(Number(user_id));
 
     if (!user) {
-      throw new Error('User not found');
+      throw new AppError('User not found', 404);
     }
 
     const message = await this.messagesRepository.findById(Number(feedback_id));
 
     if (!message) {
-      throw new Error('Message not found');
+      throw new AppError('Message not found', 404);
     }
 
     await this.messagesRepository.removeReaction(

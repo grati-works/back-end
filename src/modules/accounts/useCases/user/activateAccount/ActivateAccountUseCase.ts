@@ -38,7 +38,7 @@ class ActivateAccountUseCase {
     const user = await this.usersRepository.findById(userToken.user_id);
 
     if (!user) {
-      throw new AppError('User not found');
+      throw new AppError('User not found', 404);
     }
 
     this.usersRepository.activate(userToken.user_id);

@@ -6,6 +6,7 @@ import {
 } from '@modules/messages/repositories/IMessagesRepository';
 import { INotificationsRepository } from '@modules/notifications/repositories/INotificationsRepository';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/IStorageProvider';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 class SendMessageUseCase {
@@ -29,7 +30,7 @@ class SendMessageUseCase {
       );
 
     if (!author) {
-      throw new Error('Author not found');
+      throw new AppError('Author not found', 404);
     }
 
     if (data.attachments.attachment) {

@@ -4,6 +4,7 @@ import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositori
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { AuthenticateUserUseCase } from '@modules/accounts/useCases/auth/authenticateUser/AuthenticateUserUseCase';
+import { RefreshTokenUseCase } from '@modules/accounts/useCases/auth/refreshToken/RefreshTokenUseCase';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { AppError } from '@shared/errors/AppError';
@@ -11,16 +12,23 @@ import { client } from '@shared/infra/prisma';
 import { faker } from '@faker-js/faker';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
+let refreshTokenUseCase: RefreshTokenUseCase;
 let createUserUseCase: CreateUserUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
 let dateProvider: DayjsDateProvider;
 
-describe('Authenticate User', () => {
+describe('Refresh Token', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
+
+    refreshTokenUseCase = new RefreshTokenUseCase(
+      usersTokensRepository,
+      usersRepository,
+      dateProvider,
+    );
 
     authenticateUserUseCase = new AuthenticateUserUseCase(
       usersRepository,
@@ -37,7 +45,7 @@ describe('Authenticate User', () => {
     await client.user.deleteMany();
   });
 
-  it('should be able to authenticate a user', async () => {
+  it('should be able to refresh a token', async () => {
     const name = faker.name.findName();
     const user: ICreateUserDTO = {
       name,
@@ -54,69 +62,26 @@ describe('Authenticate User', () => {
       password: user.password,
     });
 
-    expect(result).toHaveProperty('token');
+    const { refresh_token } = result;
+
+    const newToken = await refreshTokenUseCase.execute(refresh_token);
+
+    expect(newToken).toHaveProperty('token');
+    expect(newToken).toHaveProperty('refresh_token');
+    expect(newToken).toHaveProperty('user');
   });
 
-  it('should not be able to authenticate a none existent user', async () => {
-    await expect(
-      authenticateUserUseCase.execute({
-        email: 'false@email.com',
-        password: faker.internet.password(),
-      }),
-    ).rejects.toEqual(new AppError('Email or password incorrect', 401));
-  });
-
-  it('should not be able to authenticate a user with incorrect password', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
-
-    await createUserUseCase.execute(user);
-
-    await expect(
-      authenticateUserUseCase.execute({
-        email: user.email,
-        password: 'wrong-password',
-      }),
-    ).rejects.toEqual(new AppError('Email or password incorrect', 401));
-  });
-
-  it('should not be able to authenticate a user not activated', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: false,
-    };
-
-    const createdUser = await createUserUseCase.execute(user);
-
-    const vinculedTokens = await usersTokensRepository.findByUserId(
-      createdUser.id,
+  it('should not be able to refresh a token with a invalid token', async () => {
+    await expect(refreshTokenUseCase.execute('invalid_token')).rejects.toEqual(
+      new AppError('Invalid token', 401),
     );
+  });
 
-    await authenticateUserUseCase.deleteActivateAccountTokens(vinculedTokens);
-
-    const newVinculedTokens = await usersTokensRepository.findByUserId(
-      createdUser.id,
-    );
-
-    expect(
-      newVinculedTokens.filter(token => token.type === 'activate_account'),
-    ).toHaveLength(0);
-
+  it('should not be able to refresh a token with a non existent token', async () => {
     await expect(
-      authenticateUserUseCase.execute({
-        email: user.email,
-        password: user.password,
-      }),
-    ).rejects.toEqual(new AppError('User not activated', 401));
+      refreshTokenUseCase.execute(
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWNrLmNhcGl0b0Bob3RtYWlsLmNvbSIsImlhdCI6MTY0Nzk1NzUzOSwiZXhwIjoxNjUwNTQ5NTM5LCJzdWIiOiIxIn0.J_K4f9aclLKXeV6pYKZUqF3TEjY4aFvBoFJXzgUzZtk',
+      ),
+    ).rejects.toEqual(new AppError('Token not found', 401));
   });
 });

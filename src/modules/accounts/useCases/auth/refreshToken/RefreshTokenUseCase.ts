@@ -5,6 +5,7 @@ import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTok
 import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 import auth from '@config/auth';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
+import { AppError } from '@shared/errors/AppError';
 
 interface IPayload {
   sub: string;
@@ -34,7 +35,15 @@ class RefreshTokenUseCase {
   ) {}
 
   async execute(token: string): Promise<ITokenResponse> {
-    const { email, sub } = verify(token, auth.secret_refresh_token) as IPayload;
+    let payloadToken;
+
+    try {
+      payloadToken = verify(token, auth.secret_refresh_token) as IPayload;
+    } catch (err) {
+      throw new AppError('Invalid token', 401);
+    }
+
+    const { email, sub } = payloadToken;
 
     const user_id = sub;
 
@@ -45,7 +54,7 @@ class RefreshTokenUseCase {
       );
 
     if (!userToken) {
-      throw new Error('Refresh Token does not exists');
+      throw new AppError('Token not found', 401);
     }
 
     await this.usersTokensRepository.deleteById(userToken.id);

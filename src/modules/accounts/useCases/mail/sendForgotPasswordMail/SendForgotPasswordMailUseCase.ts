@@ -21,11 +21,11 @@ class SendForgotPasswordMailUseCase {
     private mailProvider: IMailProvider,
   ) {}
 
-  async execute(email: string): Promise<void> {
+  async execute(email: string): Promise<string> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('User not found', 404);
     }
 
     const token = uuidV4();
@@ -48,6 +48,8 @@ class SendForgotPasswordMailUseCase {
       variables,
       ForgotPasswordTemplate,
     );
+
+    return token;
   }
 }
 
