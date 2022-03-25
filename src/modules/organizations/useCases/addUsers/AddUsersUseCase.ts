@@ -100,10 +100,10 @@ class AddUsersUseCase {
           organization => organization.id === Number(organizationId),
         );
 
+      let temporaryPassword = null;
+
       if (!userAlreadyHaveAccount) {
-        const temporaryPassword = `${uuidV4().substring(0, 5)}-${
-          user.username
-        }!`;
+        temporaryPassword = `${uuidV4().substring(0, 5)}-${user.username}!`;
 
         const hashedPassword = await hash(temporaryPassword, 8);
 
@@ -137,6 +137,7 @@ class AddUsersUseCase {
         await sendAddAccountToOrganizationMailUseCase.execute(
           user.email,
           organization.name,
+          temporaryPassword,
         );
 
         this.organizationsRepository.addUser(organization.id, user);

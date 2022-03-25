@@ -21,7 +21,11 @@ class SendAddAccountToOrganizationMailUseCase {
     private mailProvider: IMailProvider,
   ) {}
 
-  async execute(email: string, organization_name: string): Promise<void> {
+  async execute(
+    email: string,
+    organization_name: string,
+    temporary_password?: string,
+  ): Promise<void> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
@@ -40,7 +44,11 @@ class SendAddAccountToOrganizationMailUseCase {
     const variables = {
       name: user.name,
       organization_name,
-      link: `${process.env.ADDED_TO_ORGANIZATION_MAIL_URL}${token}`,
+      link: `${process.env.ADDED_TO_ORGANIZATION_MAIL_URL}${token}${
+        temporary_password !== null
+          ? `&temporary_password=${temporary_password}`
+          : ''
+      }`,
     };
 
     this.mailProvider.sendMail(

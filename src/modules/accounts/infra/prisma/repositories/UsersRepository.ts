@@ -12,9 +12,10 @@ class UsersRepository implements IUsersRepository {
     email,
     password,
     activated = false,
-  }: ICreateUserDTO): Promise<User> {
-    try {
-      const user = await client.user.create({
+  }: ICreateUserDTO): Promise<any> {
+    console.log('CHEGUEI AQUI1');
+    await client.user
+      .create({
         data: {
           name,
           username,
@@ -22,19 +23,20 @@ class UsersRepository implements IUsersRepository {
           password,
           activated,
         },
+      })
+      .then(user => {
+        return user;
+      })
+      .catch(({ message }) => {
+        if (message.includes('Unique constraint failed on the fields')) {
+          if (message.includes('username'))
+            throw new AppError('Username already in use');
+          else if (message.includes('email'))
+            throw new AppError('Email already in use');
+        }
+
+        throw new AppError('Unexpected error: ', message);
       });
-
-      return user;
-    } catch ({ message }) {
-      if (message.includes('Unique constraint failed on the fields')) {
-        if (message.includes('username'))
-          throw new AppError('Username already in use');
-        else if (message.includes('email'))
-          throw new AppError('Email already in use');
-      }
-
-      throw new AppError('Unexpected error: ', message);
-    }
   }
 
   async update(id: number, data: Prisma.UserUpdateInput): Promise<User> {

@@ -2,7 +2,7 @@ import { IFindUserDTO } from '@modules/accounts/dtos/IFindUserDTO';
 import { Prisma, User } from '@prisma/client';
 
 interface IUsersRepository {
-  create(data: Prisma.UserCreateInput): Promise<User>;
+  create(data: Prisma.UserCreateInput): Promise<any>;
   update(id: number, data: Prisma.UserUpdateInput): Promise<User>;
   findByEmail(
     email: string,
