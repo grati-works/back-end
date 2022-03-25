@@ -10,7 +10,7 @@ class GetUserUseCase {
     private usersRepository: IUsersRepository,
   ) {}
 
-  async execute(organization_id: string, id: string): Promise<User> {
+  async execute(id: string): Promise<User> {
     const user = await this.usersRepository.findById(Number(id));
 
     if (!user) {
