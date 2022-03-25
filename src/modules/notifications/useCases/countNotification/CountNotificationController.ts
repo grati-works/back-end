@@ -14,12 +14,7 @@ class CountNotificationController {
 
     const notifications = await countNotificationUseCase.execute(user_id);
 
-    return response.json({
-      status: 'success',
-      data: {
-        notifications,
-      },
-    });
+    return response.json(notifications);
   }
 }
 

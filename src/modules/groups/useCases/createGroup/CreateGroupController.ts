@@ -16,10 +16,7 @@ class CreateGroupController {
 
     await createGroupUseCase.execute(user.id, organization_id, name, color);
 
-    return response.status(201).json({
-      status: 'success',
-      message: 'Group created successfully',
-    });
+    return response.status(201).json('Group created successfully');
   }
 }
 

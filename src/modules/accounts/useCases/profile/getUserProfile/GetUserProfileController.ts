@@ -10,10 +10,7 @@ class GetUserProfileController {
 
     const user = await getUserProfileUseCase.execute(organization_id, id);
 
-    return response.json({
-      status: 'success',
-      data: user,
-    });
+    return response.json(user);
   };
 }
 

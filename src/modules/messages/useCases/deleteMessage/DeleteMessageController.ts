@@ -12,10 +12,7 @@ class DeleteMessageController {
 
     await deleteMessageUseCase.execute(user.id, message_id);
 
-    return response.json({
-      status: 'success',
-      message: 'Message deleted successfully',
-    });
+    return response.json('Message deleted successfully');
   }
 }
 

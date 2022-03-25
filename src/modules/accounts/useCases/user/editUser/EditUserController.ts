@@ -15,10 +15,7 @@ class EditUserController {
       password,
     });
 
-    return response.json({
-      status: 'success',
-      message: 'User edited successfully',
-    });
+    return response.json('User edited successfully');
   }
 }
 

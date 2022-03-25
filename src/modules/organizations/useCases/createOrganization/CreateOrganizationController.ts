@@ -13,10 +13,7 @@ class CreateOrganizationController {
 
     await createOrganizationUseCase.execute(user.id, name);
 
-    return response.status(201).json({
-      status: 'success',
-      message: 'Organization created successfully',
-    });
+    return response.status(201).json('Organization created successfully');
   }
 }
 

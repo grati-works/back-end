@@ -11,10 +11,7 @@ class ListUsersController {
 
     const users = await listUsersUseCase.execute(organization_id);
 
-    return response.status(201).send({
-      status: 'success',
-      data: users,
-    });
+    return response.status(201).send(users);
   }
 }
 

@@ -16,10 +16,7 @@ class SubscribeController {
       plan_size,
     );
 
-    return response.json({
-      status: 'success',
-      data: session,
-    });
+    return response.json(session);
   }
 }
 

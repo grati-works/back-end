@@ -12,10 +12,7 @@ class GetUserController {
 
     delete user.password;
 
-    return response.json({
-      status: 'success',
-      data: user,
-    });
+    return response.json(user);
   };
 }
 

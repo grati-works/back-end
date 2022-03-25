@@ -17,10 +17,7 @@ class EditGroupController {
       objective,
     });
 
-    return response.json({
-      status: 'success',
-      message: 'Group edited successfully',
-    });
+    return response.json('Group edited successfully');
   }
 }
 
