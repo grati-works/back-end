@@ -112,7 +112,7 @@ model Skill {
   id              Int          @id @unique @default(autoincrement())
   user            Profile      @relation(fields: [user_id], references: [id])
   user_id         Int
-  name            String
+  name            String       @unique
   skill_status    SkillStatus? @relation(fields: [skill_status_id], references: [id])
   skill_status_id Int?
 }
@@ -145,24 +145,29 @@ model Graduation {
   id                   Int               @id @unique @default(autoincrement())
   user                 Profile           @relation(fields: [user_id], references: [id])
   user_id              Int
+  name                 String            @unique
   graduation_status    GraduationStatus? @relation(fields: [graduation_status_id], references: [id])
   graduation_status_id Int?
 }
 
 model SkillStatus {
   id     Int     @id @unique @default(autoincrement())
+  name   String  @unique
   skills Skill[]
 }
 
 model GraduationStatus {
   id          Int          @id @unique @default(autoincrement())
+  name        String       @unique
   graduations Graduation[]
 }
 
 model VinculedAccount {
-  id      Int     @id @unique @default(autoincrement())
-  user    Profile @relation(fields: [user_id], references: [id])
-  user_id Int
+  id       Int     @id @unique @default(autoincrement())
+  user     Profile @relation(fields: [user_id], references: [id])
+  user_id  Int
+  account  String
+  provider String
 }
 
 model Privacy {

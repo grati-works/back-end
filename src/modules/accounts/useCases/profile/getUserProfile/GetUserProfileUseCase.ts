@@ -18,6 +18,17 @@ class GetUserProfileUseCase {
       await this.profilesRepository.findProfileByUserAndOrganizationId(
         Number(organization_id),
         Number(id),
+        {
+          id: true,
+          user_id: true,
+          responsibility: true,
+          description: true,
+          organization_id: true,
+          points: true,
+          vinculed_accounts: true,
+          skills: true,
+          graduations: true,
+        },
       );
 
     if (!profile) {
