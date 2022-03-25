@@ -32,6 +32,7 @@ interface IOrganizationsRepository {
     ranking: Profile[];
   }>;
   getLevel(points: number): number;
+  getUsers(organization_id: number): Promise<Profile[]>;
 }
 
 export { IOrganizationsRepository, IRankingFilter };

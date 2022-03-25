@@ -201,6 +201,38 @@ class OrganizationsRepository implements IOrganizationsRepository {
     };
   }
 
+  async getUsers(organization_id: number): Promise<Profile[]> {
+    const users = await client.profile.findMany({
+      where: { organization_id },
+      select: {
+        id: true,
+        user_id: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            profile_picture: true,
+            username: true,
+            email: true,
+            organizations: {
+              where: { organization_id },
+              select: {
+                groups: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return users;
+  }
+
   getLevel(points: number): number {
     if (points >= 0 && points < 100) {
       return 1;
