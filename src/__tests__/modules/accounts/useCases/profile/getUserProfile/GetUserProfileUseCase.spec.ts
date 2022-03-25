@@ -54,7 +54,6 @@ describe('Get user profile', () => {
         users: {
           create: {
             user_id: createdUser.id,
-            id: 1,
           },
         },
       },
@@ -62,7 +61,7 @@ describe('Get user profile', () => {
 
     const gettedProfile = await getUserProfileUseCase.execute(
       organization.id.toString(),
-      '1',
+      createdUser.id.toString(),
     );
 
     expect(gettedProfile).toBeDefined();

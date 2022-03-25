@@ -90,4 +90,100 @@ describe('Activate Account', () => {
 
     expect(activateAccount).toHaveBeenCalledWith(createdUser.id);
   });
+
+  it('should not be able to activate user account with invalid token', async () => {
+    await expect(
+      activateAccountUseCase.execute('invalid_token'),
+    ).rejects.toEqual(new AppError('Invalid token'));
+  });
+
+  it('should not be able to activate user account with expired token', async () => {
+    const name = faker.name.findName();
+    const user: ICreateUserDTO = {
+      name,
+      username: faker.internet.userName(),
+      email: faker.internet.email(name),
+      password: faker.internet.password(),
+      activated: false,
+    };
+
+    const createdUser = await createUserUseCase.execute(user);
+
+    const activateToken = await sendActivateAccountMailUseCase.execute(
+      user.email,
+    );
+
+    await client.userTokens.deleteMany({
+      where: {
+        user_id: createdUser.id,
+        token: activateToken,
+      },
+    });
+
+    await client.userTokens.create({
+      data: {
+        user: {
+          connect: {
+            id: createdUser.id,
+          },
+        },
+        token: activateToken,
+        created_at: new Date(),
+        expires_at: new Date('2020-01-01'),
+        type: 'activate_account',
+      },
+    });
+
+    await expect(activateAccountUseCase.execute(activateToken)).rejects.toEqual(
+      new AppError('Token expired'),
+    );
+  });
+
+  it('should not be able to activate an inexistent account', async () => {
+    const name = faker.name.findName();
+    const user: ICreateUserDTO = {
+      name,
+      username: faker.internet.userName(),
+      email: faker.internet.email(name),
+      password: faker.internet.password(),
+      activated: false,
+    };
+
+    const createdUser = await createUserUseCase.execute(user);
+
+    const activateToken = await sendActivateAccountMailUseCase.execute(
+      user.email,
+    );
+
+    await client.userTokens.deleteMany({
+      where: {
+        user_id: createdUser.id,
+        token: activateToken,
+      },
+    });
+
+    await client.userTokens.create({
+      data: {
+        user: {
+          connect: {
+            id: createdUser.id,
+          },
+        },
+        token: activateToken,
+        created_at: new Date(),
+        expires_at: new Date(dateProvider.addHours(3)),
+        type: 'activate_account',
+      },
+    });
+
+    jest
+      .spyOn(usersRepository, 'findById')
+      .mockImplementation(async () => null);
+
+    await expect(activateAccountUseCase.execute(activateToken)).rejects.toEqual(
+      new AppError('User not found', 404),
+    );
+
+    jest.clearAllMocks();
+  });
 });
