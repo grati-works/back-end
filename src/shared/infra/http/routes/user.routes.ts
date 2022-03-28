@@ -20,6 +20,7 @@ const updateUserAvatarController = new UpdateUserAvatarController();
 const createUserController = new CreateUserController();
 const activateAccountController = new ActivateAccountController();
 
+userRoutes.get('/', ensureAuthenticated, getUserController.handle);
 userRoutes.get('/:id', getUserController.handle);
 
 userRoutes.post('/', createUserController.handle);
