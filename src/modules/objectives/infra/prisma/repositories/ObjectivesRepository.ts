@@ -37,10 +37,10 @@ class ObjectivesRepository implements IObjectivesRepository {
     });
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(group_id: number): Promise<void> {
     await client.objective.delete({
       where: {
-        id,
+        group_id,
       },
     });
   }
