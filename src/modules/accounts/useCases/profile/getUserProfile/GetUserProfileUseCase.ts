@@ -13,6 +13,7 @@ class GetUserProfileUseCase {
   async execute(
     organization_id: string,
     id: string,
+    isPublic: boolean,
   ): Promise<Prisma.Prisma__ProfileClient<any>> {
     const profile =
       await this.profilesRepository.findProfileByUserAndOrganizationId(
@@ -20,14 +21,24 @@ class GetUserProfileUseCase {
         Number(id),
         {
           id: true,
-          user_id: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              username: !isPublic,
+              email: !isPublic,
+              profile_picture: true,
+            },
+          },
           responsibility: true,
-          description: true,
-          organization_id: true,
           points: true,
-          vinculed_accounts: true,
-          skills: true,
-          graduations: true,
+          sended_feedbacks: true,
+          received_feedbacks: true,
+
+          skills: isPublic,
+          graduations: isPublic,
+          vinculed_accounts: isPublic,
+          description: isPublic,
         },
       );
 
