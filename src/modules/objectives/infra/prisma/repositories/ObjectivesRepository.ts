@@ -20,14 +20,14 @@ class ObjectivesRepository implements IObjectivesRepository {
   }
 
   async edit(
-    id: number,
+    group_id: number,
     name: string,
     goal: number,
     expires_in: string,
   ): Promise<void> {
     await client.objective.update({
       where: {
-        id,
+        group_id,
       },
       data: {
         name,
