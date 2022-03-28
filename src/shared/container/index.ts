@@ -23,6 +23,9 @@ import { MessagesRepository } from '@modules/messages/infra/prisma/repositories/
 import { INotificationsRepository } from '@modules/notifications/repositories/INotificationsRepository';
 import { NotificationsRepository } from '@modules/notifications/infra/prisma/repositories/NotificationsRepository';
 
+import { IObjectivesRepository } from '@modules/objectives/repositories/IObjectivesRepository';
+import { ObjectivesRepository } from '@modules/objectives/infra/prisma/repositories/ObjectivesRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
@@ -56,4 +59,9 @@ container.registerSingleton<IMessagesRepository>(
 container.registerSingleton<INotificationsRepository>(
   'NotificationsRepository',
   NotificationsRepository,
+);
+
+container.registerSingleton<IObjectivesRepository>(
+  'ObjectivesRepository',
+  ObjectivesRepository,
 );
