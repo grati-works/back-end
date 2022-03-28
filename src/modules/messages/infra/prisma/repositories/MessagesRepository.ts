@@ -174,7 +174,12 @@ class MessagesRepository implements IMessagesRepository {
       },
       include: {
         sender: userSelect,
-        receivers: userSelect,
+        receivers: {
+          select: {
+            responsibility: true,
+            user: userSelect.select.user,
+          },
+        },
         tags: true,
         reactions: true,
       },
