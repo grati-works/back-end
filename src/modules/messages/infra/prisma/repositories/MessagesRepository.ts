@@ -3,8 +3,9 @@ import {
   SendArgs,
   IMessagesRepository,
   ListArgs,
+  ListResponse,
 } from '@modules/messages/repositories/IMessagesRepository';
-import { Feedback } from '@prisma/client';
+import { Feedback, Reaction } from '@prisma/client';
 import { AppError } from '@shared/errors/AppError';
 
 const userSelect = {
@@ -166,7 +167,11 @@ class MessagesRepository implements IMessagesRepository {
     });
   }
 
-  async list({ filter, skip }: ListArgs): Promise<Feedback[]> {
+  async list({
+    filter,
+    skip,
+    profile_id = null,
+  }: ListArgs): Promise<ListResponse | Feedback[]> {
     const feedbackList = (await client.feedback.findMany({
       where: {
         deleted: null,
@@ -203,6 +208,22 @@ class MessagesRepository implements IMessagesRepository {
         {},
       );
     });
+
+    if (profile_id !== null) {
+      const reacted_feedbacks = await client.reaction.findMany({
+        where: {
+          profile_id,
+          feedback_id: {
+            in: feedbackList.map(feedback => feedback.id),
+          },
+        },
+      });
+
+      return {
+        feedbacks: feedbackList,
+        reacted_feedbacks,
+      };
+    }
 
     return feedbackList;
   }

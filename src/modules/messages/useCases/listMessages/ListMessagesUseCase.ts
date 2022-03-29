@@ -1,5 +1,8 @@
 import { inject, injectable } from 'tsyringe';
-import { IMessagesRepository } from '@modules/messages/repositories/IMessagesRepository';
+import {
+  IMessagesRepository,
+  ListResponse,
+} from '@modules/messages/repositories/IMessagesRepository';
 import { IProfilesRepository } from '@modules/accounts/repositories/IProfilesRepository';
 import { Feedback } from '@prisma/client';
 
@@ -8,13 +11,16 @@ class ListMessagesUseCase {
   constructor(
     @inject('MessagesRepository')
     private messagesRepository: IMessagesRepository,
+    @inject('ProfilesRepository')
+    private profilesRepository: IProfilesRepository,
   ) {}
 
   async execute(
     organization_id: string,
     group_id: number,
     page = 0,
-  ): Promise<Feedback[]> {
+    user_id = null,
+  ): Promise<ListResponse | Feedback[]> {
     const filter: {
       organization_id: number;
       groups?: any;
@@ -30,9 +36,16 @@ class ListMessagesUseCase {
       };
     }
 
+    const profile =
+      await this.profilesRepository.findProfileByUserAndOrganizationId(
+        Number(organization_id),
+        user_id,
+      );
+
     const feedbacks = await this.messagesRepository.list({
       filter,
       skip: page * 10,
+      profile_id: profile.id,
     });
 
     return feedbacks;

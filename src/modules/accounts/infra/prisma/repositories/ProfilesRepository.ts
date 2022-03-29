@@ -23,7 +23,7 @@ class ProfilesRepository implements IProfilesRepository {
   async findById(
     id: number,
     select?: Prisma.ProfileSelect,
-  ): Promise<Prisma.Prisma__ProfileClient<object>> {
+  ): Promise<Prisma.Prisma__ProfileClient<any>> {
     const profile = await client.profile.findUnique({
       where: { id },
       select,

@@ -6,12 +6,12 @@ interface IProfilesRepository {
   findById(
     id: number,
     select?: Prisma.ProfileSelect,
-  ): Promise<Prisma.Prisma__ProfileClient<object>>;
+  ): Promise<Prisma.Prisma__ProfileClient<any>>;
   findProfileByUserAndOrganizationId(
     organization_id: number,
     user_id: number,
     select?: Prisma.ProfileSelect,
-  ): Promise<Prisma.Prisma__ProfileClient<object>>;
+  ): Promise<Prisma.Prisma__ProfileClient<any>>;
   addPoints(id: number, points: number): Promise<void>;
 }
 

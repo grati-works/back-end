@@ -5,6 +5,7 @@ import { ListMessagesUseCase } from './ListMessagesUseCase';
 
 class ListMessagesController {
   async handle(request: Request, response: Response): Promise<Response> {
+    const { id } = request.user;
     const { organization_id, group_id } = request.params;
     const { page } = request.query;
 
@@ -14,6 +15,7 @@ class ListMessagesController {
       organization_id,
       Number(group_id),
       Number(page || 0),
+      Number(id),
     );
 
     return response.json(messages);

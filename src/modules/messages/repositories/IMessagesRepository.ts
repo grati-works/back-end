@@ -1,4 +1,4 @@
-import { Prisma, Feedback } from '@prisma/client';
+import { Prisma, Feedback, Reaction } from '@prisma/client';
 
 interface CreateOptionalArgs {
   attachment?: string;
@@ -15,9 +15,15 @@ interface SendArgs {
   attachments?: CreateOptionalArgs;
 }
 
+interface ListResponse {
+  feedbacks: Feedback[];
+  reacted_feedbacks: Reaction[];
+}
+
 interface ListArgs {
   filter?: Prisma.FeedbackWhereInput;
   skip?: number;
+  profile_id?: number;
 }
 interface IMessagesRepository {
   send(args: SendArgs): Promise<number>;
@@ -32,8 +38,18 @@ interface IMessagesRepository {
     emoji: string,
   ): Promise<void>;
   delete(author_id: number, feedback_id: number): Promise<void>;
-  list({ filter, skip }: ListArgs): Promise<Feedback[]>;
+  list({
+    filter,
+    skip,
+    profile_id,
+  }: ListArgs): Promise<ListResponse | Feedback[]>;
   findById(feedback_id: number): Promise<Feedback>;
 }
 
-export { SendArgs, CreateOptionalArgs, ListArgs, IMessagesRepository };
+export {
+  SendArgs,
+  CreateOptionalArgs,
+  ListArgs,
+  ListResponse,
+  IMessagesRepository,
+};
