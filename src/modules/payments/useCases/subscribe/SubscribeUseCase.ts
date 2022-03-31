@@ -14,20 +14,12 @@ class SubscribeUseCase {
 
   async execute(
     user_id: string,
-    plan_duration: 'monthly' | 'trimester' | 'yearly',
-    plan_size: 'small' | 'medium' | 'large',
+    price_id: string,
   ): Promise<Stripe.Checkout.Session> {
-    const plans = {
-      monthly: {
-        small: 'price_1Kc83cEbfCRAyYuxaYMOmuBs',
-        medium: 'price_1Kc84eEbfCRAyYuxddNoFjPp',
-        large: 'price_1Kc85IEbfCRAyYuxl2jQNOGt',
-      },
-    };
     const user = await this.usersRepository.findById(Number(user_id));
     const session = await this.paymentProvider.createStripeUserSubscription(
       user.email,
-      plans[plan_duration][plan_size],
+      price_id,
     );
     return session;
   }

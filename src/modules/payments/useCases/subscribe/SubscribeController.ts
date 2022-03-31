@@ -6,15 +6,11 @@ import { SubscribeUseCase } from './SubscribeUseCase';
 class SubscribeController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { user } = request;
-    const { plan_duration, plan_size } = request.body;
+    const { price_id } = request.body;
 
     const subscribeUseCase = container.resolve(SubscribeUseCase);
 
-    const session = await subscribeUseCase.execute(
-      user.id,
-      plan_duration,
-      plan_size,
-    );
+    const session = await subscribeUseCase.execute(user.id, price_id);
 
     return response.json(session);
   }
