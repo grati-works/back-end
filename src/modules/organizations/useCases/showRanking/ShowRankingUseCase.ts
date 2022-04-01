@@ -21,6 +21,7 @@ class ShowRankingUseCase {
       {
         ...filter,
       },
+      true,
     );
     return classification.ranking;
   }

@@ -22,7 +22,7 @@ class ShowRankingController {
         : new Date(nowDate.getFullYear(), nowDate.getMonth(), 31, 23, 59, 59),
     });
 
-    return response.status(201).send(ranking);
+    return response.status(200).send(ranking);
   }
 }
 

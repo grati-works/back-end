@@ -39,6 +39,10 @@ class DayjsDateProvider implements IDateProvider {
   compareIfExpired(start_date: Date, end_date: Date): boolean {
     return dayjs(start_date).isBefore(dayjs(end_date));
   }
+
+  removeMonths(months: number): Date {
+    return dayjs().subtract(months, 'month').toDate();
+  }
 }
 
 export { DayjsDateProvider };

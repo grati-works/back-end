@@ -60,6 +60,69 @@ class ProfilesRepository implements IProfilesRepository {
       },
     });
   }
+
+  async getAccumulatedPoints(
+    profile_id: number,
+    start_date: Date,
+    end_date: Date,
+  ): Promise<number> {
+    const user = await client.profile.findFirst({
+      where: {
+        id: profile_id,
+        OR: [
+          {
+            received_feedbacks: {
+              every: {
+                created_at: {
+                  gte: start_date,
+                  lte: end_date,
+                },
+              },
+            },
+          },
+          {
+            sended_feedbacks: {
+              every: {
+                created_at: {
+                  gte: start_date,
+                  lte: end_date,
+                },
+              },
+            },
+          },
+        ],
+      },
+      select: {
+        user_id: true,
+        sended_feedbacks: {
+          where: {
+            created_at: {
+              gte: start_date,
+              lte: end_date,
+            },
+          },
+          select: {
+            id: true,
+          },
+        },
+        received_feedbacks: {
+          where: {
+            created_at: {
+              gte: start_date,
+              lte: end_date,
+            },
+          },
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    return (
+      user.received_feedbacks.length * 10 + user.sended_feedbacks.length * 5
+    );
+  }
 }
 
 export { ProfilesRepository };

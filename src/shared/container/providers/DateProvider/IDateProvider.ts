@@ -6,6 +6,7 @@ interface IDateProvider {
   addDays(days: number): Date;
   addHours(hours: number): Date;
   compareIfExpired(start_date: Date, end_date: Date): boolean;
+  removeMonths(months: number): Date;
 }
 
 export { IDateProvider };
