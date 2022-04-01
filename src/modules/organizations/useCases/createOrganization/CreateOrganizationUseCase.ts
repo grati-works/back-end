@@ -17,13 +17,13 @@ class CreateOrganizationUseCase {
 
   async execute(authorId: string, name: string): Promise<Organization | void> {
     if (!authorId) {
-      throw new AppError('Author id is required');
+      throw new AppError('Author id is required', 400, 'author.id.required');
     }
 
     const owner = await this.usersRepository.findById(Number(authorId));
 
     if (!owner) {
-      throw new AppError('Owner not found');
+      throw new AppError('Owner not found', 404, 'owner.not_found');
     }
 
     await this.organizationsRepository

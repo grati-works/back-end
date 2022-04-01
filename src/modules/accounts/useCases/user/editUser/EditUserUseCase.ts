@@ -14,7 +14,7 @@ class EditUserUseCase {
     const userAlreadyExists = await this.usersRepository.findById(Number(id));
 
     if (!userAlreadyExists) {
-      throw new AppError('User not exists');
+      throw new AppError('User not exists', 400, 'user.not_exists');
     }
 
     if (password) {

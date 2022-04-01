@@ -18,7 +18,11 @@ class RemoveUserUseCase {
     user_id: string,
   ): Promise<void> {
     if (!organization_id) {
-      throw new AppError('Organization id is required');
+      throw new AppError(
+        'Organization id is required',
+        400,
+        'organization.id.required',
+      );
     }
 
     const user = await this.usersRepository.findById(Number(author_id));
@@ -28,7 +32,11 @@ class RemoveUserUseCase {
     );
 
     if (!userIsOwner) {
-      throw new AppError('This user is not the owner of this organization');
+      throw new AppError(
+        'This user is not the owner of this organization',
+        403,
+        'user.not_owner',
+      );
     }
 
     await this.organizationsRepository.removeUser(

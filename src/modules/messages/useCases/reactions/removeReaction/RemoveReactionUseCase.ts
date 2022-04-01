@@ -20,13 +20,13 @@ class RemoveReactionUseCase {
     const user = await this.usersRepository.findById(Number(user_id));
 
     if (!user) {
-      throw new AppError('User not found', 404);
+      throw new AppError('User not found', 404, 'user.not_found');
     }
 
     const message = await this.messagesRepository.findById(Number(feedback_id));
 
     if (!message) {
-      throw new AppError('Message not found', 404);
+      throw new AppError('Message not found', 404, 'message.not_found');
     }
 
     await this.messagesRepository.removeReaction(

@@ -49,7 +49,7 @@ class OrganizationsRepository implements IOrganizationsRepository {
 
       return addedUser;
     }
-    throw new AppError('User not found', 404);
+    throw new AppError('User not found', 404, 'user.not_found');
   }
 
   async removeUser(organization_id: number, user_id: number): Promise<void> {

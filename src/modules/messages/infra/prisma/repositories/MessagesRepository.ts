@@ -88,7 +88,11 @@ class MessagesRepository implements IMessagesRepository {
     });
 
     if (reactionAlreadyAdded) {
-      throw new AppError('Reaction already added');
+      throw new AppError(
+        'Reaction already added',
+        400,
+        'reaction.already_added',
+      );
     }
 
     await client.feedback.update({
@@ -135,7 +139,7 @@ class MessagesRepository implements IMessagesRepository {
         },
       });
     } catch (error) {
-      throw new AppError('Reaction not found');
+      throw new AppError('Reaction not found', 400, 'reaction.not_found');
     }
   }
 
@@ -150,7 +154,11 @@ class MessagesRepository implements IMessagesRepository {
     });
 
     if (feedback.deleted_by !== null) {
-      throw new AppError('Message already deleted');
+      throw new AppError(
+        'Message already deleted',
+        400,
+        'message.already_deleted',
+      );
     }
 
     await client.feedback.update({

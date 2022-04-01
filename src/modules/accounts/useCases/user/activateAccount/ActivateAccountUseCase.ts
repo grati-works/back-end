@@ -22,7 +22,7 @@ class ActivateAccountUseCase {
     );
 
     if (!userToken) {
-      throw new AppError('Invalid token');
+      throw new AppError('Invalid token', 401, 'token.invalid');
     }
 
     if (
@@ -32,13 +32,13 @@ class ActivateAccountUseCase {
       )
     ) {
       this.usersTokensRepository.deleteById(userToken.id);
-      throw new AppError('Token expired');
+      throw new AppError('Token expired', 401, 'token.expired');
     }
 
     const user = await this.usersRepository.findById(userToken.user_id);
 
     if (!user) {
-      throw new AppError('User not found', 404);
+      throw new AppError('User not found', 404, 'user.not_found');
     }
 
     this.usersRepository.activate(userToken.user_id);

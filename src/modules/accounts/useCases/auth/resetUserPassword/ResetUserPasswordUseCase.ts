@@ -28,7 +28,7 @@ class ResetUserPasswordUseCase {
     );
 
     if (!userToken) {
-      throw new AppError('Invalid token', 401);
+      throw new AppError('Invalid token', 401, 'token.invalid');
     }
 
     if (
@@ -37,7 +37,7 @@ class ResetUserPasswordUseCase {
         this.dateProvider.dateNow(),
       )
     ) {
-      throw new AppError('Token expired', 401);
+      throw new AppError('Token expired', 401, 'token.expired');
     }
 
     const user = await this.usersRepository.findById(userToken.user_id);

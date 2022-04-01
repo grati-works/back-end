@@ -30,12 +30,20 @@ class UsersRepository implements IUsersRepository {
       .catch(({ message }) => {
         if (message.includes('Unique constraint failed on the fields')) {
           if (message.includes('username'))
-            throw new AppError('Username already in use');
+            throw new AppError(
+              'Username already in use',
+              400,
+              'user.username.in_use',
+            );
           else if (message.includes('email'))
-            throw new AppError('Email already in use');
+            throw new AppError(
+              'Email already in use',
+              400,
+              'user.email.in_use',
+            );
         }
 
-        throw new AppError('Unexpected error: ', message);
+        throw new AppError(`Unexpected error: ${message}`, 500);
       });
   }
 

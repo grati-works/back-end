@@ -15,7 +15,7 @@ class UpdateProfileUseCase {
     const profile = await this.profilesRepository.findById(Number(id));
 
     if (!profile) {
-      throw new AppError('Profile not found', 404);
+      throw new AppError('Profile not found', 404, 'profile.not_found');
     }
 
     await client.vinculedAccount.deleteMany({

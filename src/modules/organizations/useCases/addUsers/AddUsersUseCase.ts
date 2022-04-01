@@ -75,7 +75,11 @@ class AddUsersUseCase {
     );
 
     if (!userIsOwner) {
-      throw new AppError('This user is not the owner of this organization');
+      throw new AppError(
+        'This user is not the owner of this organization',
+        403,
+        'user.not_owner',
+      );
     }
 
     const organization = await this.organizationsRepository.findById(
@@ -83,7 +87,11 @@ class AddUsersUseCase {
     );
 
     if (!organization) {
-      throw new AppError('Organization not found');
+      throw new AppError(
+        'Organization not found',
+        404,
+        'organization.not_found',
+      );
     }
 
     (parsedUsers as IAddUserDTO[]).map(async user => {

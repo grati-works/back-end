@@ -40,7 +40,7 @@ class RefreshTokenUseCase {
     try {
       payloadToken = verify(token, auth.secret_refresh_token) as IPayload;
     } catch (err) {
-      throw new AppError('Invalid token', 401);
+      throw new AppError('Invalid token', 401, 'token.invalid');
     }
 
     const { email, sub } = payloadToken;
@@ -54,7 +54,7 @@ class RefreshTokenUseCase {
       );
 
     if (!userToken) {
-      throw new AppError('Token not found', 401);
+      throw new AppError('Token not found', 401, 'token.invalid');
     }
 
     await this.usersTokensRepository.deleteById(userToken.id);

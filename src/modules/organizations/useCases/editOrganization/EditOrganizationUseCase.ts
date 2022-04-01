@@ -20,7 +20,11 @@ class EditOrganizationUseCase {
     data: Prisma.OrganizationUpdateInput,
   ): Promise<void> {
     if (!organization_id) {
-      throw new AppError('Organization id is required');
+      throw new AppError(
+        'Organization id is required',
+        400,
+        'organization.id.required',
+      );
     }
 
     const user = await this.usersRepository.findById(Number(author_id));
@@ -30,7 +34,11 @@ class EditOrganizationUseCase {
     );
 
     if (!userIsOwner) {
-      throw new AppError('This user is not the owner of this organization');
+      throw new AppError(
+        'This user is not the owner of this organization',
+        403,
+        'user.not_owner',
+      );
     }
 
     if (data.color_mode) {

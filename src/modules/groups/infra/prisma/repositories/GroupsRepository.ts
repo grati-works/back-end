@@ -19,7 +19,11 @@ class GroupsRepository implements IGroupsRepository {
     });
 
     if (alreadyExistGroupNameInOrganization) {
-      throw new AppError('Group name already exist in this organization');
+      throw new AppError(
+        'Group name already exist in this organization',
+        400,
+        'group.name.already_in_use',
+      );
     }
 
     if (!color) color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;

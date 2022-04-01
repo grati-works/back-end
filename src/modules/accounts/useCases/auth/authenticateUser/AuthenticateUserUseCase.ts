@@ -53,7 +53,7 @@ class AuthenticateUserUseCase {
     } = auth;
 
     if (!user) {
-      throw new AppError('Email or password incorrect', 401);
+      throw new AppError('Email or password incorrect', 401, 'auth.incorrect');
     }
 
     if (!user.activated) {
@@ -65,13 +65,13 @@ class AuthenticateUserUseCase {
 
       if (this.mailProvider !== null) await this.mailProvider.execute(email);
 
-      throw new AppError('User not activated', 401);
+      throw new AppError('User not activated', 401, 'auth.not_activated');
     }
 
     const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new AppError('Email or password incorrect', 401);
+      throw new AppError('Email or password incorrect', 401, 'auth.incorrect');
     }
 
     const token = sign({}, secret_token, {
@@ -109,7 +109,7 @@ class AuthenticateUserUseCase {
     tokens
       .filter(token => token.type === 'activate_account')
       .forEach(async vinculedToken => {
-        await this.usersTokensRepository.deleteById(vinculedToken.token);
+        await this.usersTokensRepository.deleteById(vinculedToken.id);
       });
   }
 }

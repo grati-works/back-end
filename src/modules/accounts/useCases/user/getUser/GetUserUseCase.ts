@@ -14,7 +14,7 @@ class GetUserUseCase {
     const user = await this.usersRepository.findById(Number(id));
 
     if (!user) {
-      throw new AppError('User not found', 404);
+      throw new AppError('User not found', 404, 'user.not_found');
     }
 
     return user;

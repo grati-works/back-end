@@ -169,7 +169,11 @@ class StripePaymentProvider implements IPaymentProvider {
       );
     } catch (err) {
       console.log(err.message);
-      throw new AppError(`Webhook error: ${err.message}`);
+      throw new AppError(
+        `Webhook error: ${err.message}`,
+        400,
+        'stripe.webhook',
+      );
     }
 
     const { type } = event;
@@ -206,14 +210,22 @@ class StripePaymentProvider implements IPaymentProvider {
             );
             break;
           default:
-            throw new AppError('Unhandled event.');
+            throw new AppError(
+              'Unhandled event.',
+              400,
+              'stripe.webhook.unhandled',
+            );
             break;
 
             return true;
         }
       } catch (err) {
         console.log(err.message);
-        throw new AppError('Webhook handler failed');
+        throw new AppError(
+          'Webhook handler failed',
+          400,
+          'stripe.webhook.handler',
+        );
         return false;
       }
     }

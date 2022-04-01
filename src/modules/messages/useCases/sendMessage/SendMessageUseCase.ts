@@ -30,7 +30,7 @@ class SendMessageUseCase {
       );
 
     if (!author) {
-      throw new AppError('Author not found', 404);
+      throw new AppError('Author not found', 404, 'author.not_found');
     }
 
     if (data.attachments.attachment) {

@@ -25,7 +25,7 @@ class SendOrganizationCreateMailUseCase {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('User not found', 404);
+      throw new AppError('User not found', 404, 'user.not_found');
     }
 
     const token = uuidV4();

@@ -43,7 +43,7 @@ class GetUserProfileUseCase {
       );
 
     if (!profile) {
-      throw new AppError('Profile not found', 404);
+      throw new AppError('Profile not found', 404, 'profile.not_found');
     }
 
     return profile;
