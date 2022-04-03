@@ -10,6 +10,7 @@ import { client } from '@shared/infra/prisma';
 import { faker } from '@faker-js/faker';
 import { ResetUserPasswordUseCase } from '@modules/accounts/useCases/auth/resetUserPassword/ResetUserPasswordUseCase';
 import { SendForgotPasswordMailUseCase } from '@modules/accounts/useCases/mail/sendForgotPasswordMail/SendForgotPasswordMailUseCase';
+import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { createFakeUser } from '@utils/testUtils';
 
@@ -21,6 +22,7 @@ let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
 let dateProvider: DayjsDateProvider;
 let mailProvider: EtherealMailProvider;
+let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 
 describe('Reset Password', () => {
   beforeEach(() => {
@@ -28,6 +30,12 @@ describe('Reset Password', () => {
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
     mailProvider = new EtherealMailProvider();
+    sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
+      usersRepository,
+      usersTokensRepository,
+      dateProvider,
+      mailProvider,
+    );
 
     resetUserPasswordUseCase = new ResetUserPasswordUseCase(
       usersTokensRepository,
@@ -39,7 +47,7 @@ describe('Reset Password', () => {
       usersRepository,
       usersTokensRepository,
       dateProvider,
-      null,
+      sendActivateAccountMailUseCase,
     );
 
     createUserUseCase = new CreateUserUseCase(usersRepository, null);
