@@ -14,7 +14,7 @@ let profilesRepository: ProfilesRepository;
 let updateProfileUseCase: UpdateProfileUseCase;
 let getUserProfileUseCase: GetUserProfileUseCase;
 
-describe('Get user profile', () => {
+describe('Update user profile', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
     profilesRepository = new ProfilesRepository();

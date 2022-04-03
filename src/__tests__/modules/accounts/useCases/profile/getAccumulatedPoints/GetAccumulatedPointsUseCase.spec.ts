@@ -3,7 +3,6 @@ import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/Use
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { AppError } from '@shared/errors/AppError';
-import { faker } from '@faker-js/faker';
 import { client } from '@shared/infra/prisma';
 import { GetAccumulatedPointsUseCase } from '@modules/accounts/useCases/profile/getAccumulatedPoints/GetAccumulatedPointsUseCase';
 import { ProfilesRepository } from '@modules/accounts/infra/prisma/repositories/ProfilesRepository';
@@ -16,7 +15,7 @@ let dateProvider: DayjsDateProvider;
 let createUserUseCase: CreateUserUseCase;
 let getAccumulatedPointsUseCase: GetAccumulatedPointsUseCase;
 
-describe('Get user profile', () => {
+describe('Get user profile accumulated points', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
     profilesRepository = new ProfilesRepository();
