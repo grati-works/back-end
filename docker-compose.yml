@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  database_grati:
+    image: postgres
+    container_name: database_grati
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=docker
+      # - POSTGRES_DB=grati
+    volumes:
+      - pgdata:/data/postgres
+  backend_grati:
+    build: .
+    container_name: grati
+    ports:
+      - 3333:3333
+    volumes:
+      - .:/usr/backend
+    links:
+      - database_grati
+    depends_on: 
+      - database_grati
+    environment:
+      DATABASE_URL: postgresql://postgres:docker@host.docker.internal:5432/grati
+
+volumes:
+  pgdata:
+    driver: local
