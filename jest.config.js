@@ -8,7 +8,7 @@ module.exports = {
   testEnvironment: 'node',
   globals: {
     'ts-jest': {
-      isolatedModules: true,
+      tsconfig: 'tsconfig.json',
     },
   },
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {

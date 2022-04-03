@@ -9,7 +9,7 @@ import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/Cr
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
-import { MailTrapMailProvider } from '@shared/container/providers/MailProvider/implementations/MailTrapMailProvider';
+import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { createFakeUser } from '@utils/testUtils';
 
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
@@ -18,14 +18,14 @@ let createUserUseCase: CreateUserUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
 let dateProvider: DayjsDateProvider;
-let mailProvider: MailTrapMailProvider;
+let mailProvider: EtherealMailProvider;
 
 describe('Send activate account mail', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
-    mailProvider = new MailTrapMailProvider();
+    mailProvider = new EtherealMailProvider();
 
     authenticateUserUseCase = new AuthenticateUserUseCase(
       usersRepository,

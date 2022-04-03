@@ -10,7 +10,7 @@ import { client } from '@shared/infra/prisma';
 import { faker } from '@faker-js/faker';
 import { ResetUserPasswordUseCase } from '@modules/accounts/useCases/auth/resetUserPassword/ResetUserPasswordUseCase';
 import { SendForgotPasswordMailUseCase } from '@modules/accounts/useCases/mail/sendForgotPasswordMail/SendForgotPasswordMailUseCase';
-import { MailTrapMailProvider } from '@shared/container/providers/MailProvider/implementations/MailTrapMailProvider';
+import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { createFakeUser } from '@utils/testUtils';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
@@ -20,14 +20,14 @@ let sendForgotPasswordMailUseCase: SendForgotPasswordMailUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
 let dateProvider: DayjsDateProvider;
-let mailProvider: MailTrapMailProvider;
+let mailProvider: EtherealMailProvider;
 
 describe('Reset Password', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
-    mailProvider = new MailTrapMailProvider();
+    mailProvider = new EtherealMailProvider();
 
     resetUserPasswordUseCase = new ResetUserPasswordUseCase(
       usersTokensRepository,

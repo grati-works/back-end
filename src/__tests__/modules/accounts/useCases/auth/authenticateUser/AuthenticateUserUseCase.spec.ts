@@ -5,7 +5,7 @@ import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTok
 import { AuthenticateUserUseCase } from '@modules/accounts/useCases/auth/authenticateUser/AuthenticateUserUseCase';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
-import { MailTrapMailProvider } from '@shared/container/providers/MailProvider/implementations/MailTrapMailProvider';
+import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { AppError } from '@shared/errors/AppError';
 import { client } from '@shared/infra/prisma';
@@ -19,14 +19,14 @@ let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
 let dateProvider: DayjsDateProvider;
-let mailProvider: MailTrapMailProvider;
+let mailProvider: EtherealMailProvider;
 
 describe('Authenticate User', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
-    mailProvider = new MailTrapMailProvider();
+    mailProvider = new EtherealMailProvider();
 
     sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
       usersRepository,

@@ -30,17 +30,19 @@ class EtherealMailProvider implements IMailProvider {
     variables: object,
     template: (_: unknown) => string,
   ): Promise<void> {
-    const parsedTemplate = template(variables);
+    if (!process.env.DATABASE_URL.includes('grati_test')) {
+      const parsedTemplate = template(variables);
 
-    const message = await this.client.sendMail({
-      to,
-      from: 'Grati <noreply@grati.works>',
-      subject,
-      html: parsedTemplate,
-    });
+      const message = await this.client.sendMail({
+        to,
+        from: 'Grati <noreply@grati.works>',
+        subject,
+        html: parsedTemplate,
+      });
 
-    console.log('Message sent: %s', message.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
+      console.log('Message sent: %s', message.messageId);
+      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
+    }
   }
 }
 
