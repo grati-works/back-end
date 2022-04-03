@@ -95,7 +95,7 @@ describe('Reset Password', () => {
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWNrLmNhcGl0b0Bob3RtYWlsLmNvbSIsImlhdCI6MTY0Nzk1NzUzOSwiZXhwIjoxNjUwNTQ5NTM5LCJzdWIiOiIxIn0.J_K4f9aclLKXeV6pYKZUqF3TEjY4aFvBoFJXzgUzZtk',
         password: faker.internet.password(),
       }),
-    ).rejects.toEqual(new AppError('Invalid token', 401));
+    ).rejects.toEqual(new AppError('Invalid token', 401, 'token.invalid'));
   });
 
   it('should not be able to reset password with expired token', async () => {
@@ -144,7 +144,7 @@ describe('Reset Password', () => {
         token: recoverToken,
         password: faker.internet.password(),
       }),
-    ).rejects.toEqual(new AppError('Token expired', 401));
+    ).rejects.toEqual(new AppError('Token expired', 401, 'token.expired'));
   });
 
   it('should not be able to reset password with non existent user', async () => {
@@ -159,6 +159,6 @@ describe('Reset Password', () => {
 
     await expect(
       sendForgotPasswordMailUseCase.execute(user.email),
-    ).rejects.toEqual(new AppError('User not found', 404));
+    ).rejects.toEqual(new AppError('User not found', 404, 'user.not_found'));
   });
 });

@@ -53,7 +53,7 @@ describe('Send activate account mail', () => {
     const email = faker.internet.email();
 
     await expect(sendActivateAccountMailUseCase.execute(email)).rejects.toEqual(
-      new AppError('User not found', 404),
+      new AppError('User not found', 404, 'user.not_found'),
     );
   });
 

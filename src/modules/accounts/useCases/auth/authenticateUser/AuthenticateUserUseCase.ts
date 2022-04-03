@@ -36,12 +36,7 @@ class AuthenticateUserUseCase {
     @inject('DayjsDateProvider')
     private dateProvider: IDateProvider,
     private mailProvider?: SendActivateAccountMailUseCase,
-  ) {
-    this.mailProvider =
-      mailProvider !== null
-        ? container.resolve(SendActivateAccountMailUseCase)
-        : null;
-  }
+  ) {}
 
   async execute({ email, password }: IRequest): Promise<IResponse> {
     const user = await this.usersRepository.findByEmail(email);
@@ -65,7 +60,7 @@ class AuthenticateUserUseCase {
 
       if (this.mailProvider !== null) await this.mailProvider.execute(email);
 
-      throw new AppError('User not activated', 401, 'auth.not_activated');
+      throw new AppError('User not activated', 403, 'auth.not_activated');
     }
 
     const passwordMatch = await compare(password, user.password);

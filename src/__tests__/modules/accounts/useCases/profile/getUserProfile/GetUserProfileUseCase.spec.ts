@@ -62,12 +62,12 @@ describe('Get user profile', () => {
     const gettedProfile = await getUserProfileUseCase.execute(
       organization.id.toString(),
       createdUser.id.toString(),
+      true,
     );
 
     expect(gettedProfile).toBeDefined();
     expect(gettedProfile).toHaveProperty('id');
-    expect(gettedProfile.user_id).toEqual(createdUser.id);
-    expect(gettedProfile.organization_id).toEqual(organization.id);
+    expect(gettedProfile.user.id).toEqual(createdUser.id);
   });
 
   it('should not able to return non existent user profile', async () => {
@@ -90,7 +90,9 @@ describe('Get user profile', () => {
     });
 
     await expect(
-      getUserProfileUseCase.execute(organization.id.toString(), '2'),
-    ).rejects.toEqual(new AppError('Profile not found', 404));
+      getUserProfileUseCase.execute(organization.id.toString(), '2', true),
+    ).rejects.toEqual(
+      new AppError('Profile not found', 404, 'profile.not_found'),
+    );
   });
 });

@@ -34,7 +34,7 @@ describe('Create User', () => {
     await createUserUseCase.execute(user);
 
     await expect(createUserUseCase.execute(user)).rejects.toEqual(
-      new AppError('Email already in use'),
+      new AppError('Email already in use', 409, 'user.email.in_use'),
     );
   });
 
@@ -56,7 +56,7 @@ describe('Create User', () => {
     await createUserUseCase.execute(user1);
 
     await expect(createUserUseCase.execute(user2)).rejects.toEqual(
-      new AppError('Username already in use'),
+      new AppError('Username already in use', 409, 'user.username.in_use'),
     );
   });
 });

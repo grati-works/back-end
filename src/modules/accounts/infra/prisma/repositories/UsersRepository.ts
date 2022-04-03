@@ -13,8 +13,7 @@ class UsersRepository implements IUsersRepository {
     password,
     activated = false,
   }: ICreateUserDTO): Promise<any> {
-    console.log('CHEGUEI AQUI1');
-    await client.user
+    return client.user
       .create({
         data: {
           name,
@@ -32,7 +31,7 @@ class UsersRepository implements IUsersRepository {
           if (message.includes('username'))
             throw new AppError(
               'Username already in use',
-              400,
+              409,
               'user.username.in_use',
             );
           else if (message.includes('email'))

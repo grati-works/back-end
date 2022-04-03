@@ -6,27 +6,40 @@ import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTok
 import { AuthenticateUserUseCase } from '@modules/accounts/useCases/auth/authenticateUser/AuthenticateUserUseCase';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
+import { MailTrapMailProvider } from '@shared/container/providers/MailProvider/implementations/MailTrapMailProvider';
+import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { AppError } from '@shared/errors/AppError';
 import { client } from '@shared/infra/prisma';
 import { faker } from '@faker-js/faker';
+import { v4 as uuidV4 } from 'uuid';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let createUserUseCase: CreateUserUseCase;
+let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
 let dateProvider: DayjsDateProvider;
+let mailProvider: MailTrapMailProvider;
 
 describe('Authenticate User', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
+    mailProvider = new MailTrapMailProvider();
+
+    sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
+      usersRepository,
+      usersTokensRepository,
+      dateProvider,
+      mailProvider,
+    );
 
     authenticateUserUseCase = new AuthenticateUserUseCase(
       usersRepository,
       usersTokensRepository,
       dateProvider,
-      null,
+      sendActivateAccountMailUseCase,
     );
 
     createUserUseCase = new CreateUserUseCase(usersRepository, null);
@@ -63,7 +76,9 @@ describe('Authenticate User', () => {
         email: 'false@email.com',
         password: faker.internet.password(),
       }),
-    ).rejects.toEqual(new AppError('Email or password incorrect', 401));
+    ).rejects.toEqual(
+      new AppError('Email or password incorrect', 401, 'auth.incorrect'),
+    );
   });
 
   it('should not be able to authenticate a user with incorrect password', async () => {
@@ -83,7 +98,9 @@ describe('Authenticate User', () => {
         email: user.email,
         password: 'wrong-password',
       }),
-    ).rejects.toEqual(new AppError('Email or password incorrect', 401));
+    ).rejects.toEqual(
+      new AppError('Email or password incorrect', 401, 'auth.incorrect'),
+    );
   });
 
   it('should not be able to authenticate a user not activated', async () => {
@@ -117,6 +134,38 @@ describe('Authenticate User', () => {
         email: user.email,
         password: user.password,
       }),
-    ).rejects.toEqual(new AppError('User not activated', 401));
+    ).rejects.toEqual(
+      new AppError('User not activated', 403, 'auth.not_activated'),
+    );
+  });
+
+  it('should be check if usersTokensRepository.deleteById have been called', async () => {
+    const name = faker.name.findName();
+    const user: ICreateUserDTO = {
+      name,
+      username: faker.internet.userName(name),
+      email: faker.internet.email(name),
+      password: faker.internet.password(),
+      activated: false,
+    };
+
+    const createdUser = await createUserUseCase.execute(user);
+
+    await usersTokensRepository.create({
+      user_id: createdUser.id,
+      token: uuidV4(),
+      type: 'activate_account',
+      expires_at: dateProvider.addHours(3),
+    });
+
+    const vinculedTokens = await usersTokensRepository.findByUserId(
+      createdUser.id,
+    );
+
+    const spyDeleteById = jest.spyOn(usersTokensRepository, 'deleteById');
+
+    await authenticateUserUseCase.deleteActivateAccountTokens(vinculedTokens);
+
+    expect(spyDeleteById).toHaveBeenCalled();
   });
 });

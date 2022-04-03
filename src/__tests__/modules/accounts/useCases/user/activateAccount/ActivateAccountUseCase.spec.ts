@@ -94,7 +94,7 @@ describe('Activate Account', () => {
   it('should not be able to activate user account with invalid token', async () => {
     await expect(
       activateAccountUseCase.execute('invalid_token'),
-    ).rejects.toEqual(new AppError('Invalid token'));
+    ).rejects.toEqual(new AppError('Invalid token', 401, 'token.invalid'));
   });
 
   it('should not be able to activate user account with expired token', async () => {
@@ -135,7 +135,7 @@ describe('Activate Account', () => {
     });
 
     await expect(activateAccountUseCase.execute(activateToken)).rejects.toEqual(
-      new AppError('Token expired'),
+      new AppError('Token expired', 401, 'token.expired'),
     );
   });
 
@@ -181,7 +181,7 @@ describe('Activate Account', () => {
       .mockImplementation(async () => null);
 
     await expect(activateAccountUseCase.execute(activateToken)).rejects.toEqual(
-      new AppError('User not found', 404),
+      new AppError('User not found', 404, 'user.not_found'),
     );
 
     jest.clearAllMocks();

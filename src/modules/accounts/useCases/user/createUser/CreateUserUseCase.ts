@@ -13,12 +13,7 @@ class CreateUserUseCase {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
     private mailProvider?: SendActivateAccountMailUseCase,
-  ) {
-    this.mailProvider =
-      mailProvider !== null
-        ? container.resolve(SendActivateAccountMailUseCase)
-        : null;
-  }
+  ) {}
 
   async execute({
     name,
@@ -30,7 +25,7 @@ class CreateUserUseCase {
     const userAlreadyExists = await this.usersRepository.findByEmail(email);
 
     if (userAlreadyExists) {
-      throw new AppError('Email already in use', 400, 'user.email.in_use');
+      throw new AppError('Email already in use', 409, 'user.email.in_use');
     }
 
     const hashedPassword = await hash(password, 8);
