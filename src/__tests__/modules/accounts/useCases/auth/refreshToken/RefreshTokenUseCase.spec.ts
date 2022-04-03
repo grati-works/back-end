@@ -1,4 +1,3 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
@@ -9,7 +8,7 @@ import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/Cr
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { AppError } from '@shared/errors/AppError';
 import { client } from '@shared/infra/prisma';
-import { faker } from '@faker-js/faker';
+import { createFakeUser } from '@utils/testUtils';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let refreshTokenUseCase: RefreshTokenUseCase;
@@ -46,14 +45,7 @@ describe('Refresh Token', () => {
   });
 
   it('should be able to refresh a token', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
+    const user = createFakeUser();
 
     await createUserUseCase.execute(user);
 

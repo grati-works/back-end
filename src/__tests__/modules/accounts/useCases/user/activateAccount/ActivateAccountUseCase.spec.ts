@@ -1,9 +1,7 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { AppError } from '@shared/errors/AppError';
-import { faker } from '@faker-js/faker';
 import { client } from '@shared/infra/prisma';
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
@@ -11,6 +9,7 @@ import { DayjsDateProvider } from '@shared/container/providers/DateProvider/impl
 import { MailTrapMailProvider } from '@shared/container/providers/MailProvider/implementations/MailTrapMailProvider';
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { ActivateAccountUseCase } from '@modules/accounts/useCases/user/activateAccount/ActivateAccountUseCase';
+import { createFakeUser } from '@utils/testUtils';
 
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let activateAccountUseCase: ActivateAccountUseCase;
@@ -48,14 +47,7 @@ describe('Activate Account', () => {
   });
 
   it('should be able to activate user account', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: false,
-    };
+    const user = createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 
@@ -98,14 +90,7 @@ describe('Activate Account', () => {
   });
 
   it('should not be able to activate user account with expired token', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: false,
-    };
+    const user = createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 
@@ -140,14 +125,7 @@ describe('Activate Account', () => {
   });
 
   it('should not be able to activate an inexistent account', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: false,
-    };
+    const user = createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 

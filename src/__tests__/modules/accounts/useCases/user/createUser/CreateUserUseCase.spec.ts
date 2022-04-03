@@ -5,6 +5,7 @@ import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/Cr
 import { AppError } from '@shared/errors/AppError';
 import { faker } from '@faker-js/faker';
 import { client } from '@shared/infra/prisma';
+import { createFakeUser } from '@utils/testUtils';
 
 let createUserUseCase: CreateUserUseCase;
 let usersRepository: IUsersRepository;
@@ -22,14 +23,7 @@ describe('Create User', () => {
   });
 
   it('should not be able to create user with existent mail', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
+    const user = createFakeUser();
 
     await createUserUseCase.execute(user);
 
@@ -39,18 +33,11 @@ describe('Create User', () => {
   });
 
   it('should not be able to create user with existent username', async () => {
-    const name = faker.name.findName();
-    const user1: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      activated: true,
-    };
+    const user1 = createFakeUser();
 
     const user2: ICreateUserDTO = {
       ...user1,
-      email: faker.internet.email(name),
+      email: faker.internet.email(user1.name),
     };
 
     await createUserUseCase.execute(user1);

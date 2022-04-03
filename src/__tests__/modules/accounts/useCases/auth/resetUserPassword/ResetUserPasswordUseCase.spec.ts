@@ -1,4 +1,3 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
@@ -12,6 +11,7 @@ import { faker } from '@faker-js/faker';
 import { ResetUserPasswordUseCase } from '@modules/accounts/useCases/auth/resetUserPassword/ResetUserPasswordUseCase';
 import { SendForgotPasswordMailUseCase } from '@modules/accounts/useCases/mail/sendForgotPasswordMail/SendForgotPasswordMailUseCase';
 import { MailTrapMailProvider } from '@shared/container/providers/MailProvider/implementations/MailTrapMailProvider';
+import { createFakeUser } from '@utils/testUtils';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let resetUserPasswordUseCase: ResetUserPasswordUseCase;
@@ -57,14 +57,7 @@ describe('Reset Password', () => {
   });
 
   it('should be able to reset a password', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
+    const user = createFakeUser();
 
     await createUserUseCase.execute(user);
 
@@ -99,14 +92,7 @@ describe('Reset Password', () => {
   });
 
   it('should not be able to reset password with expired token', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
+    const user = createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 
@@ -148,14 +134,7 @@ describe('Reset Password', () => {
   });
 
   it('should not be able to reset password with non existent user', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
+    const user = createFakeUser();
 
     await expect(
       sendForgotPasswordMailUseCase.execute(user.email),

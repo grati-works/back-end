@@ -1,4 +1,3 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
@@ -12,6 +11,7 @@ import { AppError } from '@shared/errors/AppError';
 import { client } from '@shared/infra/prisma';
 import { faker } from '@faker-js/faker';
 import { v4 as uuidV4 } from 'uuid';
+import { createFakeUser } from '@utils/testUtils';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let createUserUseCase: CreateUserUseCase;
@@ -51,14 +51,7 @@ describe('Authenticate User', () => {
   });
 
   it('should be able to authenticate a user', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
+    const user = createFakeUser();
 
     await createUserUseCase.execute(user);
 
@@ -82,14 +75,7 @@ describe('Authenticate User', () => {
   });
 
   it('should not be able to authenticate a user with incorrect password', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
+    const user = createFakeUser();
 
     await createUserUseCase.execute(user);
 
@@ -104,14 +90,7 @@ describe('Authenticate User', () => {
   });
 
   it('should not be able to authenticate a user not activated', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: false,
-    };
+    const user = createFakeUser(false);
 
     const createdUser = await createUserUseCase.execute(user);
 
@@ -140,14 +119,7 @@ describe('Authenticate User', () => {
   });
 
   it('should be check if usersTokensRepository.deleteById have been called', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(name),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: false,
-    };
+    const user = createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 

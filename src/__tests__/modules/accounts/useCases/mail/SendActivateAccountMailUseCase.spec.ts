@@ -1,4 +1,3 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
@@ -11,6 +10,7 @@ import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTok
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
 import { MailTrapMailProvider } from '@shared/container/providers/MailProvider/implementations/MailTrapMailProvider';
+import { createFakeUser } from '@utils/testUtils';
 
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let authenticateUserUseCase: AuthenticateUserUseCase;
@@ -59,13 +59,7 @@ describe('Send activate account mail', () => {
 
   it('should send activate account mail', async () => {
     const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
+    const user = createFakeUser();
 
     await createUserUseCase.execute(user);
 

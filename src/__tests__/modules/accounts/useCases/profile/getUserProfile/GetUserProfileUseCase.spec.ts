@@ -1,4 +1,3 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
@@ -7,6 +6,7 @@ import { faker } from '@faker-js/faker';
 import { client } from '@shared/infra/prisma';
 import { GetUserProfileUseCase } from '@modules/accounts/useCases/profile/getUserProfile/GetUserProfileUseCase';
 import { ProfilesRepository } from '@modules/accounts/infra/prisma/repositories/ProfilesRepository';
+import { createFakeProfile, createFakeUser } from '@utils/testUtils';
 
 let usersRepository: IUsersRepository;
 let profilesRepository: ProfilesRepository;
@@ -30,34 +30,7 @@ describe('Get user profile', () => {
   });
 
   it('should able to return user profile', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
-
-    const createdUser = await createUserUseCase.execute(user);
-
-    const organization = await client.organization.create({
-      data: {
-        name: faker.company.companyName(),
-        owner_id: createdUser.id,
-      },
-    });
-
-    await client.organization.update({
-      where: { id: organization.id },
-      data: {
-        users: {
-          create: {
-            user_id: createdUser.id,
-          },
-        },
-      },
-    });
+    const { createdUser, organization } = await createFakeProfile();
 
     const gettedProfile = await getUserProfileUseCase.execute(
       organization.id.toString(),
@@ -71,14 +44,7 @@ describe('Get user profile', () => {
   });
 
   it('should not able to return non existent user profile', async () => {
-    const name = faker.name.findName();
-    const user: ICreateUserDTO = {
-      name,
-      username: faker.internet.userName(),
-      email: faker.internet.email(name),
-      password: faker.internet.password(),
-      activated: true,
-    };
+    const user = createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 
