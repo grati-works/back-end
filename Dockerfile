@@ -10,8 +10,4 @@ COPY . .
 
 EXPOSE 3333
 
-RUN npx prisma generate
-RUN npx prisma migrate
-RUN npm run build
-
-CMD ["npm", "start"]
+CMD npx prisma generate && npx prisma migrate dev && npm run build && npm start
