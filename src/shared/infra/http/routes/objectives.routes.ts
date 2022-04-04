@@ -14,19 +14,15 @@ const deleteObjectiveController = new DeleteObjectiveController();
 const getAllObjectivesController = new GetAllObjectivesController();
 
 objectiveRoutes.post(
-  '/create',
+  '/',
   ensureAuthenticated,
   createObjectiveController.handle,
 );
 
-objectiveRoutes.post(
-  '/update',
-  ensureAuthenticated,
-  editObjectiveController.handle,
-);
+objectiveRoutes.put('/', ensureAuthenticated, editObjectiveController.handle);
 
 objectiveRoutes.delete(
-  '/delete/:group_id',
+  '/:group_id',
   ensureAuthenticated,
   deleteObjectiveController.handle,
 );
