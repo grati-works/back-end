@@ -1,6 +1,7 @@
 import { client } from '@shared/infra/prisma';
 
 import { IObjectivesRepository } from '@modules/objectives/repositories/IObjectivesRepository';
+import { Objective } from '@prisma/client';
 
 class ObjectivesRepository implements IObjectivesRepository {
   async create(
@@ -43,6 +44,16 @@ class ObjectivesRepository implements IObjectivesRepository {
         group_id,
       },
     });
+  }
+
+  async getAllObjectives(group_id: number): Promise<Objective> {
+    const objective = await client.objective.findUnique({
+      where: {
+        group_id,
+      },
+    });
+
+    return objective;
   }
 }
 
