@@ -1,27 +1,45 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
+import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
+import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { AppError } from '@shared/errors/AppError';
 import { client } from '@shared/infra/prisma';
 import { GetAccumulatedPointsUseCase } from '@modules/accounts/useCases/profile/getAccumulatedPoints/GetAccumulatedPointsUseCase';
 import { ProfilesRepository } from '@modules/accounts/infra/prisma/repositories/ProfilesRepository';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
+import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { createFakeProfile, createFakeUser } from '@utils/testUtils';
+import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 
+let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let usersRepository: IUsersRepository;
+let usersTokensRepository: IUsersTokensRepository;
 let profilesRepository: ProfilesRepository;
 let dateProvider: DayjsDateProvider;
 let createUserUseCase: CreateUserUseCase;
 let getAccumulatedPointsUseCase: GetAccumulatedPointsUseCase;
+let mailProvider: EtherealMailProvider;
 
 describe('Get user profile accumulated points', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
+    usersTokensRepository = new UsersTokensRepository();
     profilesRepository = new ProfilesRepository();
     dateProvider = new DayjsDateProvider();
+    mailProvider = new EtherealMailProvider();
 
-    createUserUseCase = new CreateUserUseCase(usersRepository, null);
+    sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
+      usersRepository,
+      usersTokensRepository,
+      dateProvider,
+      mailProvider,
+    );
+
+    createUserUseCase = new CreateUserUseCase(
+      usersRepository,
+      sendActivateAccountMailUseCase,
+    );
     getAccumulatedPointsUseCase = new GetAccumulatedPointsUseCase(
       profilesRepository,
       dateProvider,
