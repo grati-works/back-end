@@ -1,5 +1,5 @@
 import { IFindUserDTO } from '@modules/accounts/dtos/IFindUserDTO';
-import { Prisma, User } from '@prisma/client';
+import { Organization, Prisma, User } from '@prisma/client';
 
 interface IUsersRepository {
   create(data: Prisma.UserCreateInput): Promise<any>;
@@ -14,6 +14,7 @@ interface IUsersRepository {
   ): Promise<IFindUserDTO>;
   findById(id: number, include?: Prisma.UserInclude): Promise<IFindUserDTO>;
   activate(id: number): Promise<void>;
+  listOrganizations(id: number): Promise<Organization[]>;
 }
 
 export { IUsersRepository };

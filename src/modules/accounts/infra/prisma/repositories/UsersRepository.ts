@@ -1,6 +1,6 @@
 import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { IFindUserDTO } from '@modules/accounts/dtos/IFindUserDTO';
-import { Prisma, User } from '@prisma/client';
+import { Organization, Prisma, User } from '@prisma/client';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { client } from '@shared/infra/prisma';
 import { AppError } from '@shared/errors/AppError';
@@ -96,6 +96,34 @@ class UsersRepository implements IUsersRepository {
       where: { id },
       data: { activated: true },
     });
+  }
+
+  async listOrganizations(id: number): Promise<Organization[]> {
+    const organizationIds = await client.user.findUnique({
+      where: { id },
+      include: {
+        organizations: {
+          select: {
+            organization_id: true,
+          },
+        },
+      },
+    });
+
+    const organizations = await client.organization.findMany({
+      where: {
+        id: {
+          in: organizationIds.organizations.map(
+            organization => organization.organization_id,
+          ),
+        },
+      },
+      include: {
+        groups: true,
+      },
+    });
+
+    return organizations;
   }
 }
 
