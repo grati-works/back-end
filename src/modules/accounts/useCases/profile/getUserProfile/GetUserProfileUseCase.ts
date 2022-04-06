@@ -35,10 +35,10 @@ class GetUserProfileUseCase {
           sended_feedbacks: true,
           received_feedbacks: true,
 
-          skills: isPublic,
-          graduations: isPublic,
-          vinculed_accounts: isPublic,
-          description: isPublic,
+          skills: true,
+          graduations: true,
+          vinculed_accounts: true,
+          description: true,
         },
       );
 
