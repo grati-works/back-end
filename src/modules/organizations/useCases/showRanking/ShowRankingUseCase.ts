@@ -15,7 +15,10 @@ class ShowRankingUseCase {
   async execute(
     organization_id: string,
     filter: IRankingFilter,
-  ): Promise<Profile[]> {
+  ): Promise<{
+    ranking: Profile[];
+    total_pages: number;
+  }> {
     const classification = await this.organizationsRepository.getRanking(
       Number(organization_id),
       {
@@ -23,7 +26,10 @@ class ShowRankingUseCase {
       },
       true,
     );
-    return classification.ranking;
+    return {
+      ranking: classification.ranking,
+      total_pages: classification.total_pages,
+    };
   }
 }
 

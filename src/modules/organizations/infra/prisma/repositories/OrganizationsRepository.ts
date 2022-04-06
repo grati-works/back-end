@@ -90,6 +90,7 @@ class OrganizationsRepository implements IOrganizationsRepository {
     sended_feedbacks: number;
     received_feedbacks: number;
     ranking: Profile[];
+    total_pages: number;
   }> {
     const users = await client.profile.findMany({
       where: {
@@ -198,6 +199,7 @@ class OrganizationsRepository implements IOrganizationsRepository {
       sended_feedbacks,
       received_feedbacks,
       ranking: ranking.sort((a, b) => b.points - a.points),
+      total_pages: Math.ceil(sortedUsers.length / 10),
     };
   }
 

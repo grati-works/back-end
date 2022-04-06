@@ -30,6 +30,7 @@ interface IOrganizationsRepository {
     sended_feedbacks: number;
     received_feedbacks: number;
     ranking: Profile[];
+    total_pages: number;
   }>;
   getLevel(points: number): number;
   getUsers(organization_id: number): Promise<Profile[]>;
