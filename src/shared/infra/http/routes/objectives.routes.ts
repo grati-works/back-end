@@ -4,7 +4,7 @@ import { ensureAuthenticated } from '@shared/infra/http/middlewares/ensureAuthen
 import { CreateObjectiveController } from '@modules/objectives/useCases/CreateObjective/CreateObjectiveController';
 import { EditObjectiveController } from '@modules/objectives/useCases/editObjective/EditObjectiveController';
 import { DeleteObjectiveController } from '@modules/objectives/useCases/deleteObjective/DeleteObjectiveController';
-import { GetAllObjectivesController } from '@modules/objectives/useCases/getAllObjective/GetAllObejctiveController';
+import { GetAllObjectivesController } from '@modules/objectives/useCases/getAllObjectives/GetAllObejctivesController';
 
 const objectiveRoutes = Router();
 
@@ -28,7 +28,7 @@ objectiveRoutes.delete(
 );
 
 objectiveRoutes.get(
-  '/:group_id',
+  '/:profile_id',
   ensureAuthenticated,
   getAllObjectivesController.handle,
 );

@@ -14,6 +14,6 @@ interface IObjectivesRepository {
     expires_in: string,
   ): Promise<void>;
   delete(group_id: number): Promise<void>;
-  getAllObjectives(group_id: number): Promise<Objective>;
+  getAllObjectives(profile_id: number): Promise<Objective[]>;
 }
 export { IObjectivesRepository };

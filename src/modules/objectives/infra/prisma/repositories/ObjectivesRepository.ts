@@ -46,14 +46,20 @@ class ObjectivesRepository implements IObjectivesRepository {
     });
   }
 
-  async getAllObjectives(group_id: number): Promise<Objective> {
-    const objective = await client.objective.findUnique({
+  async getAllObjectives(profile_id: number): Promise<Objective[]> {
+    const objectives = await client.objective.findMany({
       where: {
-        group_id,
+        group: {
+          users: {
+            some: {
+              id: profile_id,
+            },
+          },
+        },
       },
     });
 
-    return objective;
+    return objectives;
   }
 }
 
