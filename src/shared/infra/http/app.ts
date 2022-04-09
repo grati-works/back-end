@@ -33,6 +33,7 @@ app.use('/reports', express.static(`${upload.tmpFolder}/reports`));
 app.use(router);
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
+  console.log(err)
   if (err instanceof AppError) {
     return response.status(err.status).json({
       status: 'error',

@@ -50,8 +50,8 @@ model Profile {
   groups             Group[]
   responsibility     String?
   description        String?
-  skills             Skill[]
-  graduations        Graduation[]
+  skills             String?
+  graduations        String?
   vinculed_accounts  VinculedAccount[]
   organization       Organization      @relation(fields: [organization_id], references: [id])
   organization_id    Int
@@ -108,15 +108,6 @@ model Group {
   feedbacks       Feedback[]
 }
 
-model Skill {
-  id              Int          @id @unique @default(autoincrement())
-  user            Profile      @relation(fields: [user_id], references: [id])
-  user_id         Int
-  name            String       @unique
-  skill_status    SkillStatus? @relation(fields: [skill_status_id], references: [id])
-  skill_status_id Int?
-}
-
 model Tag {
   id       Int        @id @unique @default(autoincrement())
   name     String     @unique
@@ -139,27 +130,6 @@ model Reaction {
   feedback_id Int
   user        Profile  @relation(fields: [profile_id], references: [id])
   profile_id  Int
-}
-
-model Graduation {
-  id                   Int               @id @unique @default(autoincrement())
-  user                 Profile           @relation(fields: [user_id], references: [id])
-  user_id              Int
-  name                 String            @unique
-  graduation_status    GraduationStatus? @relation(fields: [graduation_status_id], references: [id])
-  graduation_status_id Int?
-}
-
-model SkillStatus {
-  id     Int     @id @unique @default(autoincrement())
-  name   String  @unique
-  skills Skill[]
-}
-
-model GraduationStatus {
-  id          Int          @id @unique @default(autoincrement())
-  name        String       @unique
-  graduations Graduation[]
 }
 
 model VinculedAccount {

@@ -5,6 +5,7 @@ import { IOrganizationsRepository } from '@modules/organizations/repositories/IO
 import { client } from '@shared/infra/prisma';
 import { IAddUserDTO } from '@modules/organizations/dtos/IAddUserDTO';
 import { AppError } from '@shared/errors/AppError';
+import axios from 'axios';
 
 class OrganizationsRepository implements IOrganizationsRepository {
   async create(data: Prisma.OrganizationCreateInput): Promise<Organization> {
@@ -44,6 +45,36 @@ class OrganizationsRepository implements IOrganizationsRepository {
           },
         },
       });
+
+      const profile = await client.profile.findFirst({
+        where: {
+          user_id: user.id,
+          organization_id,
+        },
+        select: {
+          id: true,
+          user: true,
+        },
+      });
+
+      try {
+        await axios.post(
+          `${process.env.SEARCH_SERVICE_URL}/user/${organization_id}/${profile.id}`,
+          {
+            name: user.name,
+            username: user.username,
+            responsibility: '',
+            about: '',
+            skills: '',
+            graduations: '',
+          },
+        );
+      } catch (error) {
+        console.log(error);
+        console.log(
+          `Não foi possível inserir os dados do usuário ${profile.user.username} no Search Service.`,
+        );
+      }
 
       return addedUser;
     }

@@ -10,6 +10,7 @@ import { groupRoutes } from './group.routes';
 import { passwordRoutes } from './password.routes';
 import { authenticationRoutes } from './authentication.routes';
 import { paymentRoutes } from './payment.routes';
+import { searchRoutes } from './search.routes';
 
 const router = Router();
 
@@ -23,5 +24,6 @@ router.use('/group', groupRoutes);
 router.use('/password', passwordRoutes);
 router.use('/payment', paymentRoutes);
 router.use(authenticationRoutes);
+router.use('/search', searchRoutes);
 
 export { router };

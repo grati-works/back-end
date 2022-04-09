@@ -121,11 +121,6 @@ class AddUsersUseCase {
             username: user.username,
             email: user.email,
             password: hashedPassword,
-            organizations: {
-              connect: {
-                id: Number(organizationId),
-              },
-            },
           })
           .then(async () => {
             const sendCreateAccountMailUseCase = container.resolve(
@@ -135,22 +130,30 @@ class AddUsersUseCase {
               user.email,
               organization.name,
             );
+
+            await this.addUserToOrganization(
+              user,
+              organization,
+              temporaryPassword,
+            );
           });
-      }
-
-      if (!userAlreadyInOrganization) {
-        const sendAddAccountToOrganizationMailUseCase = container.resolve(
-          SendAddAccountToOrganizationMailUseCase,
-        );
-        await sendAddAccountToOrganizationMailUseCase.execute(
-          user.email,
-          organization.name,
-          temporaryPassword,
-        );
-
-        this.organizationsRepository.addUser(organization.id, user);
-      }
+      } else if (!userAlreadyInOrganization)
+        await this.addUserToOrganization(user, organization, temporaryPassword);
     });
+  }
+
+  async addUserToOrganization(user, organization, temporaryPassword) {
+    const sendAddAccountToOrganizationMailUseCase = container.resolve(
+      SendAddAccountToOrganizationMailUseCase,
+    );
+
+    await sendAddAccountToOrganizationMailUseCase.execute(
+      user.email,
+      organization.name,
+      temporaryPassword,
+    );
+
+    this.organizationsRepository.addUser(organization.id, user);
   }
 }
 

@@ -1,14 +1,14 @@
 import nodemailer, { Transporter } from 'nodemailer';
 
+import { AppError } from '@shared/errors/AppError';
 import { IMailProvider } from '../IMailProvider';
 
 class EtherealMailProvider implements IMailProvider {
   private client: Transporter;
 
   constructor() {
-    nodemailer
-      .createTestAccount()
-      .then(account => {
+    try {
+      nodemailer.createTestAccount().then(account => {
         const transporter = nodemailer.createTransport({
           host: account.smtp.host,
           port: account.smtp.port,
@@ -20,8 +20,12 @@ class EtherealMailProvider implements IMailProvider {
         });
 
         this.client = transporter;
-      })
-      .catch(console.log);
+      });
+    } catch (error) {
+      throw new AppError(
+        'Não foi possível se comunicar com o serviço de email!',
+      );
+    }
   }
 
   async sendMail(

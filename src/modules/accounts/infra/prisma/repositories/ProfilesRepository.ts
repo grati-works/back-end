@@ -1,12 +1,34 @@
 import { Prisma, Profile } from '@prisma/client';
 import { IProfilesRepository } from '@modules/accounts/repositories/IProfilesRepository';
 import { client } from '@shared/infra/prisma';
+import axios from 'axios';
 
 class ProfilesRepository implements IProfilesRepository {
   async create(data: Prisma.ProfileCreateInput): Promise<Profile> {
     const profile = await client.profile.create({
       data,
+      include: {
+        user: true,
+      },
     });
+    
+    try {
+      await axios.post(
+        `${process.env.SEARCH_SERVICE_URL}/user/${data.organization.connect.id}/${profile.id}`,
+        {
+          name: profile.user.name,
+          username: profile.user.username,
+          responsibility: '',
+          about: '',
+          skills: '',
+          graduations: '',
+        },
+      );
+    } catch {
+      console.log(
+        `Não foi possível inserir os dados do usuário ${profile.user.username} no Search Service.`,
+      );
+    }
 
     return profile;
   }
@@ -15,7 +37,37 @@ class ProfilesRepository implements IProfilesRepository {
     const profile = await client.profile.update({
       where: { id },
       data,
+      include: {
+        user: true,
+        skills: true,
+        graduations: true,
+      },
     });
+
+    const { organization_id } = await client.profile.findUnique({
+      where: { id },
+      select: {
+        organization_id: true,
+      },
+    });
+    
+    try {
+      await axios.post(
+        `${process.env.SEARCH_SERVICE_URL}/user/${organization_id}/${profile.id}`,
+        {
+          name: profile.user.name,
+          username: profile.user.username,
+          responsibility: profile.responsibility,
+          about: profile.description,
+          skills: profile.skills,
+          graduations: profile.graduations,
+        },
+      );
+    } catch {
+      console.log(
+        `Não foi possível atualizar os dados do usuário ${profile.user.username} no Search Service.`,
+      );
+    }
 
     return profile;
   }

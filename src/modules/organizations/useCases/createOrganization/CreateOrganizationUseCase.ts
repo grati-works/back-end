@@ -26,28 +26,29 @@ class CreateOrganizationUseCase {
       throw new AppError('Owner not found', 404, 'owner.not_found');
     }
 
-    await this.organizationsRepository
-      .create({
-        name,
-        owner: {
-          connect: {
-            id: Number(owner.id),
+    try {
+      await this.organizationsRepository
+        .create({
+          name,
+          owner: {
+            connect: {
+              id: Number(owner.id),
+            },
           },
-        },
-      })
-      .then(async organization => {
-        await this.organizationsRepository.addUser(organization.id, owner);
-        const userMail = owner.email;
-        const sendOrganizationCreateMailUseCase = container.resolve(
-          SendOrganizationCreateMailUseCase,
-        );
-        await sendOrganizationCreateMailUseCase.execute(userMail, name);
+        })
+        .then(async organization => {
+          await this.organizationsRepository.addUser(organization.id, owner);
+          const userMail = owner.email;
+          const sendOrganizationCreateMailUseCase = container.resolve(
+            SendOrganizationCreateMailUseCase,
+          );
+          await sendOrganizationCreateMailUseCase.execute(userMail, name);
 
-        return organization;
-      })
-      .catch(err => {
-        throw new AppError(err.message);
-      });
+          return organization;
+        });
+    } catch ({ message }) {
+      throw new AppError(message);
+    }
   }
 }
 
