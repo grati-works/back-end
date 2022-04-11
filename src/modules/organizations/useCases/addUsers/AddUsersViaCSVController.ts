@@ -6,7 +6,7 @@ import { AddUsersUseCase } from './AddUsersUseCase';
 class AddUsersViaCSVController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { file, user } = request;
-    const { organization_id } = request.body;
+    const { organization_id } = request.params;
 
     const addUsersUseCase = container.resolve(AddUsersUseCase);
 

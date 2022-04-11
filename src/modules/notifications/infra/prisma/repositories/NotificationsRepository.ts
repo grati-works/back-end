@@ -4,10 +4,15 @@ import { INotificationsRepository } from '@modules/notifications/repositories/IN
 import { Notification } from '@prisma/client';
 
 class NotificationsRepository implements INotificationsRepository {
-  async create(user_id: number, feedback_id: number): Promise<void> {
+  async create(profile_id: number, feedback_id: number): Promise<void> {
+    const profile = await client.profile.findUnique({
+      where: { id: profile_id },
+      select: { user_id: true },
+    });
+
     await client.notification.create({
       data: {
-        user_id,
+        user_id: profile.user_id,
         feedback_id,
       },
     });
@@ -24,15 +29,7 @@ class NotificationsRepository implements INotificationsRepository {
   }
 
   async visualize(user_id: number): Promise<Notification[]> {
-    const notifications = await client.notification.findMany({
-      where: {
-        user_id,
-        visualized: false,
-      },
-      orderBy: {
-        created_at: 'desc',
-      },
-    });
+    const notifications = await this.list(user_id);
 
     await client.notification.updateMany({
       where: {
@@ -41,6 +38,23 @@ class NotificationsRepository implements INotificationsRepository {
       },
       data: {
         visualized: true,
+      },
+    });
+
+    return notifications;
+  }
+
+  async list(user_id: number): Promise<Notification[]> {
+    const notifications = await client.notification.findMany({
+      where: {
+        user_id,
+        visualized: false,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+      include: {
+        user: true,
       },
     });
 

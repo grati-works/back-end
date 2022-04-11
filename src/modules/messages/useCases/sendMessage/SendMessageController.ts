@@ -7,7 +7,7 @@ class SendMessageController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { user } = request;
     const { organization_id } = request.params;
-    const { receivers_ids, tags, message, emoji, groups } = request.body;
+    const { receivers_usernames, tags, message, emoji, groups } = request.body;
     const attachment_file = request.file.filename;
 
     const sendMessageUseCase = container.resolve(SendMessageUseCase);
@@ -16,7 +16,7 @@ class SendMessageController {
       groups: JSON.parse(groups),
       author_id: Number(user.id),
       organization_id: Number(organization_id),
-      receivers_ids: JSON.parse(receivers_ids),
+      receivers_usernames: JSON.parse(receivers_usernames),
       tags: JSON.parse(tags),
       message,
       attachments: {

@@ -1,4 +1,4 @@
-import { inject, injectable, container } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 

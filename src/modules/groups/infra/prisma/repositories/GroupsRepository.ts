@@ -97,6 +97,13 @@ class GroupsRepository implements IGroupsRepository {
     });
     await client.group.delete({ where: { id: group_id } });
   }
+
+  async findByNameAndOrganizationId(
+    name: string,
+    organization_id: number,
+  ): Promise<Group> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export { GroupsRepository };

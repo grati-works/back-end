@@ -13,6 +13,13 @@ class OrganizationsRepository implements IOrganizationsRepository {
       data,
     });
 
+    await client.group.create({
+      data: {
+        name: 'Público',
+        organization_id: organization.id,
+      },
+    });
+
     return organization;
   }
 
@@ -70,7 +77,6 @@ class OrganizationsRepository implements IOrganizationsRepository {
           },
         );
       } catch (error) {
-        console.log(error);
         console.log(
           `Não foi possível inserir os dados do usuário ${profile.user.username} no Search Service.`,
         );

@@ -9,6 +9,10 @@ interface IGroupsRepository {
     email: string,
   ): Promise<Group>;
   delete(group_id: number): Promise<void>;
+  findByNameAndOrganizationId(
+    name: string,
+    organization_id: number,
+  ): Promise<Group>;
 }
 
 export { IGroupsRepository };

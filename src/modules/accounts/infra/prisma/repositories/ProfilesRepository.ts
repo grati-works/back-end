@@ -175,6 +175,22 @@ class ProfilesRepository implements IProfilesRepository {
       user.received_feedbacks.length * 10 + user.sended_feedbacks.length * 5
     );
   }
+
+  async findProfileByUsernameAndOrganizationId(
+    username: string,
+    organization_id: number,
+  ): Promise<Profile> {
+    const profile = await client.profile.findFirst({
+      where: {
+        user: {
+          username,
+        },
+        organization_id,
+      },
+    });
+
+    return profile;
+  }
 }
 
 export { ProfilesRepository };

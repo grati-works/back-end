@@ -9,7 +9,7 @@ interface SendArgs {
   author_id: number;
   groups: number[];
   organization_id: number;
-  receivers_ids: number[];
+  receivers_usernames: string[];
   tags: string[];
   message: string;
   attachments?: CreateOptionalArgs;

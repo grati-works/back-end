@@ -32,8 +32,36 @@ class GetUserProfileUseCase {
           },
           responsibility: true,
           points: true,
-          sended_feedbacks: true,
-          received_feedbacks: true,
+          sended_feedbacks: {
+            include: {
+              reactions: true,
+              receivers: {
+                include: {
+                  user: true,
+                },
+              },
+              sender: {
+                include: {
+                  user: true,
+                },
+              },
+            },
+          },
+          received_feedbacks: {
+            include: {
+              reactions: true,
+              receivers: {
+                include: {
+                  user: true,
+                },
+              },
+              sender: {
+                include: {
+                  user: true,
+                },
+              },
+            },
+          },
 
           skills: true,
           graduations: true,

@@ -39,7 +39,7 @@ userRoutes.patch(
   updateUserAvatarController.handle,
 );
 
-userRoutes.post('/edit', ensureAuthenticated, editUserProfileController.handle);
+userRoutes.put('/', ensureAuthenticated, editUserProfileController.handle);
 
 userRoutes.post('/activate', activateAccountController.handle);
 

@@ -18,6 +18,10 @@ interface IProfilesRepository {
     start_date: Date,
     end_date: Date,
   ): Promise<number>;
+  findProfileByUsernameAndOrganizationId(
+    username: string,
+    organization_id: number,
+  ): Promise<Profile>;
 }
 
 export { IProfilesRepository };

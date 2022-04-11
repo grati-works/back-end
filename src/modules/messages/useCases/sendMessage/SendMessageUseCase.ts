@@ -7,6 +7,7 @@ import {
 import { INotificationsRepository } from '@modules/notifications/repositories/INotificationsRepository';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/IStorageProvider';
 import { AppError } from '@shared/errors/AppError';
+import { IGroupsRepository } from '@modules/groups/repositories/IGroupsRepository';
 
 @injectable()
 class SendMessageUseCase {
@@ -15,6 +16,8 @@ class SendMessageUseCase {
     private profilesRepository: IProfilesRepository,
     @inject('MessagesRepository')
     private messagesRepository: IMessagesRepository,
+    @inject('GroupsRepository')
+    private groupsRepository: IGroupsRepository,
     @inject('StorageProvider')
     private storageProvider: IStorageProvider,
     @inject('NotificationsRepository')
@@ -40,11 +43,25 @@ class SendMessageUseCase {
       );
     }
 
+    if (data.groups.filter(group => group === 0)) {
+      data.groups.splice(data.groups.indexOf(0), 1);
+      const publicGroup =
+        await this.groupsRepository.findByNameAndOrganizationId(
+          'Público',
+          organization_id,
+        );
+      data.groups.push(publicGroup.id);
+    }
     await this.messagesRepository.send(data).then(async feedback_id => {
       await this.profilesRepository.addPoints(author_id, 5);
-      data.receivers_ids.map(async receiver_id => {
-        await this.profilesRepository.addPoints(receiver_id, 10);
-        await this.notificationsRepository.create(receiver_id, feedback_id);
+      data.receivers_usernames.map(async receiver_username => {
+        const receiver =
+          await this.profilesRepository.findProfileByUsernameAndOrganizationId(
+            receiver_username,
+            organization_id,
+          );
+        await this.profilesRepository.addPoints(receiver.id, 10);
+        await this.notificationsRepository.create(receiver.id, feedback_id);
       });
     });
   }

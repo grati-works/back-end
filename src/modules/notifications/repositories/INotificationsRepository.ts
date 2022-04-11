@@ -9,6 +9,7 @@ interface INotificationsRepository {
   create(user_id: number, feedback_id: number): Promise<void>;
   count(user_id: number): Promise<number>;
   visualize(user_id: number): Promise<Notification[]>;
+  list(user_id: number): Promise<Notification[]>;
 }
 
 export { SendArgs, INotificationsRepository };
