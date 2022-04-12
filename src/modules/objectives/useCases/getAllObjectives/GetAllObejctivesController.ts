@@ -12,10 +12,6 @@ class GetAllObjectivesController {
 
     const objectives = await getAllObjectivesUseCase.execute(idGroup);
 
-    if (objectives == null) {
-      return response.json({ message: "There's no objective in this group" });
-    }
-
     return response.status(201).json(objectives);
   }
 }

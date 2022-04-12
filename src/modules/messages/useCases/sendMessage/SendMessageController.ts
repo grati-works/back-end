@@ -7,20 +7,27 @@ class SendMessageController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { user } = request;
     const { organization_id } = request.params;
-    const { receivers_usernames, tags, message, emoji, groups } = request.body;
-    const attachment_file = request.file.filename;
+    const {
+      receivers_usernames,
+      tags,
+      message,
+      emoji,
+      groups,
+      attachment_gif,
+    } = JSON.parse(request.body.data);
+    const attachment_file = attachment_gif || request.file?.filename || null;
 
     const sendMessageUseCase = container.resolve(SendMessageUseCase);
 
     await sendMessageUseCase.execute({
-      groups: JSON.parse(groups),
+      groups,
       author_id: Number(user.id),
       organization_id: Number(organization_id),
-      receivers_usernames: JSON.parse(receivers_usernames),
-      tags: JSON.parse(tags),
+      receivers_usernames,
+      tags,
       message,
       attachments: {
-        emoji,
+        emoji: emoji.replace(':', ''),
         attachment: attachment_file,
       },
     });
@@ -30,7 +37,3 @@ class SendMessageController {
 }
 
 export { SendMessageController };
-
-/*
-
-*/

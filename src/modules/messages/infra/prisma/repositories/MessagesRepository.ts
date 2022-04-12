@@ -24,11 +24,26 @@ class MessagesRepository implements IMessagesRepository {
     author_id,
     organization_id,
     groups,
-    receivers_ids,
+    receivers_usernames,
     tags,
     message,
     attachments,
   }: SendArgs): Promise<number> {
+    const receivers_profiles = await client.profile.findMany({
+      where: {
+        organization_id,
+        user: {
+          username: {
+            in: receivers_usernames,
+          },
+        },
+      },
+    });
+
+    if (receivers_profiles.length === 0) {
+      throw new AppError('Receivers not found', 404, 'receivers.not_found');
+    }
+
     const feedback = await client.feedback.create({
       data: {
         sender: {
@@ -42,12 +57,12 @@ class MessagesRepository implements IMessagesRepository {
           },
         },
         groups: {
-          connect: groups.map(group => ({ id: group })),
+          connect: groups.map(group => ({ id: Number(group) })),
         },
         receivers: {
           connect: [
-            ...receivers_ids.map(receiver_id => ({
-              id: receiver_id,
+            ...receivers_profiles.map(profile => ({
+              id: profile.id,
             })),
           ],
         },

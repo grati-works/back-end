@@ -37,21 +37,24 @@ class SendMessageUseCase {
     }
 
     if (data.attachments.attachment) {
-      await this.storageProvider.save(
-        data.attachments.attachment,
-        'attachments',
-      );
+      const { attachment } = data.attachments;
+      if (!attachment.startsWith('http')) {
+        await this.storageProvider.save(attachment, 'attachments');
+      }
     }
 
-    if (data.groups.filter(group => group === 0)) {
-      data.groups.splice(data.groups.indexOf(0), 1);
+    if (data.groups.filter(group => group === 'public')) {
+      data.groups.splice(data.groups.indexOf('public'), 1);
       const publicGroup =
         await this.groupsRepository.findByNameAndOrganizationId(
           'Público',
           organization_id,
         );
-      data.groups.push(publicGroup.id);
+      data.groups.push(publicGroup.id.toString());
+    } else if (data.groups.filter(group => group === 'private')) {
+      data.groups = [];
     }
+
     await this.messagesRepository.send(data).then(async feedback_id => {
       await this.profilesRepository.addPoints(author_id, 5);
       data.receivers_usernames.map(async receiver_username => {

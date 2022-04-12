@@ -102,7 +102,20 @@ class GroupsRepository implements IGroupsRepository {
     name: string,
     organization_id: number,
   ): Promise<Group> {
-    throw new Error('Method not implemented.');
+    const group = await client.group.findFirst({
+      where: {
+        name,
+        organization: {
+          id: organization_id,
+        },
+      },
+    });
+
+    if (!group) {
+      throw new AppError('Group not found', 404, 'group.not_found');
+    }
+
+    return group;
   }
 }
 
