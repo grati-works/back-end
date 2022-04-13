@@ -33,6 +33,9 @@ class GetUserProfileUseCase {
           responsibility: true,
           points: true,
           sended_feedbacks: {
+            where: {
+              deleted: null,
+            },
             include: {
               reactions: true,
               receivers: {
@@ -48,6 +51,9 @@ class GetUserProfileUseCase {
             },
           },
           received_feedbacks: {
+            where: {
+              deleted: null,
+            },
             include: {
               reactions: true,
               receivers: {

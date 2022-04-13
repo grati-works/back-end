@@ -11,7 +11,7 @@ class ProfilesRepository implements IProfilesRepository {
         user: true,
       },
     });
-    
+
     try {
       await axios.post(
         `${process.env.SEARCH_SERVICE_URL}/user/${data.organization.connect.id}/${profile.id}`,
@@ -39,8 +39,6 @@ class ProfilesRepository implements IProfilesRepository {
       data,
       include: {
         user: true,
-        skills: true,
-        graduations: true,
       },
     });
 
@@ -50,7 +48,7 @@ class ProfilesRepository implements IProfilesRepository {
         organization_id: true,
       },
     });
-    
+
     try {
       await axios.post(
         `${process.env.SEARCH_SERVICE_URL}/user/${organization_id}/${profile.id}`,
