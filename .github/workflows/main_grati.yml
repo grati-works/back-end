@@ -52,4 +52,4 @@ jobs:
           app-name: 'grati'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_53272E86AC7D4F45A2B2B062BE7106B6 }}
-          package: .
+          package: ./dist
