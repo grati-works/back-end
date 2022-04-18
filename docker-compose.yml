@@ -1,29 +1,39 @@
 version: "3.8"
 
 services:
-  database_grati:
+  database:
     image: postgres
-    container_name: database_grati
+    container_name: database
     restart: always
     ports:
       - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=docker
-      # - POSTGRES_DB=grati
+      - POSTGRES_DB=grati
     volumes:
       - pgdata:/data/postgres
-  backend_grati:
+  microservice_search:
+    image: valeriansaliou/sonic:v1.3.2
+    container_name: search-microservice
+    ports:
+      - 1491:1491
+    environment:
+      RUST_BACKTRACE: "full"
+    volumes:
+      - ~/Desktop/Grati/repos/search-microservice/src/sonic/config.cfg:/etc/sonic.cfg
+      - ~/Desktop/Grati/repos/search-microservice/src/sonic/store/:/var/lib/sonic/store/
+  backend:
     build: .
-    container_name: grati
+    container_name: backend
     ports:
       - 3333:3333
     volumes:
       - .:/usr/backend
     links:
-      - database_grati
+      - database
     depends_on: 
-      - database_grati
+      - database
     environment:
       DATABASE_URL: postgresql://postgres:docker@host.docker.internal:5432/grati
 

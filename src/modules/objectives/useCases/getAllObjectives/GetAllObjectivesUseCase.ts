@@ -15,7 +15,7 @@ class GetAllObjectivesUseCase {
       group_id,
     );
 
-    if (!objectives) {
+    if (!objectives || objectives.length === 0) {
       throw new AppError('Objectives not found', 404, 'objectives.not_found');
     }
 

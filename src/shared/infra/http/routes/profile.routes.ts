@@ -12,7 +12,7 @@ const updateProfileController = new UpdateProfileController();
 const getAccumulatedPointsController = new GetAccumulatedPointsController();
 
 profileRoutes.get('/:organization_id/:id', getUserProfileController.handle);
-profileRoutes.post('/:id', ensureAuthenticated, updateProfileController.handle);
+profileRoutes.put('/:id', ensureAuthenticated, updateProfileController.handle);
 profileRoutes.get(
   '/:organization_id/:id/accumulatedPoints',
   getAccumulatedPointsController.handle,

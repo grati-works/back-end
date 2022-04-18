@@ -20,17 +20,17 @@ class EditUserUseCase {
       throw new AppError('User not exists', 400, 'user.not_exists');
     }
 
-    const passwordMatch = await compare(password, userAlreadyExists.password);
-
-    if (!passwordMatch) {
-      throw new AppError(
-        'The password is incorrect',
-        401,
-        'user.password.incorrect',
-      );
-    }
-
     if (password) {
+      const passwordMatch = await compare(password, userAlreadyExists.password);
+
+      if (!passwordMatch) {
+        throw new AppError(
+          'The password is incorrect',
+          401,
+          'user.password.incorrect',
+        );
+      }
+
       password = await hash(new_password, 8);
     }
 

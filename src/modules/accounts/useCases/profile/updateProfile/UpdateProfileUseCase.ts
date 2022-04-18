@@ -23,16 +23,6 @@ class UpdateProfileUseCase {
         user_id: Number(id),
       },
     });
-    await client.skill.deleteMany({
-      where: {
-        user_id: Number(id),
-      },
-    });
-    await client.graduation.deleteMany({
-      where: {
-        user_id: Number(id),
-      },
-    });
 
     await this.profilesRepository.update(Number(id), data);
   }

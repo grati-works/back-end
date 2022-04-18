@@ -23,46 +23,8 @@ class UpdateProfileController {
           provider,
         })),
       },
-      skills: {
-        connectOrCreate: skills.map(({ name, status }) => ({
-          where: {
-            name,
-          },
-          create: {
-            name,
-            skill_status: {
-              connectOrCreate: {
-                where: {
-                  name: status,
-                },
-                create: {
-                  name: status,
-                },
-              },
-            },
-          },
-        })),
-      },
-      graduations: {
-        connectOrCreate: graduations.map(({ name, status }) => ({
-          where: {
-            name,
-          },
-          create: {
-            name,
-            graduation_status: {
-              connectOrCreate: {
-                where: {
-                  name: status,
-                },
-                create: {
-                  name: status,
-                },
-              },
-            },
-          },
-        })),
-      },
+      skills,
+      graduations,
       responsibility,
     });
 
