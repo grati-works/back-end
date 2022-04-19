@@ -15,14 +15,25 @@ class UpdateProfileController {
     } = request.body;
     const getUserProfileUseCase = container.resolve(UpdateProfileUseCase);
 
+    const vinculedAccounts =
+      vinculed_accounts !== undefined
+        ? {
+            create: vinculed_accounts.map(vinculed_account => {
+              if (vinculed_account !== null) {
+                return {
+                  account: vinculed_account.account,
+                  provider: vinculed_account.provider,
+                };
+              }
+            }),
+          }
+        : undefined;
+
+    console.log(vinculedAccounts);
+
     await getUserProfileUseCase.execute(id, {
       description,
-      vinculed_accounts: {
-        create: vinculed_accounts.map(({ account, provider }) => ({
-          account,
-          provider,
-        })),
-      },
+      vinculed_accounts: vinculedAccounts,
       skills,
       graduations,
       responsibility,

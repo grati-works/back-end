@@ -99,10 +99,15 @@ class OrganizationsRepository implements IOrganizationsRepository {
     });
   }
 
-  findById(id: number): Promise<Organization> {
-    return client.organization.findUnique({
+  async findById(id: number): Promise<Organization> {
+    const organization = await client.organization.findUnique({
       where: { id },
+      include: {
+        color_mode: true,
+      },
     });
+
+    return organization;
   }
 
   async checkIfUserIsOwner(

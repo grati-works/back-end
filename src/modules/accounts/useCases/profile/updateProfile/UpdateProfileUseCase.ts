@@ -18,11 +18,13 @@ class UpdateProfileUseCase {
       throw new AppError('Profile not found', 404, 'profile.not_found');
     }
 
-    await client.vinculedAccount.deleteMany({
-      where: {
-        user_id: Number(id),
-      },
-    });
+    if (data.vinculed_accounts !== undefined) {
+      await client.vinculedAccount.deleteMany({
+        where: {
+          user_id: Number(id),
+        },
+      });
+    }
 
     await this.profilesRepository.update(Number(id), data);
   }
