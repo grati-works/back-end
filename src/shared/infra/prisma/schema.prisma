@@ -28,19 +28,20 @@ model Feedback {
 }
 
 model User {
-  id                  Int            @id @unique @default(autoincrement())
-  name                String
-  username            String         @unique
-  email               String         @unique
-  password            String
-  profile_picture     String?
-  activated           Boolean        @default(false)
-  stripe_customer_id  String?        @unique
-  owned_organizations Organization[] @relation("OwnedOrganizations")
-  organizations       Profile[]
-  user_tokens         UserTokens[]
-  subscriptions       Subscription[]
-  notifications       Notification[]
+  id                        Int            @id @unique @default(autoincrement())
+  name                      String
+  username                  String         @unique
+  email                     String         @unique
+  password                  String
+  profile_picture           String?
+  profile_picture_public_id String?
+  activated                 Boolean        @default(false)
+  stripe_customer_id        String?        @unique
+  owned_organizations       Organization[] @relation("OwnedOrganizations")
+  organizations             Profile[]
+  user_tokens               UserTokens[]
+  subscriptions             Subscription[]
+  notifications             Notification[]
 }
 
 model Profile {

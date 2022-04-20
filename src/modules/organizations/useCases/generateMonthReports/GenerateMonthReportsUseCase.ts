@@ -55,11 +55,9 @@ class GenerateMonthReportsUseCase {
         .join('-')}.pdf`;
 
       await fs.writeFileSync(`./tmp/${fileName}`, pdfBuffer);
-      await this.storageProvider.save(fileName, 'reports');
+      const file = await this.storageProvider.save(fileName, 'reports');
 
-      return process.env.STORAGE_PROVIDER !== 's3'
-        ? `http://localhost:3333/reports/${fileName}`
-        : `https://${process.env.AWS_BUCKET_URL}/reports/${fileName}`;
+      return file.url;
     } catch (err) {
       throw new AppError(err.message);
     }

@@ -8,7 +8,7 @@ class ObjectivesRepository implements IObjectivesRepository {
     group_id: number,
     name: string,
     goal: number,
-    expires_in: string,
+    expires_in: Date,
   ): Promise<void> {
     await client.objective.create({
       data: {
@@ -24,7 +24,7 @@ class ObjectivesRepository implements IObjectivesRepository {
     group_id: number,
     name: string,
     goal: number,
-    expires_in: string,
+    expires_in: Date,
   ): Promise<void> {
     await client.objective.update({
       where: {

@@ -20,16 +20,17 @@ class UpdateUserAvatarUseCase {
     const user = await this.usersRepository.findById(Number(user_id));
 
     if (user.profile_picture)
-      await this.storageProvider.delete(user.profile_picture, 'avatar');
-    await this.storageProvider.save(avatar_file, 'avatars');
+      await this.storageProvider.delete(
+        user.profile_picture_public_id,
+        'avatar',
+      );
+    const file = await this.storageProvider.save(avatar_file, 'avatars');
 
-    const avatar_url =
-      process.env.STORAGE_PROVIDER !== 's3'
-        ? `http://localhost:3333/avatars/${avatar_file}`
-        : `https://${process.env.AWS_BUCKET_URL}/avatars/${avatar_file}`;
+    const avatar_url = file.url;
 
     await this.usersRepository.update(user.id, {
       profile_picture: avatar_url,
+      profile_picture_public_id: file.public_id,
     });
   }
 }

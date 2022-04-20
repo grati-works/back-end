@@ -3,16 +3,19 @@ import { resolve } from 'path';
 import { get } from 'https';
 import upload from '@config/upload';
 
-import { IStorageProvider } from '../IStorageProvider';
+import { IStorageProvider, UploadResponse } from '../IStorageProvider';
 
 class LocalStorageProvider implements IStorageProvider {
-  async save(file: string, folder: string): Promise<string> {
+  async save(file: string, folder: string): Promise<UploadResponse> {
     await fs.promises.rename(
       resolve(upload.tmpFolder, file),
       resolve(`${upload.tmpFolder}/${folder}`, file),
     );
 
-    return file;
+    return {
+      url: `https://localhost:3333/${folder}/${file}`,
+      public_id: file,
+    };
   }
 
   async delete(file: string, folder: string): Promise<void> {

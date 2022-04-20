@@ -2,11 +2,11 @@ import { container } from 'tsyringe';
 
 import { IStorageProvider } from './IStorageProvider';
 import { LocalStorageProvider } from './implementations/LocalStorageProvider';
-import { S3StorageProvider } from './implementations/S3StorageProvider';
+import { CloudinaryStorageProvider } from './implementations/CloudinaryProvider';
 
 const diskStorage = {
   local: container.resolve(LocalStorageProvider),
-  s3: container.resolve(S3StorageProvider),
+  cloudinary: container.resolve(CloudinaryStorageProvider),
 };
 
 container.registerInstance<IStorageProvider>(

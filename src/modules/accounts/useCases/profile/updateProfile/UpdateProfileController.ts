@@ -29,8 +29,6 @@ class UpdateProfileController {
           }
         : undefined;
 
-    console.log(vinculedAccounts);
-
     await getUserProfileUseCase.execute(id, {
       description,
       vinculed_accounts: vinculedAccounts,

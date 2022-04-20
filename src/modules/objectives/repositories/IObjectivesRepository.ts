@@ -5,13 +5,13 @@ interface IObjectivesRepository {
     group_id: number,
     name: string,
     goal: number,
-    expires_in: string,
+    expires_in: Date,
   ): Promise<void>;
   edit(
     group_id: number,
     name: string,
     goal: number,
-    expires_in: string,
+    expires_in: Date,
   ): Promise<void>;
   delete(group_id: number): Promise<void>;
   getAllObjectives(profile_id: number): Promise<Objective[]>;

@@ -41,8 +41,6 @@ class OrganizationsRepository implements IOrganizationsRepository {
       where: { email },
     });
 
-    console.log(organization_id, user);
-
     if (user) {
       const addedUser = await client.organization.update({
         where: { id: organization_id },
@@ -104,6 +102,17 @@ class OrganizationsRepository implements IOrganizationsRepository {
       where: { id },
       include: {
         color_mode: true,
+        groups: {
+          include: {
+            objective: true,
+          },
+        },
+        users: {
+          include: {
+            user: true,
+            groups: true,
+          },
+        },
       },
     });
 

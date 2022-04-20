@@ -12,9 +12,18 @@ class EditObjectiveUseCase {
     group_id: number,
     name: string,
     goal: number,
-    expires_in: string,
+    expires_in: Date,
   ): Promise<void> {
-    await this.objectivesRepository.edit(group_id, name, goal, expires_in);
+    await this.objectivesRepository
+      .edit(group_id, name, goal, expires_in)
+      .catch(async () => {
+        await this.objectivesRepository.create(
+          group_id,
+          name,
+          goal,
+          expires_in,
+        );
+      });
   }
 }
 
