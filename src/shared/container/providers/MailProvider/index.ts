@@ -2,13 +2,11 @@ import { container } from 'tsyringe';
 
 import { IMailProvider } from './IMailProvider';
 import { EtherealMailProvider } from './implementations/EtherealMailProvider';
-import { SESMailProvider } from './implementations/SESMailProvider';
-import { MailTrapMailProvider } from './implementations/MailTrapMailProvider';
+import { SMTPMailProvider } from './implementations/SMTPMailProvider';
 
 const mailProvider = {
   ethereal: container.resolve(EtherealMailProvider),
-  ses: container.resolve(SESMailProvider),
-  mailtrap: container.resolve(MailTrapMailProvider),
+  smtp: container.resolve(SMTPMailProvider),
 };
 
 container.registerInstance<IMailProvider>(

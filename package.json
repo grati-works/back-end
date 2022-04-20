@@ -27,7 +27,6 @@
   "dependencies": {
     "@jest/globals": "^27.5.1",
     "@prisma/client": "^3.11.1",
-    "aws-sdk": "^2.1106.0",
     "axios": "^0.26.1",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",

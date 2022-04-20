@@ -2,13 +2,13 @@ import nodemailer, { Transporter } from 'nodemailer';
 
 import { IMailProvider } from '../IMailProvider';
 
-class MailTrapMailProvider implements IMailProvider {
+class SMTPMailProvider implements IMailProvider {
   private client: Transporter;
 
   constructor() {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
+      port: Number(process.env.SMTP_PORT),
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
@@ -29,7 +29,7 @@ class MailTrapMailProvider implements IMailProvider {
 
       const message = await this.client.sendMail({
         to,
-        from: 'Grati <noreply@grati.works>',
+        from: 'Grati Works <noreply@grati.works>',
         subject,
         html: parsedTemplate,
       });
@@ -39,4 +39,4 @@ class MailTrapMailProvider implements IMailProvider {
   }
 }
 
-export { MailTrapMailProvider };
+export { SMTPMailProvider };
