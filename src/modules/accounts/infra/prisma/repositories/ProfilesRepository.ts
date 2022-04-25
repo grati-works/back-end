@@ -73,7 +73,7 @@ class ProfilesRepository implements IProfilesRepository {
   async findById(
     id: number,
     select?: Prisma.ProfileSelect,
-  ): Promise<Prisma.Prisma__ProfileClient<any>> {
+  ): Promise<Prisma.Prisma__ProfileClient<object>> {
     const profile = await client.profile.findUnique({
       where: { id },
       select,
@@ -86,7 +86,7 @@ class ProfilesRepository implements IProfilesRepository {
     organization_id: number,
     user_id: number,
     select?: Prisma.ProfileSelect,
-  ): Promise<Prisma.Prisma__ProfileClient<any>> {
+  ): Promise<Prisma.Prisma__ProfileClient<object>> {
     const profile = await client.profile.findFirst({
       where: {
         user_id,
@@ -177,7 +177,8 @@ class ProfilesRepository implements IProfilesRepository {
   async findProfileByUsernameAndOrganizationId(
     username: string,
     organization_id: number,
-  ): Promise<Profile> {
+    select?: Prisma.ProfileSelect,
+  ): Promise<Prisma.Prisma__ProfileClient<object>> {
     const profile = await client.profile.findFirst({
       where: {
         user: {
@@ -185,9 +186,28 @@ class ProfilesRepository implements IProfilesRepository {
         },
         organization_id,
       },
+      select,
     });
 
     return profile;
+  }
+
+  async findManyByUserAndOrganizationId(
+    user_ids: number[],
+    organization_id: number,
+    select?: Prisma.ProfileSelect,
+  ): Promise<object[]> {
+    const profiles = await client.profile.findMany({
+      where: {
+        id: {
+          in: user_ids,
+        },
+        organization_id,
+      },
+      select,
+    });
+
+    return profiles;
   }
 }
 

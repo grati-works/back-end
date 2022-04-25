@@ -1,8 +1,9 @@
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import multer from 'multer';
 
 import uploadConfig from '@config/upload';
 import { ensureAuthenticated } from '@shared/infra/http/middlewares/ensureAuthenticated';
+import { ensureOrganizationAuthor } from '@shared/infra/http/middlewares/ensureOrganizationAuthor';
 
 import { CreateOrganizationController } from '@modules/organizations/useCases/createOrganization/CreateOrganizationController';
 import { EditOrganizationController } from '@modules/organizations/useCases/editOrganization/EditOrganizationController';
@@ -73,6 +74,14 @@ organizationRoutes.get(
   '/:organization_id',
   ensureAuthenticated,
   getOrganizationInfoController.handle,
+);
+organizationRoutes.get(
+  '/is-owner/:organization_id',
+  ensureAuthenticated,
+  ensureOrganizationAuthor,
+  (_, response: Response) => {
+    response.send(true);
+  },
 );
 
 export { organizationRoutes };

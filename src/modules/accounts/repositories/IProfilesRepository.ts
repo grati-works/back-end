@@ -6,12 +6,12 @@ interface IProfilesRepository {
   findById(
     id: number,
     select?: Prisma.ProfileSelect,
-  ): Promise<Prisma.Prisma__ProfileClient<any>>;
+  ): Promise<Prisma.Prisma__ProfileClient<object>>;
   findProfileByUserAndOrganizationId(
     organization_id: number,
     user_id: number,
     select?: Prisma.ProfileSelect,
-  ): Promise<Prisma.Prisma__ProfileClient<any>>;
+  ): Promise<Prisma.Prisma__ProfileClient<object>>;
   addPoints(id: number, points: number): Promise<void>;
   getAccumulatedPoints(
     profile_id: number,
@@ -21,7 +21,13 @@ interface IProfilesRepository {
   findProfileByUsernameAndOrganizationId(
     username: string,
     organization_id: number,
-  ): Promise<Profile>;
+    select?: Prisma.ProfileSelect,
+  ): Promise<Prisma.Prisma__ProfileClient<object>>;
+  findManyByUserAndOrganizationId(
+    user_ids: number[],
+    organization_id: number,
+    select?: Prisma.ProfileSelect,
+  ): Promise<object[]>;
 }
 
 export { IProfilesRepository };

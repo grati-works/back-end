@@ -55,6 +55,20 @@ class NotificationsRepository implements INotificationsRepository {
       },
       include: {
         user: true,
+        feedback: {
+          select: {
+            id: true,
+            sender: {
+              select: {
+                user: {
+                  select: {
+                    username: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
 
