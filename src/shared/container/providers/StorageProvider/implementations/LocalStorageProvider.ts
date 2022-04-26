@@ -13,7 +13,7 @@ class LocalStorageProvider implements IStorageProvider {
     );
 
     return {
-      url: `https://localhost:3333/${folder}/${file}`,
+      url: `https://localhost:${process.env.PORT}/${folder}/${file}`,
       public_id: file,
     };
   }
