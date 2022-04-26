@@ -44,7 +44,10 @@ class SendAddAccountToOrganizationMailUseCase {
     const variables = {
       name: user.name,
       organization_name,
-      link: `${process.env.ADDED_TO_ORGANIZATION_MAIL_URL}${token}${
+      link: `${process.env.ADDED_TO_ORGANIZATION_MAIL_URL.replace(
+        '$APP_API_PORT',
+        process.env.PORT,
+      )}${token}${
         temporary_password !== null
           ? `&temporary_password=${temporary_password}`
           : ''

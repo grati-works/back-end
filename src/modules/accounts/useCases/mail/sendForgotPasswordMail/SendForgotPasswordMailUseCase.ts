@@ -39,7 +39,10 @@ class SendForgotPasswordMailUseCase {
 
     const variables = {
       name: user.name,
-      link: `${process.env.FORGOT_MAIL_URL}${token}`,
+      link: `${process.env.FORGOT_MAIL_URL.replace(
+        '$APP_API_PORT',
+        process.env.PORT,
+      )}${token}`,
     };
 
     this.mailProvider.sendMail(

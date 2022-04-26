@@ -40,7 +40,10 @@ class SendOrganizationCreateMailUseCase {
     const variables = {
       name: user.name,
       organization_name,
-      link: `${process.env.CREATE_ORGANIZATION_MAIL_URL}${token}`,
+      link: `${process.env.CREATE_ORGANIZATION_MAIL_URL.replace(
+        '$APP_API_PORT',
+        process.env.PORT,
+      )}${token}`,
     };
 
     this.mailProvider.sendMail(
