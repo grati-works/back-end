@@ -46,7 +46,7 @@ describe('Update User Avatar', () => {
     const gettedUser = await usersRepository.findById(createdUser.id);
 
     expect(gettedUser.profile_picture).toEqual(
-      `http://localhost:3333/avatars/${filename}`,
+      `http://localhost:${process.env.PORT}/avatars/${filename}`,
     );
 
     storageProvider.delete(filename, 'avatars');
