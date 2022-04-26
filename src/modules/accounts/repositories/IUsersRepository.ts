@@ -13,6 +13,7 @@ interface IUsersRepository {
     include?: Prisma.UserInclude,
   ): Promise<IFindUserDTO>;
   findById(id: number, include?: Prisma.UserInclude): Promise<IFindUserDTO>;
+  findByToken(token: string, token_type: string): Promise<IFindUserDTO>;
   activate(id: number): Promise<void>;
   listOrganizations(id: number): Promise<Organization[]>;
 }

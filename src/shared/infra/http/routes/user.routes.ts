@@ -4,6 +4,7 @@ import multer from 'multer';
 import uploadConfig from '@config/upload';
 import { ensureAuthenticated } from '@shared/infra/http/middlewares/ensureAuthenticated';
 
+import { GetUserByTokenController } from '@modules/accounts/useCases/user/getUserByToken/GetUserByTokenController';
 import { GetUserController } from '@modules/accounts/useCases/user/getUser/GetUserController';
 import { UpdateUserAvatarController } from '@modules/accounts/useCases/user/updateUserAvatar/UpdateUserAvatarController';
 import { CreateUserController } from '@modules/accounts/useCases/user/createUser/CreateUserController';
@@ -17,12 +18,16 @@ const uploadAvatar = multer(uploadConfig);
 
 const editUserProfileController = new EditUserController();
 const getUserController = new GetUserController();
+const getUserByTokenController = new GetUserByTokenController();
 const listOrganizationsController = new ListOrganizationsController();
 const updateUserAvatarController = new UpdateUserAvatarController();
 const createUserController = new CreateUserController();
 const activateAccountController = new ActivateAccountController();
 
 userRoutes.get('/', ensureAuthenticated, getUserController.handle);
+
+userRoutes.get('/by-token', getUserByTokenController.handle);
+
 userRoutes.get(
   '/organizations',
   ensureAuthenticated,

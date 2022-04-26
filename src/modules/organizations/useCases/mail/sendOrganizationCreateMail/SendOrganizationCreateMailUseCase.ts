@@ -21,7 +21,11 @@ class SendOrganizationCreateMailUseCase {
     private mailProvider: IMailProvider,
   ) {}
 
-  async execute(email: string, organization_name: string): Promise<void> {
+  async execute(
+    email: string,
+    organization_name: string,
+    organization_id: number,
+  ): Promise<void> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
@@ -40,7 +44,7 @@ class SendOrganizationCreateMailUseCase {
     const variables = {
       name: user.name,
       organization_name,
-      link: `${process.env.CREATE_ORGANIZATION_MAIL_URL}${token}`,
+      link: `${process.env.CREATE_ORGANIZATION_MAIL_URL}/${organization_id}&token=${token}`,
     };
 
     this.mailProvider.sendMail(

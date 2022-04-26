@@ -42,7 +42,11 @@ class CreateOrganizationUseCase {
           const sendOrganizationCreateMailUseCase = container.resolve(
             SendOrganizationCreateMailUseCase,
           );
-          await sendOrganizationCreateMailUseCase.execute(userMail, name);
+          await sendOrganizationCreateMailUseCase.execute(
+            userMail,
+            name,
+            organization.id,
+          );
 
           return organization;
         });

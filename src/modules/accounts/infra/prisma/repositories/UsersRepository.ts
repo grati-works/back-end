@@ -86,6 +86,21 @@ class UsersRepository implements IUsersRepository {
     return user as IFindUserDTO;
   }
 
+  async findByToken(token: string, token_type: string): Promise<IFindUserDTO> {
+    const user = await client.user.findFirst({
+      where: {
+        user_tokens: {
+          some: {
+            token,
+            type: token_type,
+          },
+        },
+      },
+    });
+
+    return user as IFindUserDTO;
+  }
+
   async activate(id: number): Promise<void> {
     await client.user.update({
       where: { id },
