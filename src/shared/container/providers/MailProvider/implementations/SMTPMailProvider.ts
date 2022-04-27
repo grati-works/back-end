@@ -27,14 +27,18 @@ class SMTPMailProvider implements IMailProvider {
     if (!process.env.DATABASE_URL.includes('grati_test')) {
       const parsedTemplate = template(variables);
 
-      const message = await this.client.sendMail({
-        to,
-        from: 'Grati Works <noreply@grati.works>',
-        subject,
-        html: parsedTemplate,
-      });
+      try {
+        const message = await this.client.sendMail({
+          to,
+          from: 'Grati Works <noreply@grati.works>',
+          subject,
+          html: parsedTemplate,
+        });
 
-      console.log('Message sent: %s', message.messageId);
+        console.log('Message sent: %s', message.messageId);
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 }

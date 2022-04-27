@@ -1,4 +1,4 @@
-import { inject, injectable } from 'tsyringe';
+import { container, inject, injectable } from 'tsyringe';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
@@ -58,7 +58,11 @@ class AuthenticateUserUseCase {
 
       await this.deleteActivateAccountTokens(vinculedTokens);
 
-      if (this.mailProvider !== null) await this.mailProvider.execute(email);
+      if (this.mailProvider == null) {
+        this.mailProvider = container.resolve(SendActivateAccountMailUseCase);
+      }
+
+      await this.mailProvider.execute(email);
 
       throw new AppError('User not activated', 403, 'auth.not_activated');
     }
