@@ -5,7 +5,7 @@ import {
   ListArgs,
   ListResponse,
 } from '@modules/messages/repositories/IMessagesRepository';
-import { Feedback, Reaction } from '@prisma/client';
+import { Feedback } from '@prisma/client';
 import { AppError } from '@shared/errors/AppError';
 
 const userSelect = {
@@ -175,6 +175,18 @@ class MessagesRepository implements IMessagesRepository {
         'message.already_deleted',
       );
     }
+
+    const notification = await client.notification.findFirst({
+      where: {
+        feedback_id,
+      },
+    });
+
+    await client.notification.delete({
+      where: {
+        id: notification.id,
+      },
+    });
 
     await client.feedback.update({
       where: {

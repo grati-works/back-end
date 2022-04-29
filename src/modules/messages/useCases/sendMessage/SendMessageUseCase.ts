@@ -43,7 +43,7 @@ class SendMessageUseCase {
       }
     }
 
-    if (data.groups.filter(group => group === 'public')) {
+    if (data.groups.find(group => group === 'public')) {
       data.groups.splice(data.groups.indexOf('public'), 1);
       const publicGroup =
         await this.groupsRepository.findByNameAndOrganizationId(
@@ -51,7 +51,7 @@ class SendMessageUseCase {
           organization_id,
         );
       data.groups.push(publicGroup.id.toString());
-    } else if (data.groups.filter(group => group === 'private')) {
+    } else if (data.groups.find(group => group === 'private')) {
       data.groups = [];
     }
 
