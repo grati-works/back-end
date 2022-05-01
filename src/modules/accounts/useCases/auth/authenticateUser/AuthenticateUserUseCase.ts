@@ -58,11 +58,15 @@ class AuthenticateUserUseCase {
 
       await this.deleteActivateAccountTokens(vinculedTokens);
 
-      if (this.mailProvider == null) {
-        this.mailProvider = container.resolve(SendActivateAccountMailUseCase);
-      }
+      try {
+        if (this.mailProvider == null) {
+          this.mailProvider = container.resolve(SendActivateAccountMailUseCase);
+        }
 
-      await this.mailProvider.execute(email);
+        await this.mailProvider.execute(email);
+      } catch (error) {
+        console.log('Activation e-mail not sent', error);
+      }
 
       throw new AppError('User not activated', 403, 'auth.not_activated');
     }

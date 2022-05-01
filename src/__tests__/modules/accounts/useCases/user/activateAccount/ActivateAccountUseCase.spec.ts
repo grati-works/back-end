@@ -32,12 +32,16 @@ describe('Activate Account', () => {
       usersRepository,
     );
 
-    createUserUseCase = new CreateUserUseCase(usersRepository, null);
     sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
       usersRepository,
       usersTokensRepository,
       dateProvider,
       mailProvider,
+    );
+
+    createUserUseCase = new CreateUserUseCase(
+      usersRepository,
+      sendActivateAccountMailUseCase,
     );
   });
 
@@ -47,7 +51,7 @@ describe('Activate Account', () => {
   });
 
   it('should be able to activate user account', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 
@@ -90,7 +94,7 @@ describe('Activate Account', () => {
   });
 
   it('should not be able to activate user account with expired token', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 
@@ -125,7 +129,7 @@ describe('Activate Account', () => {
   });
 
   it('should not be able to activate an inexistent account', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 

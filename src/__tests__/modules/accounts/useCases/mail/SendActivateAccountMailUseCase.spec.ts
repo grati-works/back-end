@@ -13,7 +13,6 @@ import { EtherealMailProvider } from '@shared/container/providers/MailProvider/i
 import { createFakeUser } from '@utils/testUtils';
 
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
-let authenticateUserUseCase: AuthenticateUserUseCase;
 let createUserUseCase: CreateUserUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
@@ -27,20 +26,16 @@ describe('Send activate account mail', () => {
     dateProvider = new DayjsDateProvider();
     mailProvider = new EtherealMailProvider();
 
-    authenticateUserUseCase = new AuthenticateUserUseCase(
-      usersRepository,
-      usersTokensRepository,
-      dateProvider,
-      null,
-    );
-
-    createUserUseCase = new CreateUserUseCase(usersRepository, null);
-
     sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
       usersRepository,
       usersTokensRepository,
       dateProvider,
       mailProvider,
+    );
+
+    createUserUseCase = new CreateUserUseCase(
+      usersRepository,
+      sendActivateAccountMailUseCase,
     );
   });
 
@@ -59,7 +54,7 @@ describe('Send activate account mail', () => {
 
   it('should send activate account mail', async () => {
     const name = faker.name.findName();
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     await createUserUseCase.execute(user);
 

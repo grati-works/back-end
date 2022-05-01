@@ -7,18 +7,41 @@ import { client } from '@shared/infra/prisma';
 import { GetUserProfileUseCase } from '@modules/accounts/useCases/profile/getUserProfile/GetUserProfileUseCase';
 import { ProfilesRepository } from '@modules/accounts/infra/prisma/repositories/ProfilesRepository';
 import { createFakeProfile, createFakeUser } from '@utils/testUtils';
+import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
+import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
+import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
+import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
+import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
+import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
 
 let usersRepository: IUsersRepository;
 let profilesRepository: ProfilesRepository;
 let createUserUseCase: CreateUserUseCase;
 let getUserProfileUseCase: GetUserProfileUseCase;
+let usersTokensRepository: IUsersTokensRepository;
+let dateProvider: DayjsDateProvider;
+let mailProvider: IMailProvider;
+let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 
 describe('Get user profile', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
+    usersTokensRepository = new UsersTokensRepository();
+    dateProvider = new DayjsDateProvider();
     profilesRepository = new ProfilesRepository();
+    mailProvider = new EtherealMailProvider();
 
-    createUserUseCase = new CreateUserUseCase(usersRepository, null);
+    sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
+      usersRepository,
+      usersTokensRepository,
+      dateProvider,
+      mailProvider,
+    );
+
+    createUserUseCase = new CreateUserUseCase(
+      usersRepository,
+      sendActivateAccountMailUseCase,
+    );
     getUserProfileUseCase = new GetUserProfileUseCase(profilesRepository);
   });
 
@@ -44,7 +67,7 @@ describe('Get user profile', () => {
   });
 
   it('should not able to return non existent user profile', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 

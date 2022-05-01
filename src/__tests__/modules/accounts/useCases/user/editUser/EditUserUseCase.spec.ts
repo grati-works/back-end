@@ -5,6 +5,7 @@ import { AppError } from '@shared/errors/AppError';
 import { faker } from '@faker-js/faker';
 import { client } from '@shared/infra/prisma';
 import { createFakeUser } from '@utils/testUtils';
+import { hash } from 'bcryptjs';
 
 let editUserUseCase: EditUserUseCase;
 let usersRepository: IUsersRepository;
@@ -27,17 +28,21 @@ describe('Edit User', () => {
         name: faker.name.firstName(),
         username: faker.internet.userName(),
         password: faker.internet.password(),
+        new_password: faker.internet.password(),
+        profile_picture: faker.image.avatar(),
       }),
     ).rejects.toEqual(new AppError('User not exists', 400, 'user.not_exists'));
   });
 
   it('should be able to edit user', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
     const createdUser = await usersRepository.create(user);
     const newUserInfo = {
       name: faker.name.firstName(),
       username: faker.internet.userName(),
-      password: faker.internet.password(),
+      password: user.originalPassword,
+      new_password: faker.internet.password(),
+      profile_picture: faker.image.avatar(),
     };
 
     await editUserUseCase.execute(createdUser.id.toString(), newUserInfo);

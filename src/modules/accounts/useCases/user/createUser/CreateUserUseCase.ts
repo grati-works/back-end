@@ -6,7 +6,6 @@ import { AppError } from '@shared/errors/AppError';
 
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { User } from '@prisma/client';
-import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
 
 @injectable()
 class CreateUserUseCase {
@@ -39,8 +38,14 @@ class CreateUserUseCase {
       activated,
     });
 
-    if (this.mailProvider == null) {
-      this.mailProvider = container.resolve(SendActivateAccountMailUseCase);
+    try {
+      if (this.mailProvider == null) {
+        this.mailProvider = container.resolve(SendActivateAccountMailUseCase);
+      }
+
+      await this.mailProvider.execute(email);
+    } catch (error) {
+      console.log('Activation e-mail not sent', error);
     }
 
     await this.mailProvider.execute(email);

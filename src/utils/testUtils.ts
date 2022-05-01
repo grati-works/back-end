@@ -1,22 +1,32 @@
 import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { faker } from '@faker-js/faker';
 import { client } from '@shared/infra/prisma';
+import { hash } from 'bcryptjs';
 
-export function createFakeUser(activated = true): ICreateUserDTO {
+interface FakeUser extends ICreateUserDTO {
+  originalPassword: string;
+}
+
+export async function createFakeUser(activated = true): Promise<FakeUser> {
   const name = faker.name.findName();
+  const password = faker.internet.password();
+  const encryptedPassword = await hash(password, 8);
+
   const user: ICreateUserDTO = {
     name,
     username: faker.internet.userName(),
     email: faker.internet.email(name),
-    password: faker.internet.password(),
+    password: encryptedPassword,
     activated,
   };
 
-  return user;
+  return { ...user, originalPassword: password };
 }
 
 export async function createFakeProfile() {
-  const user = createFakeUser();
+  const user = await createFakeUser();
+
+  delete user.originalPassword;
 
   const createdUser = await client.user.create({
     data: user,

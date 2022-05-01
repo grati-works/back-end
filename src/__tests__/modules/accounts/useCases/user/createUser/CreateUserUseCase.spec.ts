@@ -45,7 +45,7 @@ describe('Create User', () => {
   });
 
   it('should not be able to create user with existent mail', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     await createUserUseCase.execute(user);
 
@@ -55,7 +55,7 @@ describe('Create User', () => {
   });
 
   it('should not be able to create user with existent username', async () => {
-    const user1 = createFakeUser();
+    const user1 = await createFakeUser();
 
     const user2: ICreateUserDTO = {
       ...user1,

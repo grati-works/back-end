@@ -4,8 +4,11 @@ import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepositor
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { AuthenticateUserUseCase } from '@modules/accounts/useCases/auth/authenticateUser/AuthenticateUserUseCase';
 import { RefreshTokenUseCase } from '@modules/accounts/useCases/auth/refreshToken/RefreshTokenUseCase';
+import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
+import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
+import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { AppError } from '@shared/errors/AppError';
 import { client } from '@shared/infra/prisma';
 import { createFakeUser } from '@utils/testUtils';
@@ -16,12 +19,22 @@ let createUserUseCase: CreateUserUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
 let dateProvider: DayjsDateProvider;
+let mailProvider: IMailProvider;
+let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 
 describe('Refresh Token', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
+    mailProvider = new EtherealMailProvider();
+
+    sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
+      usersRepository,
+      usersTokensRepository,
+      dateProvider,
+      mailProvider,
+    );
 
     refreshTokenUseCase = new RefreshTokenUseCase(
       usersTokensRepository,
@@ -33,10 +46,13 @@ describe('Refresh Token', () => {
       usersRepository,
       usersTokensRepository,
       dateProvider,
-      null,
+      sendActivateAccountMailUseCase,
     );
 
-    createUserUseCase = new CreateUserUseCase(usersRepository, null);
+    createUserUseCase = new CreateUserUseCase(
+      usersRepository,
+      sendActivateAccountMailUseCase,
+    );
   });
 
   afterAll(async () => {
@@ -45,7 +61,7 @@ describe('Refresh Token', () => {
   });
 
   it('should be able to refresh a token', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     await createUserUseCase.execute(user);
 
@@ -74,6 +90,6 @@ describe('Refresh Token', () => {
       refreshTokenUseCase.execute(
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWNrLmNhcGl0b0Bob3RtYWlsLmNvbSIsImlhdCI6MTY0Nzk1NzUzOSwiZXhwIjoxNjUwNTQ5NTM5LCJzdWIiOiIxIn0.J_K4f9aclLKXeV6pYKZUqF3TEjY4aFvBoFJXzgUzZtk',
       ),
-    ).rejects.toEqual(new AppError('Token not found', 401, 'token.invalid'));
+    ).rejects.toEqual(new AppError('Invalid token', 401, 'token.invalid'));
   });
 });

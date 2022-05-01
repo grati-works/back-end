@@ -29,7 +29,7 @@ describe('Update User Avatar', () => {
   });
 
   it('should be able to create user avatar', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     const createdUser = await usersRepository.create(user);
 
@@ -46,7 +46,7 @@ describe('Update User Avatar', () => {
     const gettedUser = await usersRepository.findById(createdUser.id);
 
     expect(gettedUser.profile_picture).toEqual(
-      `http://localhost:${process.env.PORT}/avatars/${filename}`,
+      `https://localhost:${process.env.PORT}/avatars/${filename}`,
     );
 
     storageProvider.delete(filename, 'avatars');

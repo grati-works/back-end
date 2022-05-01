@@ -27,7 +27,7 @@ describe('Get User', () => {
   });
 
   it('should be able to get user', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
     const createdUser = await usersRepository.create(user);
 
     const gettedUser = await getUserUseCase.execute(createdUser.id.toString());

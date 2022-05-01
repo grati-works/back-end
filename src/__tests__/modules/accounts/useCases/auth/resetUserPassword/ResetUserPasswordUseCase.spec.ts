@@ -13,6 +13,7 @@ import { SendForgotPasswordMailUseCase } from '@modules/accounts/useCases/mail/s
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { createFakeUser } from '@utils/testUtils';
+import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let resetUserPasswordUseCase: ResetUserPasswordUseCase;
@@ -21,7 +22,7 @@ let sendForgotPasswordMailUseCase: SendForgotPasswordMailUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
 let dateProvider: DayjsDateProvider;
-let mailProvider: EtherealMailProvider;
+let mailProvider: IMailProvider;
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 
 describe('Reset Password', () => {
@@ -30,6 +31,7 @@ describe('Reset Password', () => {
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
     mailProvider = new EtherealMailProvider();
+
     sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
       usersRepository,
       usersTokensRepository,
@@ -50,7 +52,11 @@ describe('Reset Password', () => {
       sendActivateAccountMailUseCase,
     );
 
-    createUserUseCase = new CreateUserUseCase(usersRepository, null);
+    createUserUseCase = new CreateUserUseCase(
+      usersRepository,
+      sendActivateAccountMailUseCase,
+    );
+
     sendForgotPasswordMailUseCase = new SendForgotPasswordMailUseCase(
       usersRepository,
       usersTokensRepository,
@@ -65,7 +71,7 @@ describe('Reset Password', () => {
   });
 
   it('should be able to reset a password', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     await createUserUseCase.execute(user);
 
@@ -96,11 +102,13 @@ describe('Reset Password', () => {
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWNrLmNhcGl0b0Bob3RtYWlsLmNvbSIsImlhdCI6MTY0Nzk1NzUzOSwiZXhwIjoxNjUwNTQ5NTM5LCJzdWIiOiIxIn0.J_K4f9aclLKXeV6pYKZUqF3TEjY4aFvBoFJXzgUzZtk',
         password: faker.internet.password(),
       }),
-    ).rejects.toEqual(new AppError('Invalid token', 401, 'token.invalid'));
+    ).rejects.toEqual(
+      new AppError('Invalid token', 401, 'token.resetpassword.invalid'),
+    );
   });
 
   it('should not be able to reset password with expired token', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     const createdUser = await createUserUseCase.execute(user);
 
@@ -138,11 +146,13 @@ describe('Reset Password', () => {
         token: recoverToken,
         password: faker.internet.password(),
       }),
-    ).rejects.toEqual(new AppError('Token expired', 401, 'token.expired'));
+    ).rejects.toEqual(
+      new AppError('Token expired', 401, 'token.resetpassword.expired'),
+    );
   });
 
   it('should not be able to reset password with non existent user', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
 
     await expect(
       sendForgotPasswordMailUseCase.execute(user.email),

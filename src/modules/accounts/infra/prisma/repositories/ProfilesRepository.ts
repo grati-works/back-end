@@ -86,7 +86,7 @@ class ProfilesRepository implements IProfilesRepository {
     organization_id: number,
     user_id: number,
     select?: Prisma.ProfileSelect,
-  ): Promise<Prisma.Prisma__ProfileClient<object>> {
+  ): Promise<Prisma.Prisma__ProfileClient<any>> {
     const profile = await client.profile.findFirst({
       where: {
         user_id,

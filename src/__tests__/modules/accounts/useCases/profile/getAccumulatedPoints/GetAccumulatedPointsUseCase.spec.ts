@@ -54,7 +54,7 @@ describe('Get user profile accumulated points', () => {
   });
 
   it('should not be able to return points if profile does not exist', async () => {
-    const user = createFakeUser();
+    const user = await createFakeUser();
     const createdUser = await createUserUseCase.execute(user);
 
     const organization_id = '10';
