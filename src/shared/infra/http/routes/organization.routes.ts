@@ -34,6 +34,7 @@ organizationRoutes.post(
   ensureAuthenticated,
   createOrganizationController.handle,
 );
+organizationRoutes.post('/:id', createOrganizationController.handle);
 organizationRoutes.patch(
   '/:organization_id',
   ensureAuthenticated,

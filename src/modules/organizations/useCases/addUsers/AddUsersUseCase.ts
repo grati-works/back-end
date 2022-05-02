@@ -10,7 +10,7 @@ import { parse } from 'csv-parse';
 import { IAddUserDTO } from '@modules/organizations/dtos/IAddUserDTO';
 
 import { v4 as uuidV4 } from 'uuid';
-import { SendCreateAccountMailUseCase } from '@modules/organizations/useCases/mail/sendCreateAccountMail/SendOrganizationCreateMailUseCase';
+import { SendCreateAccountMailUseCase } from '@modules/organizations/useCases/mail/sendCreateAccountMail/SendCreateAccountMailUseCase';
 import { SendAddAccountToOrganizationMailUseCase } from '@modules/organizations/useCases/mail/sendAddAccountToOrganizationMail/SendAddAccountToOrganizationMail';
 
 interface IAddUsers {

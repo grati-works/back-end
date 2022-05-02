@@ -101,6 +101,32 @@ class UsersRepository implements IUsersRepository {
     return user as IFindUserDTO;
   }
 
+  async findByQuery(query: string, organization_id: number): Promise<User[]> {
+    const users = await client.user.findMany({
+      where: {
+        OR: [
+          {
+            username: {
+              contains: query,
+            },
+          },
+          {
+            name: {
+              contains: query,
+            },
+          },
+        ],
+        organizations: {
+          some: {
+            organization_id,
+          },
+        },
+      },
+    });
+
+    return users;
+  }
+
   async activate(id: number): Promise<void> {
     await client.user.update({
       where: { id },

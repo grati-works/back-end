@@ -11,6 +11,7 @@ import { CreateUserController } from '@modules/accounts/useCases/user/createUser
 import { ActivateAccountController } from '@modules/accounts/useCases/user/activateAccount/ActivateAccountController';
 import { EditUserController } from '@modules/accounts/useCases/user/editUser/EditUserController';
 import { ListOrganizationsController } from '@modules/accounts/useCases/user/listOrganizations/ListOrganizationsController';
+import { SuggestUsersController } from '@modules/accounts/useCases/user/suggestUsers/SuggestUsersController';
 
 const userRoutes = Router();
 
@@ -23,6 +24,7 @@ const listOrganizationsController = new ListOrganizationsController();
 const updateUserAvatarController = new UpdateUserAvatarController();
 const createUserController = new CreateUserController();
 const activateAccountController = new ActivateAccountController();
+const suggestUsersController = new SuggestUsersController();
 
 userRoutes.get('/', ensureAuthenticated, getUserController.handle);
 
@@ -47,5 +49,7 @@ userRoutes.patch(
 userRoutes.put('/', ensureAuthenticated, editUserProfileController.handle);
 
 userRoutes.post('/activate', activateAccountController.handle);
+
+userRoutes.get('/suggestions/:organization_id', suggestUsersController.handle);
 
 export { userRoutes };

@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { Readable } from 'stream';
 import { AppError } from '@shared/errors/AppError';
 import { Request } from 'express';
+import axios from 'axios';
 import { IPaymentProvider } from '../IPaymentProvider';
 import { version } from '../../../../../../package.json';
 
@@ -118,7 +119,7 @@ class StripePaymentProvider implements IPaymentProvider {
   async getSubscriptionData(
     subscription_id: string,
     stripe_customer_id: string,
-    organization_id: number,
+    organization_id = null,
     max_users = 100,
   ): Promise<Prisma.SubscriptionUncheckedCreateInput> {
     const stripeClient = await this.getInstance();
@@ -177,9 +178,9 @@ class StripePaymentProvider implements IPaymentProvider {
     }
 
     const { type } = event;
-
     if (this.relevantEvents.has(type)) {
       try {
+        let user;
         let subscriptionData;
         switch (type) {
           case 'customer.subscription.updated':
@@ -208,6 +209,24 @@ class StripePaymentProvider implements IPaymentProvider {
               checkoutSession.subscription.toString(),
               checkoutSession.customer.toString(),
             );
+
+            user = await client.user.findUnique({
+              where: {
+                stripe_customer_id: checkoutSession.customer.toString(),
+              },
+            });
+
+            try {
+              await axios.post(
+                `http://localhost:${process.env.PORT}/organization/${user.id}`,
+                {
+                  name: `Organização de ${user.name}`,
+                },
+              );
+            } catch (err) {
+              console.log(err);
+              console.log(err.response);
+            }
             break;
           default:
             throw new AppError(

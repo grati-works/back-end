@@ -5,13 +5,13 @@ import { CreateOrganizationUseCase } from './CreateOrganizationUseCase';
 
 class CreateOrganizationController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { user } = request;
+    const { id } = request.user || request.params;
     const { name } = request.body;
     const createOrganizationUseCase = container.resolve(
       CreateOrganizationUseCase,
     );
 
-    await createOrganizationUseCase.execute(user.id, name);
+    await createOrganizationUseCase.execute(id, name);
 
     return response.status(201).json('Organization created successfully');
   }
