@@ -52,4 +52,24 @@ describe('Edit User', () => {
     expect(editedUser.name).toEqual(newUserInfo.name);
     expect(editedUser.username).toEqual(newUserInfo.username);
   });
+
+  it('should not be able to edit user with invalid password', async () => {
+    const user = await createFakeUser();
+
+    const createdUser = await usersRepository.create(user);
+
+    const newUserInfo = {
+      name: faker.name.firstName(),
+      username: faker.internet.userName(),
+      password: faker.internet.password(),
+      new_password: faker.internet.password(),
+      profile_picture: faker.image.avatar(),
+    };
+
+    await expect(
+      editUserUseCase.execute(createdUser.id, newUserInfo),
+    ).rejects.toEqual(
+      new AppError('The password is incorrect', 401, 'user.password.incorrect'),
+    );
+  });
 });

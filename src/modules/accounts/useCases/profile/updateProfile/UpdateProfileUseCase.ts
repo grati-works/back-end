@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 import { IProfilesRepository } from '@modules/accounts/repositories/IProfilesRepository';
-import { Prisma } from '@prisma/client';
+import { Prisma, Profile } from '@prisma/client';
 import { AppError } from '@shared/errors/AppError';
 import { client } from '@shared/infra/prisma';
 
@@ -11,7 +11,10 @@ class UpdateProfileUseCase {
     private profilesRepository: IProfilesRepository,
   ) {}
 
-  async execute(id: string, data: Prisma.ProfileUpdateInput): Promise<void> {
+  async execute(
+    id: string,
+    data: Prisma.ProfileUpdateInput,
+  ): Promise<Prisma.Prisma__ProfileClient<any>> {
     const profile = await this.profilesRepository.findById(Number(id));
 
     if (!profile) {
@@ -26,7 +29,12 @@ class UpdateProfileUseCase {
       });
     }
 
-    await this.profilesRepository.update(Number(id), data);
+    const updatedProfile = await this.profilesRepository.update(
+      Number(id),
+      data,
+    );
+
+    return updatedProfile;
   }
 }
 

@@ -38,16 +38,6 @@ class CreateUserUseCase {
       activated,
     });
 
-    try {
-      if (this.mailProvider == null) {
-        this.mailProvider = container.resolve(SendActivateAccountMailUseCase);
-      }
-
-      await this.mailProvider.execute(email);
-    } catch (error) {
-      console.log('Activation e-mail not sent', error);
-    }
-
     await this.mailProvider.execute(email);
 
     return user;

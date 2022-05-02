@@ -2,7 +2,10 @@ import { Prisma, Profile } from '@prisma/client';
 
 interface IProfilesRepository {
   create(data: Prisma.ProfileCreateInput): Promise<Profile>;
-  update(id: number, data: Prisma.ProfileUpdateInput): Promise<Profile>;
+  update(
+    id: number,
+    data: Prisma.ProfileUpdateInput,
+  ): Promise<Prisma.Prisma__ProfileClient<object>>;
   findById(
     id: number,
     select?: Prisma.ProfileSelect,

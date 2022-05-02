@@ -33,7 +33,10 @@ class ProfilesRepository implements IProfilesRepository {
     return profile;
   }
 
-  async update(id: number, data: Prisma.ProfileUpdateInput): Promise<Profile> {
+  async update(
+    id: number,
+    data: Prisma.ProfileUpdateInput,
+  ): Promise<Prisma.Prisma__ProfileClient<object>> {
     const profile = await client.profile.update({
       where: { id },
       data,

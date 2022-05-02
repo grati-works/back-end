@@ -88,8 +88,8 @@ describe('Refresh Token', () => {
   it('should not be able to refresh a token with a non existent token', async () => {
     await expect(
       refreshTokenUseCase.execute(
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWNrLmNhcGl0b0Bob3RtYWlsLmNvbSIsImlhdCI6MTY0Nzk1NzUzOSwiZXhwIjoxNjUwNTQ5NTM5LCJzdWIiOiIxIn0.J_K4f9aclLKXeV6pYKZUqF3TEjY4aFvBoFJXzgUzZtk',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWNrLmNhcGl0b0Bob3RtYWlsLmNvbSIsImlhdCI6MTY1MTQ1MjU3MywiZXhwIjoyMjgyNjA0NTczLCJzdWIiOiIxIn0.CJzTwZZD8UCyS13Nxebk-m-ZuldW2XK95qEq505kpo0',
       ),
-    ).rejects.toEqual(new AppError('Invalid token', 401, 'token.invalid'));
+    ).rejects.toEqual(new AppError('Token not found', 401, 'token.invalid'));
   });
 });
