@@ -36,6 +36,7 @@ describe('Update User Avatar', () => {
     const avatarFile = faker.image.avatar();
     const filename = `${uuidV4()}-avatar.png`;
 
+    jest.setTimeout(5000);
     await storageProvider.downloadImage(avatarFile, filename);
 
     await updateUserAvatarUseCase.execute({

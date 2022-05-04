@@ -5,6 +5,7 @@ import { Readable } from 'stream';
 import { AppError } from '@shared/errors/AppError';
 import { Request } from 'express';
 import axios from 'axios';
+import { logger } from '@utils/logger';
 import { IPaymentProvider } from '../IPaymentProvider';
 import { version } from '../../../../../../package.json';
 
@@ -169,7 +170,6 @@ class StripePaymentProvider implements IPaymentProvider {
         process.env.STRIPE_WEBHOOK_SECRET,
       );
     } catch (err) {
-      console.log(err.message);
       throw new AppError(
         `Webhook error: ${err.message}`,
         400,
@@ -224,8 +224,7 @@ class StripePaymentProvider implements IPaymentProvider {
                 },
               );
             } catch (err) {
-              console.log(err);
-              console.log(err.response);
+              logger.error(err);
             }
             break;
           default:
@@ -239,7 +238,6 @@ class StripePaymentProvider implements IPaymentProvider {
             return true;
         }
       } catch (err) {
-        console.log(err.message);
         throw new AppError(
           'Webhook handler failed',
           400,

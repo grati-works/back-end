@@ -1,3 +1,4 @@
+import { logger } from '@utils/logger';
 import nodemailer, { Transporter } from 'nodemailer';
 
 import { IMailProvider } from '../IMailProvider';
@@ -35,9 +36,9 @@ class SMTPMailProvider implements IMailProvider {
           html: parsedTemplate,
         });
 
-        console.log('Message sent: %s', message.messageId);
+        logger.info('Message sent: %s', message.messageId);
       } catch (err) {
-        console.log(err);
+        logger.error(err);
       }
     }
   }

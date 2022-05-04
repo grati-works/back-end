@@ -1,3 +1,5 @@
+import { logger } from '@utils/logger';
+
 export class AppError {
   public readonly message: string;
 
@@ -9,5 +11,10 @@ export class AppError {
     this.message = message;
     this.status = status;
     this.code = code;
+
+    if (!process.env.DATABASE_URL.includes('grati_test'))
+      logger.error(
+        `An error occurred: ${this.message} with status ${this.status} and code ${this.code}`,
+      );
   }
 }

@@ -1,6 +1,7 @@
 import nodemailer, { Transporter } from 'nodemailer';
 
 import { AppError } from '@shared/errors/AppError';
+import { logger } from '@utils/logger';
 import { IMailProvider } from '../IMailProvider';
 
 class EtherealMailProvider implements IMailProvider {
@@ -44,8 +45,8 @@ class EtherealMailProvider implements IMailProvider {
         html: parsedTemplate,
       });
 
-      console.log('Message sent: %s', message.messageId);
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
+      logger.info('Message sent: %s', message.messageId);
+      logger.info('Preview URL: %s', nodemailer.getTestMessageUrl(message));
     }
   }
 }

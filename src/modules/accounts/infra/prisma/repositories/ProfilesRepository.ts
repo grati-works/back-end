@@ -2,6 +2,7 @@ import { Prisma, Profile } from '@prisma/client';
 import { IProfilesRepository } from '@modules/accounts/repositories/IProfilesRepository';
 import { client } from '@shared/infra/prisma';
 import axios from 'axios';
+import { logger } from '@utils/logger';
 
 class ProfilesRepository implements IProfilesRepository {
   async create(data: Prisma.ProfileCreateInput): Promise<Profile> {
@@ -25,7 +26,7 @@ class ProfilesRepository implements IProfilesRepository {
         },
       );
     } catch {
-      console.log(
+      logger.info(
         `Não foi possível inserir os dados do usuário ${profile.user.username} no Search Service.`,
       );
     }
@@ -65,7 +66,7 @@ class ProfilesRepository implements IProfilesRepository {
         },
       );
     } catch {
-      console.log(
+      logger.info(
         `Não foi possível atualizar os dados do usuário ${profile.user.username} no Search Service.`,
       );
     }

@@ -47,6 +47,8 @@ describe('Activate Account', () => {
 
   afterAll(async () => {
     await client.userTokens.deleteMany();
+    await client.profile.deleteMany();
+    await client.organization.deleteMany();
     await client.user.deleteMany();
   });
 

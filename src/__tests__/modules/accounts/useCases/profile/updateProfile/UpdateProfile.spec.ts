@@ -1,22 +1,16 @@
-import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
-import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
-import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { AppError } from '@shared/errors/AppError';
-import { faker } from '@faker-js/faker';
 import { client } from '@shared/infra/prisma';
 import { UpdateProfileUseCase } from '@modules/accounts/useCases/profile/updateProfile/UpdateProfileUseCase';
 import { ProfilesRepository } from '@modules/accounts/infra/prisma/repositories/ProfilesRepository';
-import { createFakeProfile, createFakeUser } from '@utils/testUtils';
+import { createFakeProfile } from '@utils/testUtils';
 import { GetUserProfileUseCase } from '@modules/accounts/useCases/profile/getUserProfile/GetUserProfileUseCase';
 
-let usersRepository: IUsersRepository;
 let profilesRepository: ProfilesRepository;
 let updateProfileUseCase: UpdateProfileUseCase;
 let getUserProfileUseCase: GetUserProfileUseCase;
 
 describe('Update user profile', () => {
   beforeEach(() => {
-    usersRepository = new UsersRepository();
     profilesRepository = new ProfilesRepository();
 
     updateProfileUseCase = new UpdateProfileUseCase(profilesRepository);

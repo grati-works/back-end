@@ -17,6 +17,7 @@ describe('Get User', () => {
 
   afterAll(async () => {
     await client.userTokens.deleteMany();
+    await client.organization.deleteMany();
     await client.user.deleteMany();
   });
 

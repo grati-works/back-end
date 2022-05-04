@@ -6,6 +6,7 @@ import { client } from '@shared/infra/prisma';
 import { IAddUserDTO } from '@modules/organizations/dtos/IAddUserDTO';
 import { AppError } from '@shared/errors/AppError';
 import axios from 'axios';
+import { logger } from '@utils/logger';
 
 class OrganizationsRepository implements IOrganizationsRepository {
   async create(data: Prisma.OrganizationCreateInput): Promise<Organization> {
@@ -77,7 +78,7 @@ class OrganizationsRepository implements IOrganizationsRepository {
           },
         );
       } catch (error) {
-        console.log(
+        logger.info(
           `Não foi possível inserir os dados do usuário ${profile.user.username} no Search Service.`,
         );
       }

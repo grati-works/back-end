@@ -5,7 +5,6 @@ import { AppError } from '@shared/errors/AppError';
 import { faker } from '@faker-js/faker';
 import { client } from '@shared/infra/prisma';
 import { createFakeUser } from '@utils/testUtils';
-import { hash } from 'bcryptjs';
 
 let editUserUseCase: EditUserUseCase;
 let usersRepository: IUsersRepository;
@@ -19,6 +18,8 @@ describe('Edit User', () => {
 
   afterAll(async () => {
     await client.userTokens.deleteMany();
+    await client.profile.deleteMany();
+    await client.organization.deleteMany();
     await client.user.deleteMany();
   });
 
