@@ -2,7 +2,6 @@ import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/Use
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { UpdateUserAvatarUseCase } from '@modules/accounts/useCases/user/updateUserAvatar/UpdateUserAvatarUseCase';
 import { faker } from '@faker-js/faker';
-import { client } from '@shared/infra/prisma';
 import { createFakeUser } from '@utils/testUtils';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/IStorageProvider';
 import { LocalStorageProvider } from '@shared/container/providers/StorageProvider/implementations/LocalStorageProvider';
@@ -21,11 +20,6 @@ describe('Update User Avatar', () => {
       usersRepository,
       storageProvider,
     );
-  });
-
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.user.deleteMany();
   });
 
   it('should be able to create user avatar', async () => {

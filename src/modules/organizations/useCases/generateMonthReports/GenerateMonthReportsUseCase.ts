@@ -31,7 +31,7 @@ class GenerateMonthReportsUseCase {
     );
 
     const options = { format: 'A4' };
-    const file = {
+    const generatedFile = {
       content: OrganizationCreateTemplate({
         start_date: start_date.toLocaleDateString('pt-BR'),
         end_date: end_date.toLocaleDateString('pt-BR'),
@@ -44,7 +44,7 @@ class GenerateMonthReportsUseCase {
     };
 
     try {
-      const pdfBuffer = await html_to_pdf.generatePdf(file, options);
+      const pdfBuffer = await html_to_pdf.generatePdf(generatedFile, options);
 
       const fileName = `${organization.name}-${start_date
         .toLocaleDateString('pt-BR')

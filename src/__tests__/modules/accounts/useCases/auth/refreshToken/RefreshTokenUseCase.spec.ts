@@ -10,7 +10,6 @@ import { DayjsDateProvider } from '@shared/container/providers/DateProvider/impl
 import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
 import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { AppError } from '@shared/errors/AppError';
-import { client } from '@shared/infra/prisma';
 import { createFakeUser } from '@utils/testUtils';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
@@ -53,12 +52,6 @@ describe('Refresh Token', () => {
       usersRepository,
       sendActivateAccountMailUseCase,
     );
-  });
-
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.organization.deleteMany();
-    await client.user.deleteMany();
   });
 
   it('should be able to refresh a token', async () => {

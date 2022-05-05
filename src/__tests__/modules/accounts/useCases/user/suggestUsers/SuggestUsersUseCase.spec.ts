@@ -1,6 +1,5 @@
 import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
-import { client } from '@shared/infra/prisma';
 import { SuggestUsersUseCase } from '@modules/accounts/useCases/user/suggestUsers/SuggestUsersUseCase';
 import { createFakeProfile } from '@utils/testUtils';
 
@@ -12,12 +11,6 @@ describe('Suggest Users', () => {
     usersRepository = new UsersRepository();
 
     suggestUsersUseCase = new SuggestUsersUseCase(usersRepository);
-  });
-
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.organization.deleteMany();
-    await client.user.deleteMany();
   });
 
   it('should be able to suggest users', async () => {

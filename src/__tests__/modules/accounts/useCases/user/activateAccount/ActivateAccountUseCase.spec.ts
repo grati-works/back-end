@@ -45,13 +45,6 @@ describe('Activate Account', () => {
     );
   });
 
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.profile.deleteMany();
-    await client.organization.deleteMany();
-    await client.user.deleteMany();
-  });
-
   it('should be able to activate user account', async () => {
     const user = await createFakeUser();
 

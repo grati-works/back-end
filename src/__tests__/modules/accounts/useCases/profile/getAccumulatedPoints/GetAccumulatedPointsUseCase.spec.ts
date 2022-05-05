@@ -4,7 +4,6 @@ import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepositor
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { AppError } from '@shared/errors/AppError';
-import { client } from '@shared/infra/prisma';
 import { GetAccumulatedPointsUseCase } from '@modules/accounts/useCases/profile/getAccumulatedPoints/GetAccumulatedPointsUseCase';
 import { ProfilesRepository } from '@modules/accounts/infra/prisma/repositories/ProfilesRepository';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
@@ -45,14 +44,6 @@ describe('Get user profile accumulated points', () => {
       dateProvider,
     );
   });
-
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.profile.deleteMany();
-    await client.organization.deleteMany();
-    await client.user.deleteMany();
-  });
-
   it('should not be able to return points if profile does not exist', async () => {
     const user = await createFakeUser();
     const createdUser = await createUserUseCase.execute(user);

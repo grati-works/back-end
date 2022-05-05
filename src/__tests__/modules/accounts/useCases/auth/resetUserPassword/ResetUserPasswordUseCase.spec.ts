@@ -65,11 +65,6 @@ describe('Reset Password', () => {
     );
   });
 
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.user.deleteMany();
-  });
-
   it('should be able to reset a password', async () => {
     const user = await createFakeUser();
 

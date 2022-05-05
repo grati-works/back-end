@@ -25,7 +25,7 @@ interface IProfilesRepository {
     username: string,
     organization_id: number,
     select?: Prisma.ProfileSelect,
-  ): Promise<Prisma.Prisma__ProfileClient<object>>;
+  ): Promise<Prisma.Prisma__ProfileClient<any>>;
   findManyByUserAndOrganizationId(
     user_ids: number[],
     organization_id: number,

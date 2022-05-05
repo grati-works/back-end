@@ -34,4 +34,5 @@ module.exports = {
     'src/modules/**/useCases/**/**/*UseCase.ts',
     'src/modules/**/useCases/**/*UseCase.ts',
   ],
+  verbose: true,
 };

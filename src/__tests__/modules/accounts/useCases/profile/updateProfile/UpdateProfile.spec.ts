@@ -1,5 +1,4 @@
 import { AppError } from '@shared/errors/AppError';
-import { client } from '@shared/infra/prisma';
 import { UpdateProfileUseCase } from '@modules/accounts/useCases/profile/updateProfile/UpdateProfileUseCase';
 import { ProfilesRepository } from '@modules/accounts/infra/prisma/repositories/ProfilesRepository';
 import { createFakeProfile } from '@utils/testUtils';
@@ -15,13 +14,6 @@ describe('Update user profile', () => {
 
     updateProfileUseCase = new UpdateProfileUseCase(profilesRepository);
     getUserProfileUseCase = new GetUserProfileUseCase(profilesRepository);
-  });
-
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.profile.deleteMany();
-    await client.organization.deleteMany();
-    await client.user.deleteMany();
   });
 
   it('should not be able to update user profile if user not exists', async () => {

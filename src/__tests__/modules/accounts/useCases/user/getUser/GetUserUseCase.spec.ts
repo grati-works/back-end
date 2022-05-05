@@ -2,7 +2,6 @@ import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/Use
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { GetUserUseCase } from '@modules/accounts/useCases/user/getUser/GetUserUseCase';
 import { AppError } from '@shared/errors/AppError';
-import { client } from '@shared/infra/prisma';
 import { createFakeUser } from '@utils/testUtils';
 
 let getUserUseCase: GetUserUseCase;
@@ -13,12 +12,6 @@ describe('Get User', () => {
     usersRepository = new UsersRepository();
 
     getUserUseCase = new GetUserUseCase(usersRepository);
-  });
-
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.organization.deleteMany();
-    await client.user.deleteMany();
   });
 
   it('should not be able to get inexistent user', async () => {

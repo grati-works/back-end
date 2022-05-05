@@ -3,8 +3,6 @@ import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepositor
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { AppError } from '@shared/errors/AppError';
 import { faker } from '@faker-js/faker';
-import { client } from '@shared/infra/prisma';
-import { AuthenticateUserUseCase } from '@modules/accounts/useCases/auth/authenticateUser/AuthenticateUserUseCase';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
@@ -39,11 +37,6 @@ describe('Send activate account mail', () => {
     );
   });
 
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.user.deleteMany();
-  });
-
   it('should not send activate an inexistent account', async () => {
     const email = faker.internet.email();
 
@@ -53,7 +46,6 @@ describe('Send activate account mail', () => {
   });
 
   it('should send activate account mail', async () => {
-    const name = faker.name.findName();
     const user = await createFakeUser();
 
     await createUserUseCase.execute(user);

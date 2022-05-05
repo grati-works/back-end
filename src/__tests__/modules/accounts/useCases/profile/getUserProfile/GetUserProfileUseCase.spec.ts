@@ -45,13 +45,6 @@ describe('Get user profile', () => {
     getUserProfileUseCase = new GetUserProfileUseCase(profilesRepository);
   });
 
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.profile.deleteMany();
-    await client.organization.deleteMany();
-    await client.user.deleteMany();
-  });
-
   it('should able to return user profile', async () => {
     const { createdUser, organization } = await createFakeProfile();
 

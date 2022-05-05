@@ -2,6 +2,7 @@ import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { faker } from '@faker-js/faker';
 import { client } from '@shared/infra/prisma';
 import { hash } from 'bcryptjs';
+import { Group, Organization, User } from '@prisma/client';
 
 interface FakeUser extends ICreateUserDTO {
   originalPassword: string;
@@ -23,7 +24,23 @@ export async function createFakeUser(activated = true): Promise<FakeUser> {
   return { ...user, originalPassword: password };
 }
 
-export async function createFakeProfile() {
+export async function createFakeOrganization(
+  owner_id: number,
+): Promise<Organization> {
+  const organization = await client.organization.create({
+    data: {
+      name: faker.company.companyName(),
+      owner_id,
+    },
+  });
+
+  return organization;
+}
+
+export async function createFakeProfile(organization_id = null): Promise<{
+  createdUser: User;
+  organization?: Organization | null;
+}> {
   const user = await createFakeUser();
 
   delete user.originalPassword;
@@ -32,12 +49,13 @@ export async function createFakeProfile() {
     data: user,
   });
 
-  const organization = await client.organization.create({
-    data: {
-      name: faker.company.companyName(),
-      owner_id: createdUser.id,
-    },
-  });
+  let organization: any = {
+    id: organization_id,
+  };
+
+  if (organization_id === null) {
+    organization = await createFakeOrganization(createdUser.id);
+  }
 
   await client.organization.update({
     where: { id: organization.id },
@@ -51,4 +69,19 @@ export async function createFakeProfile() {
   });
 
   return { createdUser, organization };
+}
+
+export async function createFakeGroup(organization_id: number): Promise<Group> {
+  const group = await client.group.create({
+    data: {
+      name: faker.lorem.word(),
+      organization: {
+        connect: {
+          id: organization_id,
+        },
+      },
+    },
+  });
+
+  return group;
 }

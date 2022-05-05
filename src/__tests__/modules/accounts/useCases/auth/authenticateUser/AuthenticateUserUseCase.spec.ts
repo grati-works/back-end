@@ -8,7 +8,6 @@ import { DayjsDateProvider } from '@shared/container/providers/DateProvider/impl
 import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { AppError } from '@shared/errors/AppError';
-import { client } from '@shared/infra/prisma';
 import { faker } from '@faker-js/faker';
 import { v4 as uuidV4 } from 'uuid';
 import { createFakeUser } from '@utils/testUtils';
@@ -47,11 +46,6 @@ describe('Authenticate User', () => {
       usersRepository,
       sendActivateAccountMailUseCase,
     );
-  });
-
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.user.deleteMany();
   });
 
   it('should be able to authenticate a user', async () => {

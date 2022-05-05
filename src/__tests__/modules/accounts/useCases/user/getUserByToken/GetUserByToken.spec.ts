@@ -1,6 +1,5 @@
 import { UsersRepository } from '@modules/accounts/infra/prisma/repositories/UsersRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
-import { client } from '@shared/infra/prisma';
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
@@ -32,11 +31,6 @@ describe('Get User By Token', () => {
       dateProvider,
       mailProvider,
     );
-  });
-
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.user.deleteMany();
   });
 
   it('should be able to get user by token', async () => {

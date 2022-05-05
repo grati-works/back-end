@@ -3,7 +3,6 @@ import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepositor
 import { EditUserUseCase } from '@modules/accounts/useCases/user/editUser/EditUserUseCase';
 import { AppError } from '@shared/errors/AppError';
 import { faker } from '@faker-js/faker';
-import { client } from '@shared/infra/prisma';
 import { createFakeUser } from '@utils/testUtils';
 
 let editUserUseCase: EditUserUseCase;
@@ -14,13 +13,6 @@ describe('Edit User', () => {
     usersRepository = new UsersRepository();
 
     editUserUseCase = new EditUserUseCase(usersRepository);
-  });
-
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.profile.deleteMany();
-    await client.organization.deleteMany();
-    await client.user.deleteMany();
   });
 
   it('should not be able to edit inexistent user', async () => {

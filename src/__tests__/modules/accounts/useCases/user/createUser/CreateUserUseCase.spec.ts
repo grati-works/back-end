@@ -8,7 +8,6 @@ import { EtherealMailProvider } from '@shared/container/providers/MailProvider/i
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { AppError } from '@shared/errors/AppError';
 import { faker } from '@faker-js/faker';
-import { client } from '@shared/infra/prisma';
 import { createFakeUser } from '@utils/testUtils';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 
@@ -37,13 +36,6 @@ describe('Create User', () => {
       usersRepository,
       sendActivateAccountMailUseCase,
     );
-  });
-
-  afterAll(async () => {
-    await client.userTokens.deleteMany();
-    await client.profile.deleteMany();
-    await client.organization.deleteMany();
-    await client.user.deleteMany();
   });
 
   it('should not be able to create user with existent mail', async () => {
