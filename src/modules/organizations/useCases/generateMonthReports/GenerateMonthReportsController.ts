@@ -18,7 +18,7 @@ class GenerateMonthReportsController {
       new Date(end_date.toString()),
     );
 
-    return response.status(201).send(file_url);
+    return response.send(file_url);
   }
 }
 

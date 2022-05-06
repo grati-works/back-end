@@ -6,23 +6,24 @@ import { faker } from '@faker-js/faker';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
+import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
+import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
-import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { createFakeUser } from '@utils/testUtils';
 
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let createUserUseCase: CreateUserUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
-let dateProvider: DayjsDateProvider;
-let mailProvider: EtherealMailProvider;
+let dateProvider: IDateProvider;
+let mailProvider: IMailProvider;
 
 describe('Send activate account mail', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
-    mailProvider = new EtherealMailProvider();
+    mailProvider = { sendMail: jest.fn() };
 
     sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
       usersRepository,

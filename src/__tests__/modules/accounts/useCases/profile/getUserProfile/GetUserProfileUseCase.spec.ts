@@ -9,7 +9,6 @@ import { ProfilesRepository } from '@modules/accounts/infra/prisma/repositories/
 import { createFakeProfile, createFakeUser } from '@utils/testUtils';
 import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
-import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
@@ -29,7 +28,7 @@ describe('Get user profile', () => {
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
     profilesRepository = new ProfilesRepository();
-    mailProvider = new EtherealMailProvider();
+    mailProvider = { sendMail: jest.fn() };
 
     sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
       usersRepository,

@@ -20,25 +20,25 @@ describe('List Notifications', () => {
   });
 
   it('should be able to list notifications', async () => {
-    const { createdUser: senderUser, organization } = await createFakeProfile();
-    const { createdUser: receiverUser } = await createFakeProfile(
-      organization.id,
-    );
+    const { createdProfile: senderProfile, organization } =
+      await createFakeProfile();
+    const { createdUser: receiverUser, createdProfile: receiverProfile } =
+      await createFakeProfile(organization.id);
     const group = await createFakeGroup(organization.id);
 
     const message = await messagesRepository.send({
-      author_id: senderUser.id,
+      author_id: senderProfile.id,
       receivers_usernames: [receiverUser.username],
       groups: [group.id.toString()],
       message: 'Nova Mensagem',
       organization_id: organization.id,
-      tags: ['Reqiliência'],
+      tags: ['Resiliência'],
       attachments: {
         emoji: 'mage',
       },
     });
 
-    await notificationsRepository.create(receiverUser.id, message);
+    await notificationsRepository.create(receiverProfile.id, message);
 
     const notifications = await listNotificationUseCase.execute(
       receiverUser.id,

@@ -9,7 +9,7 @@ import { ProfilesRepository } from '@modules/accounts/infra/prisma/repositories/
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { createFakeProfile, createFakeUser } from '@utils/testUtils';
-import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
+import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
 
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let usersRepository: IUsersRepository;
@@ -18,7 +18,7 @@ let profilesRepository: ProfilesRepository;
 let dateProvider: DayjsDateProvider;
 let createUserUseCase: CreateUserUseCase;
 let getAccumulatedPointsUseCase: GetAccumulatedPointsUseCase;
-let mailProvider: EtherealMailProvider;
+let mailProvider: IMailProvider;
 
 describe('Get user profile accumulated points', () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('Get user profile accumulated points', () => {
     usersTokensRepository = new UsersTokensRepository();
     profilesRepository = new ProfilesRepository();
     dateProvider = new DayjsDateProvider();
-    mailProvider = new EtherealMailProvider();
+    mailProvider = { sendMail: jest.fn() };
 
     sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
       usersRepository,

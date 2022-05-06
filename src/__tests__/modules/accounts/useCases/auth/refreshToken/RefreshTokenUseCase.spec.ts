@@ -8,7 +8,6 @@ import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
-import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { AppError } from '@shared/errors/AppError';
 import { createFakeUser } from '@utils/testUtils';
 
@@ -26,7 +25,7 @@ describe('Refresh Token', () => {
     usersRepository = new UsersRepository();
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
-    mailProvider = new EtherealMailProvider();
+    mailProvider = { sendMail: jest.fn() };
 
     sendActivateAccountMailUseCase = new SendActivateAccountMailUseCase(
       usersRepository,

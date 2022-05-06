@@ -28,7 +28,7 @@ class MessagesRepository implements IMessagesRepository {
     tags,
     message,
     attachments,
-  }: SendArgs): Promise<number> {
+  }: SendArgs): Promise<Feedback> {
     const receivers_profiles = await client.profile.findMany({
       where: {
         organization_id,
@@ -44,11 +44,20 @@ class MessagesRepository implements IMessagesRepository {
       throw new AppError('Receivers not found', 404, 'receivers.not_found');
     }
 
+    const authorProfile = await client.profile.findFirst({
+      where: {
+        user: {
+          id: author_id,
+        },
+        organization_id,
+      },
+    });
+
     const feedback = await client.feedback.create({
       data: {
         sender: {
           connect: {
-            id: author_id,
+            id: authorProfile.id,
           },
         },
         organization: {
@@ -84,7 +93,7 @@ class MessagesRepository implements IMessagesRepository {
       },
     });
 
-    return feedback.id;
+    return feedback;
   }
 
   async addReaction(
@@ -176,15 +185,25 @@ class MessagesRepository implements IMessagesRepository {
       );
     }
 
-    const notification = await client.notification.findFirst({
+    await client.notification.deleteMany({
       where: {
         feedback_id,
       },
     });
 
-    await client.notification.delete({
+    const authorProfile = await client.profile.findFirst({
       where: {
-        id: notification.id,
+        user: {
+          id: author_id,
+        },
+        sended_feedbacks: {
+          some: {
+            id: feedback_id,
+          },
+        },
+      },
+      select: {
+        id: true,
       },
     });
 
@@ -195,7 +214,7 @@ class MessagesRepository implements IMessagesRepository {
       data: {
         deleted: {
           connect: {
-            id: author_id,
+            id: authorProfile.id,
           },
         },
       },

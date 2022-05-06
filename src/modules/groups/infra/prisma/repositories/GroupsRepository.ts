@@ -102,7 +102,7 @@ class GroupsRepository implements IGroupsRepository {
     name: string,
     organization_id: number,
   ): Promise<Group> {
-    const group = await client.group.findFirst({
+    let group = await client.group.findFirst({
       where: {
         name,
         organization: {
@@ -110,6 +110,20 @@ class GroupsRepository implements IGroupsRepository {
         },
       },
     });
+
+    if (name === 'Público' && !group) {
+      group = await client.group.create({
+        data: {
+          organization: {
+            connect: {
+              id: organization_id,
+            },
+          },
+          name,
+          color: '#000000',
+        },
+      });
+    }
 
     if (!group) {
       throw new AppError('Group not found', 404, 'group.not_found');

@@ -3,25 +3,25 @@ import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepositor
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
-import { EtherealMailProvider } from '@shared/container/providers/MailProvider/implementations/EtherealMailProvider';
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { GetUserByTokenUseCase } from '@modules/accounts/useCases/user/getUserByToken/GetUserByTokenUseCase';
 import { createFakeUser } from '@utils/testUtils';
 import { AppError } from '@shared/errors/AppError';
+import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
 
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let getUserByTokenUseCase: GetUserByTokenUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
 let dateProvider: DayjsDateProvider;
-let mailProvider: EtherealMailProvider;
+let mailProvider: IMailProvider;
 
 describe('Get User By Token', () => {
   beforeEach(() => {
     usersRepository = new UsersRepository();
     usersTokensRepository = new UsersTokensRepository();
     dateProvider = new DayjsDateProvider();
-    mailProvider = new EtherealMailProvider();
+    mailProvider = { sendMail: jest.fn() };
 
     getUserByTokenUseCase = new GetUserByTokenUseCase(usersRepository);
 

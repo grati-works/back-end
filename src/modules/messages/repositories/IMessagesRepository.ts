@@ -26,7 +26,7 @@ interface ListArgs {
   profile_id?: number;
 }
 interface IMessagesRepository {
-  send(args: SendArgs): Promise<number>;
+  send(args: SendArgs): Promise<Feedback>;
   addReaction(
     author_id: number,
     feedback_id: number,

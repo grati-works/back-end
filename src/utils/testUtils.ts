@@ -2,7 +2,7 @@ import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { faker } from '@faker-js/faker';
 import { client } from '@shared/infra/prisma';
 import { hash } from 'bcryptjs';
-import { Group, Organization, User } from '@prisma/client';
+import { Group, Organization, User, Profile } from '@prisma/client';
 
 interface FakeUser extends ICreateUserDTO {
   originalPassword: string;
@@ -40,6 +40,7 @@ export async function createFakeOrganization(
 export async function createFakeProfile(organization_id = null): Promise<{
   createdUser: User;
   organization?: Organization | null;
+  createdProfile: Profile;
 }> {
   const user = await createFakeUser();
 
@@ -56,7 +57,7 @@ export async function createFakeProfile(organization_id = null): Promise<{
   if (organization_id === null) {
     organization = await createFakeOrganization(createdUser.id);
   }
-
+  /*
   await client.organization.update({
     where: { id: organization.id },
     data: {
@@ -67,8 +68,15 @@ export async function createFakeProfile(organization_id = null): Promise<{
       },
     },
   });
+*/
+  const createdProfile = await client.profile.create({
+    data: {
+      user_id: createdUser.id,
+      organization_id: organization.id,
+    },
+  });
 
-  return { createdUser, organization };
+  return { createdUser, createdProfile, organization };
 }
 
 export async function createFakeGroup(organization_id: number): Promise<Group> {

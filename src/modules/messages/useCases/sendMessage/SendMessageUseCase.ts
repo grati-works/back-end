@@ -55,8 +55,8 @@ class SendMessageUseCase {
       data.groups = [];
     }
 
-    await this.messagesRepository.send(data).then(async feedback_id => {
-      await this.profilesRepository.addPoints(author_id, 5);
+    await this.messagesRepository.send(data).then(async feedback => {
+      await this.profilesRepository.addPoints(feedback.sender_id, 5);
       data.receivers_usernames.map(async receiver_username => {
         const receiver =
           await this.profilesRepository.findProfileByUsernameAndOrganizationId(
@@ -64,7 +64,7 @@ class SendMessageUseCase {
             organization_id,
           );
         await this.profilesRepository.addPoints(receiver.id, 10);
-        await this.notificationsRepository.create(receiver.id, feedback_id);
+        await this.notificationsRepository.create(receiver.id, feedback.id);
       });
     });
   }

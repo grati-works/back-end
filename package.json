@@ -9,9 +9,9 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn --exit-child --poll .",
     "debug": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn .",
     "lint": "npx eslint . --fix",
-    "test": "export ENVIRONMENT=test&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& prisma migrate reset --force&& jest --runInBand",
-    "test:cov": "export ENVIRONMENT=test&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& prisma migrate reset --force&& jest --coverage --runInBand",
-    "test:watch": "export ENVIRONMENT=test&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& jest --no-cache --watchAll --runInBand"
+    "test": "export NODE_ENV=test&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& prisma migrate reset --force&& jest --runInBand",
+    "test:cov": "export NODE_ENV=test&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& prisma migrate reset --force&& jest --coverage --runInBand",
+    "test:watch": "export NODE_ENV=test&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& jest --no-cache --watchAll --runInBand"
   },
   "repository": {
     "type": "git",

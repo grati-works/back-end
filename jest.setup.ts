@@ -5,6 +5,7 @@ import '@shared/container';
 import checkColorModes from '@utils/functions/checkColorModes';
 import checkPermissions from '@utils/functions/checkPermissions';
 import { client } from '@shared/infra/prisma';
+import { logger } from '@utils/logger';
 
 beforeAll(async () => {
   await checkColorModes();
@@ -13,6 +14,8 @@ beforeAll(async () => {
 
 beforeEach(() => {
   container.clearInstances();
+  jest.spyOn(logger, 'info').mockImplementation();
+  jest.spyOn(logger, 'error').mockImplementation();
 });
 
 afterAll(async () => {

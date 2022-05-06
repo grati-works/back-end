@@ -64,8 +64,18 @@ class AddUsersUseCase {
     let parsedUsers = users;
     const file = users as Express.Multer.File;
 
-    if (file.fieldname) {
-      parsedUsers = await this.loadUsers(users as Express.Multer.File);
+    if (file) {
+      if (file?.fieldname) {
+        parsedUsers = await this.loadUsers(users as Express.Multer.File);
+
+        if (!file?.filename?.endsWith('.csv')) {
+          throw new AppError(
+            'File must be a CSV file',
+            400,
+            'file.invalid_extension',
+          );
+        }
+      }
     }
 
     const user = await this.usersRepository.findById(Number(authorId));
@@ -105,7 +115,8 @@ class AddUsersUseCase {
       const userAlreadyInOrganization =
         userAlreadyHaveAccount &&
         userAlreadyHaveAccount.organizations.some(
-          organization => organization.id === Number(organizationId),
+          organization =>
+            organization.organization_id === Number(organizationId),
         );
 
       let temporaryPassword = null;
