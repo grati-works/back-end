@@ -38,7 +38,7 @@ describe('Count Notifications', () => {
       },
     });
 
-    await notificationsRepository.create(receiverProfile.id, message);
+    await notificationsRepository.create(receiverProfile.id, message.id);
 
     const notifications = await countNotificationUseCase.execute(
       receiverUser.id,
