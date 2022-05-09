@@ -7,12 +7,12 @@ export class AppError {
 
   public readonly code: string;
 
-  constructor(message: string, status = 400, code = undefined) {
+  constructor(message: string, status = 400, code = undefined, debug = false) {
     this.message = message;
     this.status = status;
     this.code = code;
 
-    if (!process.env.DATABASE_URL.includes('grati_test'))
+    if (!process.env.DATABASE_URL.includes('grati_test') && debug)
       logger.error(
         `An error occurred: ${this.message} with status ${this.status} and code ${this.code}`,
       );
