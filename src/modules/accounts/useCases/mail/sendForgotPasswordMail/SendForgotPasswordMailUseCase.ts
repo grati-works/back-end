@@ -22,7 +22,6 @@ class SendForgotPasswordMailUseCase {
   ) {}
 
   async execute(email: string): Promise<string> {
-   
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
@@ -40,7 +39,7 @@ class SendForgotPasswordMailUseCase {
 
     const variables = {
       name: user.name,
-      link: `${process.env.FORGOT_MAIL_URL}${token}`,
+      link: `${process.env.APP_URL}/${process.env.FORGOT_MAIL_URL}${token}`,
     };
 
     this.mailProvider.sendMail(

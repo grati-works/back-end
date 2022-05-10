@@ -39,7 +39,7 @@ class SendActivateAccountMailUseCase {
 
     const variables = {
       name: user.name,
-      link: `${process.env.ACTIVATE_ACCOUNT_MAIL_URL}${token}`,
+      link: `${process.env.APP_URL}/${process.env.ACTIVATE_ACCOUNT_MAIL_URL}${token}`,
     };
 
     this.mailProvider.sendMail(

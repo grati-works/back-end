@@ -40,7 +40,7 @@ class SendCreateAccountMailUseCase {
     const variables = {
       name: user.name,
       organization_name,
-      link: `${process.env.CONFIGURE_ACCOUNT_MAIL_URL}${token}`,
+      link: `${process.env.APP_URL}/${process.env.CONFIGURE_ACCOUNT_MAIL_URL}${token}`,
     };
 
     this.mailProvider.sendMail(

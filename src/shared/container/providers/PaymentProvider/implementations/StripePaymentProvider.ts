@@ -71,8 +71,8 @@ class StripePaymentProvider implements IPaymentProvider {
       line_items: [{ price: plan_price_id, quantity: 1 }],
       mode: 'subscription',
       allow_promotion_codes: true,
-      success_url: process.env.STRIPE_SUCCESS_URL,
-      cancel_url: process.env.STRIPE_CANCEL_URL,
+      success_url: `${process.env.APP_URL}/${process.env.STRIPE_SUCCESS_URL}`,
+      cancel_url: `${process.env.APP_URL}/${process.env.STRIPE_CANCEL_URL}`,
     });
 
     return stripeCheckoutSession;
