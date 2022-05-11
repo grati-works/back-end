@@ -13,6 +13,7 @@ import { SendForgotPasswordMailUseCase } from '@modules/accounts/useCases/mail/s
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { createFakeUser } from '@utils/testUtils';
 import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
+import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let resetUserPasswordUseCase: ResetUserPasswordUseCase;
@@ -20,7 +21,7 @@ let createUserUseCase: CreateUserUseCase;
 let sendForgotPasswordMailUseCase: SendForgotPasswordMailUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
-let dateProvider: DayjsDateProvider;
+let dateProvider: IDateProvider;
 let mailProvider: IMailProvider;
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 

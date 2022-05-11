@@ -29,6 +29,7 @@ app.use(
     },
   }),
 );
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/avatars', express.static(`${upload.tmpFolder}/avatars`));
 app.use('/attachments', express.static(`${upload.tmpFolder}/attachments`));

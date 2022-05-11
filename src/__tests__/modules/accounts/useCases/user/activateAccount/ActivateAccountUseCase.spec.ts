@@ -10,13 +10,14 @@ import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTok
 import { ActivateAccountUseCase } from '@modules/accounts/useCases/user/activateAccount/ActivateAccountUseCase';
 import { createFakeUser } from '@utils/testUtils';
 import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
+import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let activateAccountUseCase: ActivateAccountUseCase;
 let createUserUseCase: CreateUserUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
-let dateProvider: DayjsDateProvider;
+let dateProvider: IDateProvider;
 let mailProvider: IMailProvider;
 
 describe('Activate Account', () => {

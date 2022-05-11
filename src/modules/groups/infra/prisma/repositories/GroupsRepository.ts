@@ -101,7 +101,12 @@ class GroupsRepository implements IGroupsRepository {
   async findByNameAndOrganizationId(
     name: string,
     organization_id: number,
-  ): Promise<Group> {
+  ): Promise<Prisma.Prisma__GroupClient<any>> {
+    const include = {
+      permissions: true,
+      objectives: true,
+    };
+
     let group = await client.group.findFirst({
       where: {
         name,
@@ -109,6 +114,7 @@ class GroupsRepository implements IGroupsRepository {
           id: organization_id,
         },
       },
+      include,
     });
 
     if (name === 'Público' && !group) {
@@ -122,6 +128,7 @@ class GroupsRepository implements IGroupsRepository {
           name,
           color: '#000000',
         },
+        include,
       });
     }
 

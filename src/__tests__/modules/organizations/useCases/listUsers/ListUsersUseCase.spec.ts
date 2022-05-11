@@ -1,5 +1,5 @@
 import { ListUsersUseCase } from '@modules/organizations/useCases/listUsers/ListUsersUseCase';
-import { createFakeGroup, createFakeProfile } from '@utils/testUtils';
+import { createFakeProfile } from '@utils/testUtils';
 import { IOrganizationsRepository } from '@modules/organizations/repositories/IOrganizationsRepository';
 import { OrganizationsRepository } from '@modules/organizations/infra/prisma/repositories/OrganizationsRepository';
 
@@ -13,5 +13,12 @@ describe('List organization users', () => {
     listUsersUseCase = new ListUsersUseCase(organizationsRepository);
   });
 
-  test.todo('should be able to list organization users');
+  it('should be able to list organization users', async () => {
+    const { createdUser, organization } = await createFakeProfile();
+
+    const users = await listUsersUseCase.execute(organization.id.toString());
+
+    expect(users).toHaveLength(1);
+    expect(users[0].id).toEqual(createdUser.id);
+  });
 });

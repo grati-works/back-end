@@ -12,7 +12,7 @@ interface IGroupsRepository {
   findByNameAndOrganizationId(
     name: string,
     organization_id: number,
-  ): Promise<Group>;
+  ): Promise<Prisma.Prisma__GroupClient<any>>;
 }
 
 export { IGroupsRepository };

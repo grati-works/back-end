@@ -12,13 +12,14 @@ import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { UsersTokensRepository } from '@modules/accounts/infra/prisma/repositories/UsersTokensRepository';
+import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 
 let usersRepository: IUsersRepository;
 let profilesRepository: ProfilesRepository;
 let createUserUseCase: CreateUserUseCase;
 let getUserProfileUseCase: GetUserProfileUseCase;
 let usersTokensRepository: IUsersTokensRepository;
-let dateProvider: DayjsDateProvider;
+let dateProvider: IDateProvider;
 let mailProvider: IMailProvider;
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 

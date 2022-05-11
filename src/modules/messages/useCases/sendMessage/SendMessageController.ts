@@ -5,6 +5,14 @@ import { SendMessageUseCase } from './SendMessageUseCase';
 
 class SendMessageController {
   async handle(request: Request, response: Response): Promise<Response> {
+    let data = null;
+
+    try {
+      data = JSON.parse(request.body.data);
+    } catch (err) {
+      data = request.body.data;
+    }
+
     const { user } = request;
     const { organization_id } = request.params;
     const {
@@ -14,7 +22,7 @@ class SendMessageController {
       emoji,
       groups,
       attachment_gif,
-    } = JSON.parse(request.body.data);
+    } = data;
     const attachment_file = attachment_gif || request.file?.filename || null;
 
     const sendMessageUseCase = container.resolve(SendMessageUseCase);

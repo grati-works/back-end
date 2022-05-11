@@ -10,12 +10,13 @@ import { DayjsDateProvider } from '@shared/container/providers/DateProvider/impl
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { createFakeProfile, createFakeUser } from '@utils/testUtils';
 import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
+import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
 let profilesRepository: ProfilesRepository;
-let dateProvider: DayjsDateProvider;
+let dateProvider: IDateProvider;
 let createUserUseCase: CreateUserUseCase;
 let getAccumulatedPointsUseCase: GetAccumulatedPointsUseCase;
 let mailProvider: IMailProvider;

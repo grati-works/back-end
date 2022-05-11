@@ -6,6 +6,7 @@ import { AuthenticateUserUseCase } from '@modules/accounts/useCases/auth/authent
 import { RefreshTokenUseCase } from '@modules/accounts/useCases/auth/refreshToken/RefreshTokenUseCase';
 import { SendActivateAccountMailUseCase } from '@modules/accounts/useCases/mail/sendActivateAccountMail/SendActivateAccountMailUseCase';
 import { CreateUserUseCase } from '@modules/accounts/useCases/user/createUser/CreateUserUseCase';
+import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
 import { AppError } from '@shared/errors/AppError';
@@ -16,7 +17,7 @@ let refreshTokenUseCase: RefreshTokenUseCase;
 let createUserUseCase: CreateUserUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
-let dateProvider: DayjsDateProvider;
+let dateProvider: IDateProvider;
 let mailProvider: IMailProvider;
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 

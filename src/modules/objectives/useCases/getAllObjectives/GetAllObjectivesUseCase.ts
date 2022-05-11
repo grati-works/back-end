@@ -10,9 +10,9 @@ class GetAllObjectivesUseCase {
     private objectivesRepository: IObjectivesRepository,
   ) {}
 
-  async execute(group_id: number): Promise<Objective[]> {
+  async execute(profile_id: number): Promise<Objective[]> {
     const objectives = await this.objectivesRepository.getAllObjectives(
-      group_id,
+      profile_id,
     );
 
     if (!objectives || objectives.length === 0) {

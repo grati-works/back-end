@@ -11,13 +11,14 @@ import { faker } from '@faker-js/faker';
 import { v4 as uuidV4 } from 'uuid';
 import { createFakeUser } from '@utils/testUtils';
 import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
+import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let createUserUseCase: CreateUserUseCase;
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
-let dateProvider: DayjsDateProvider;
+let dateProvider: IDateProvider;
 let mailProvider: IMailProvider;
 
 describe('Authenticate User', () => {

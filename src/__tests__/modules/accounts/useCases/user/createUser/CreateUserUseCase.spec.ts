@@ -10,11 +10,12 @@ import { faker } from '@faker-js/faker';
 import { createFakeUser } from '@utils/testUtils';
 import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
+import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 
 let createUserUseCase: CreateUserUseCase;
 let usersRepository: IUsersRepository;
 let usersTokensRepository: IUsersTokensRepository;
-let dateProvider: DayjsDateProvider;
+let dateProvider: IDateProvider;
 let mailProvider: IMailProvider;
 let sendActivateAccountMailUseCase: SendActivateAccountMailUseCase;
 
