@@ -104,7 +104,7 @@ class GroupsRepository implements IGroupsRepository {
   ): Promise<Prisma.Prisma__GroupClient<any>> {
     const include = {
       permissions: true,
-      objectives: true,
+      objective: true,
     };
 
     let group = await client.group.findFirst({

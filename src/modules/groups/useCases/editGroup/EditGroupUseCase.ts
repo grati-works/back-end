@@ -16,7 +16,7 @@ class EditGroupUseCase {
       name?: string;
       color?: string;
       permissions?: number[];
-      objective?: Prisma.ObjectiveCreateInput;
+      objective?: Prisma.ObjectiveCreateWithoutGroupInput;
     },
   ): Promise<void> {
     let newData = data as any;

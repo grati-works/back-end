@@ -59,11 +59,6 @@ describe('Edit Group', () => {
     const objective = {
       name: 'objective',
       goal: 100,
-      group: {
-        connect: {
-          id: group.id,
-        },
-      },
       expires_in: dateProvider.addDays(5),
     };
 
@@ -76,6 +71,8 @@ describe('Edit Group', () => {
       organization.id,
     );
 
-    expect(updatedGroup.objectives[0]).toEqual(objective);
+    expect(updatedGroup.objective.name).toEqual(objective.name);
+    expect(updatedGroup.objective.goal).toEqual(objective.goal);
+    expect(updatedGroup.objective.expires_in).toEqual(objective.expires_in);
   });
 });
