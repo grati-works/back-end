@@ -19,6 +19,6 @@ describe('List organization users', () => {
     const users = await listUsersUseCase.execute(organization.id.toString());
 
     expect(users).toHaveLength(1);
-    expect(users[0].id).toEqual(createdUser.id);
+    expect(users.find(user => user.id === createdUser.id)).toBeDefined();
   });
 });
