@@ -13,5 +13,24 @@ describe('Edit Objective', () => {
     editObjectiveUseCase = new EditObjectiveUseCase(objectivesRepository);
   });
 
-  test.todo('should be able to edit objectives');
+  it('should be able to edit objectives', async () => {
+    const { organization } = await createFakeProfile();
+    const group = await createFakeGroup(organization.id);
+
+    const spyObjectiveEdit = jest.spyOn(objectivesRepository, 'edit');
+    const objectiveDate = new Date();
+    await editObjectiveUseCase.execute(
+      group.id,
+      'New Objective',
+      100,
+      objectiveDate,
+    );
+
+    expect(spyObjectiveEdit).toHaveBeenCalledWith(
+      group.id,
+      'New Objective',
+      100,
+      objectiveDate,
+    );
+  });
 });

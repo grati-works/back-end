@@ -28,6 +28,8 @@ class AddUsersUseCase {
     private usersRepository: IUsersRepository,
     @inject('ProfilesRepository')
     private profilesRepository: IProfilesRepository,
+    private sendCreateAccountMailUseCase?: SendCreateAccountMailUseCase,
+    private sendAddAccountToOrganizationMailUseCase?: SendAddAccountToOrganizationMailUseCase,
   ) {}
 
   loadUsers(file: Express.Multer.File): Promise<IAddUserDTO[]> {
@@ -134,10 +136,7 @@ class AddUsersUseCase {
             password: hashedPassword,
           })
           .then(async () => {
-            const sendCreateAccountMailUseCase = container.resolve(
-              SendCreateAccountMailUseCase,
-            );
-            await sendCreateAccountMailUseCase.execute(
+            await this.sendCreateAccountMailUseCase.execute(
               user.email,
               organization.name,
             );
@@ -154,11 +153,7 @@ class AddUsersUseCase {
   }
 
   async addUserToOrganization(user, organization, temporaryPassword) {
-    const sendAddAccountToOrganizationMailUseCase = container.resolve(
-      SendAddAccountToOrganizationMailUseCase,
-    );
-
-    await sendAddAccountToOrganizationMailUseCase.execute(
+    await this.sendAddAccountToOrganizationMailUseCase.execute(
       user.email,
       organization.name,
       temporaryPassword,
