@@ -25,6 +25,8 @@ class SearchUseCase {
         Number(organization_id),
         {
           id: true,
+          points: true,
+          responsibility: true,
           user: {
             select: {
               id: true,

@@ -27,6 +27,7 @@ class GroupsRepository implements IGroupsRepository {
     }
 
     if (!color) color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    if (color.length === 5) color = `${color}0`;
 
     const createdGroup = await client.group.create({
       data: {

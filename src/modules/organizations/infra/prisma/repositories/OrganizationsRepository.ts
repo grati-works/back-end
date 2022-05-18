@@ -43,6 +43,9 @@ class OrganizationsRepository implements IOrganizationsRepository {
     });
 
     if (user) {
+      const test = await client.organization.findMany();
+
+      console.log({ test });
       const addedUser = await client.organization.update({
         where: { id: organization_id },
         data: {
