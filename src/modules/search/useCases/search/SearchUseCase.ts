@@ -27,6 +27,9 @@ class SearchUseCase {
           id: true,
           points: true,
           responsibility: true,
+          description: true,
+          skills: true,
+          graduations: true,
           user: {
             select: {
               id: true,
