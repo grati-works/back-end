@@ -8,8 +8,6 @@ class SearchController {
     const { organization_id } = request.params;
     const { q: query } = request.query;
 
-    console.log({ organization_id, query })
-
     const searchUseCase = container.resolve(SearchUseCase);
 
     const users = await searchUseCase.execute({

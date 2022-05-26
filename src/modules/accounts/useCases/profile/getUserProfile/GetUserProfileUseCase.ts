@@ -16,7 +16,6 @@ class GetUserProfileUseCase {
     isPublic: boolean,
     getAllData: boolean,
   ): Promise<Prisma.Prisma__ProfileClient<any>> {
-    console.log(getAllData);
     const profile =
       await this.profilesRepository.findProfileByUserAndOrganizationId(
         Number(organization_id),
@@ -34,42 +33,48 @@ class GetUserProfileUseCase {
           },
           responsibility: true,
           points: true,
-          sended_feedbacks: {
-            where: {
-              deleted: null,
-            },
-            include: {
-              reactions: true,
-              receivers: {
-                include: {
-                  user: true,
-                },
-              },
-              sender: {
-                include: {
-                  user: true,
-                },
-              },
-            },
-          },
-          received_feedbacks: {
-            where: {
-              deleted: null,
-            },
-            include: {
-              reactions: true,
-              receivers: {
-                include: {
-                  user: true,
-                },
-              },
-              sender: {
-                include: {
-                  user: true,
-                },
-              },
-            },
-          },
+          sended_feedbacks:
+            getAllData === true
+              ? {
+                  where: {
+                    deleted: null,
+                  },
+                  include: {
+                    reactions: true,
+                    receivers: {
+                      include: {
+                        user: true,
+                      },
+                    },
+                    sender: {
+                      include: {
+                        user: true,
+                      },
+                    },
+                  },
+                }
+              : false,
+          received_feedbacks:
+            getAllData === true
+              ? {
+                  where: {
+                    deleted: null,
+                  },
+                  include: {
+                    reactions: true,
+                    receivers: {
+                      include: {
+                        user: true,
+                      },
+                    },
+                    sender: {
+                      include: {
+                        user: true,
+                      },
+                    },
+                  },
+                }
+              : false,
 
           skills: true,
           graduations: true,
