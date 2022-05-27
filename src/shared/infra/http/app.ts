@@ -5,6 +5,7 @@ import cors from 'cors';
 import 'express-async-errors';
 import checkColorModes from '@utils/functions/checkColorModes';
 import checkPermissions from '@utils/functions/checkPermissions';
+import createFakeData from '@utils/functions/createFakeData';
 
 import upload from '@config/upload';
 
@@ -54,5 +55,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
 
 checkColorModes();
 checkPermissions();
+if (process.env.NODE_ENV === 'preview') createFakeData();
+console.log(process.env.NODE_ENV);
 
 export { app };
