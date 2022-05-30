@@ -57,6 +57,12 @@ class GenerateMonthReportsUseCase {
       await fs.writeFileSync(`./tmp/${fileName}`, pdfBuffer);
       const file = await this.storageProvider.save(fileName, 'reports');
 
+      const deleteAfterMs = 1000 * 60 * 5; // 5 minutes
+
+      setTimeout(() => {
+        this.storageProvider.delete(file.public_id, 'reports');
+      }, deleteAfterMs);
+
       return file.url;
     } catch (err) {
       throw new AppError(err.message);

@@ -240,7 +240,15 @@ class MessagesRepository implements IMessagesRepository {
           },
         },
         tags: true,
-        reactions: true,
+        reactions: {
+          include: {
+            user: {
+              select: {
+                user_id: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
         created_at: 'desc',
@@ -294,6 +302,11 @@ class MessagesRepository implements IMessagesRepository {
         reactions: {
           select: {
             emoji: true,
+            user: {
+              select: {
+                user_id: true,
+              },
+            },
           },
         },
       },

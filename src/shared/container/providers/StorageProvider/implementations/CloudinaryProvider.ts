@@ -21,6 +21,11 @@ class CloudinaryStorageProvider implements IStorageProvider {
         public_id: file,
         folder,
         resource_type: 'auto',
+        transformation: [
+          {
+            quality: 'auto',
+          },
+        ],
       },
       (error, result) => {
         return result;

@@ -40,7 +40,15 @@ class GetUserProfileUseCase {
                     deleted: null,
                   },
                   include: {
-                    reactions: true,
+                    reactions: {
+                      include: {
+                        user: {
+                          select: {
+                            user_id: true,
+                          },
+                        },
+                      },
+                    },
                     receivers: {
                       include: {
                         user: true,
@@ -61,7 +69,15 @@ class GetUserProfileUseCase {
                     deleted: null,
                   },
                   include: {
-                    reactions: true,
+                    reactions: {
+                      include: {
+                        user: {
+                          select: {
+                            user_id: true,
+                          },
+                        },
+                      },
+                    },
                     receivers: {
                       include: {
                         user: true,
