@@ -34,6 +34,6 @@ module.exports = {
     'src/modules/**/useCases/**/**/*UseCase.ts',
     'src/modules/**/useCases/**/*UseCase.ts',
   ],
-  modulePathIgnorePatterns: ["<rootDir>/dist/"],
+  modulePathIgnorePatterns: ["<rootDir>/dist/", "<rootDir>/src/modules/accounts/useCases/activateAccount/"],
   verbose: true,
 };
