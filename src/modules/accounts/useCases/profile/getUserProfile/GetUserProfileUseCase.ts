@@ -14,7 +14,7 @@ class GetUserProfileUseCase {
     organization_id: string,
     id: string,
     isPublic: boolean,
-    getAllData: boolean,
+    getAllData = true,
   ): Promise<Prisma.Prisma__ProfileClient<any>> {
     const profile =
       await this.profilesRepository.findProfileByUserAndOrganizationId(

@@ -257,6 +257,7 @@ class MessagesRepository implements IMessagesRepository {
       take: 10,
     })) as any[];
 
+    /*
     feedbackList.forEach((feedback, index) => {
       feedbackList[index].reactions = feedback.reactions.reduce(
         (acc, reaction) => {
@@ -270,7 +271,7 @@ class MessagesRepository implements IMessagesRepository {
         {},
       );
     });
-
+*/
     if (profile_id !== null) {
       const reacted_feedbacks = await client.reaction.findMany({
         where: {

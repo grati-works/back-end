@@ -1,14 +1,25 @@
-import { createPrismaQueryEventHandler } from 'prisma-query-log';
 import { PrismaClient } from '@prisma/client';
 
-const client = new PrismaClient({
-  log: [
-    {
-      emit: 'event',
-      level: 'query',
-    },
-  ],
-});
+// @ts-ignore
+interface CustomNodeJsGlobal extends NodeJS.Global {
+  prisma: PrismaClient;
+}
+
+declare const global: CustomNodeJsGlobal;
+
+const client =
+  global.prisma ||
+  new PrismaClient({
+    log: [
+      {
+        emit: 'event',
+        level: 'query',
+      },
+    ],
+  });
+
+if (!global.prisma) global.prisma = client;
+
 /*
 const log = createPrismaQueryEventHandler();
 client.$on('query', e => {

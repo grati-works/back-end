@@ -6,6 +6,7 @@
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
     "start": "node dist/shared/infra/http/server.js",
+    "start:preview": "export NODE_ENV=preview&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_preview?schema=public&& prisma migrate reset --force&& node dist/shared/infra/http/server.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn --exit-child --poll .",
     "debug": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn .",
     "lint": "npx eslint . --fix",
@@ -26,7 +27,7 @@
   "homepage": "https://github.com/grati-platform/back-end#readme",
   "dependencies": {
     "@jest/globals": "^28.0.3",
-    "@prisma/client": "^3.13.0",
+    "@prisma/client": "^3.14.0",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.29.1",
@@ -42,6 +43,7 @@
     "nodemailer": "^6.7.4",
     "pino": "^7.11.0",
     "pino-pretty": "^7.6.1",
+    "prisma-query-log": "^3.1.1",
     "reflect-metadata": "^0.1.13",
     "stripe": "^8.219.0",
     "tsyringe": "^4.6.0",
@@ -79,7 +81,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "27.5.1",
     "prettier": "^2.6.2",
-    "prisma": "^3.13.0",
+    "prisma": "^3.14.0",
     "supertest": "^6.2.3",
     "ts-jest": "^27.1.4",
     "ts-node-dev": "^1.1.8",

@@ -299,6 +299,42 @@ export default async function createFakeData() {
       },
     ],
   });
+  await client.profile.update({
+    where: {
+      id: 1,
+    },
+    data: {
+      vinculed_accounts: {
+        createMany: {
+          data: [
+            {
+              id: 1,
+              account: 'ericknathan',
+              provider: 'github',
+            },
+            {
+              id: 2,
+              account: 'ericknathan',
+              provider: 'linkedin',
+            },
+            {
+              id: 3,
+              account: 'ericknathan',
+              provider: 'dribbble',
+            },
+          ],
+        },
+      },
+    },
+  });
+  console.log(
+    await client.profile.findFirst({
+      where: { id: 1 },
+      include: {
+        vinculed_accounts: true,
+      },
+    }),
+  );
   await client.group.createMany({
     data: [
       {
@@ -323,7 +359,6 @@ export default async function createFakeData() {
   });
   await client.feedback.create({
     data: {
-      id: 1,
       organization_id: 2,
       attachment:
         'https://media3.giphy.com/media/3EuAsjZDUJefK/giphy.gif?cid=ecf05e4773cl9c96lbe602h7bi9ptqhzvdqavqr36i75l8uu&rid=giphy.gif&ct=g',
@@ -375,7 +410,6 @@ export default async function createFakeData() {
   });
   await client.feedback.create({
     data: {
-      id: 2,
       organization_id: 2,
       attachment:
         'https://media2.giphy.com/media/yoJC2El7xJkYCadlWE/giphy.gif?cid=ecf05e47dry4nctr4kquhwvvhhoj4q7qzvpqx4ec6tasz7rn&rid=giphy.gif&ct=g',

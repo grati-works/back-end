@@ -19,10 +19,10 @@ class ProfilesRepository implements IProfilesRepository {
         {
           name: profile.user.name,
           username: profile.user.username,
-          responsibility: '',
-          about: '',
-          skills: '',
-          graduations: '',
+          responsibility: profile.responsibility,
+          about: profile.description.replace(/(<([^>]+)>)/gi, ''),
+          skills: profile.skills.replace(/(<([^>]+)>)/gi, ''),
+          graduations: profile.graduations.replace(/(<([^>]+)>)/gi, ''),
         },
       );
     } catch {

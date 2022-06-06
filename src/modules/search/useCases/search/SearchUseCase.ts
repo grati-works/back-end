@@ -38,6 +38,7 @@ class SearchUseCase {
               profile_picture: true,
             },
           },
+          vinculed_accounts: true,
         },
       );
 

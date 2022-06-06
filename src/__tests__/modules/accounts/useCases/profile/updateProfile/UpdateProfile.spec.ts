@@ -31,6 +31,7 @@ describe('Update user profile', () => {
       organization.id.toString(),
       createdUser.id.toString(),
       true,
+      true,
     );
 
     await updateProfileUseCase.execute(gettedProfile.id, { points: 10 });

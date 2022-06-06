@@ -52,6 +52,7 @@ describe('Get user profile', () => {
       organization.id.toString(),
       createdUser.id.toString(),
       true,
+      true,
     );
 
     expect(gettedProfile).toBeDefined();
@@ -72,7 +73,12 @@ describe('Get user profile', () => {
     });
 
     await expect(
-      getUserProfileUseCase.execute(organization.id.toString(), '2', true),
+      getUserProfileUseCase.execute(
+        organization.id.toString(),
+        '2',
+        true,
+        true,
+      ),
     ).rejects.toEqual(
       new AppError('Profile not found', 404, 'profile.not_found'),
     );

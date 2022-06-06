@@ -169,6 +169,6 @@ model Notification {
   visualized  Boolean  @default(false)
   user        User     @relation(fields: [user_id], references: [id])
   user_id     Int
-  feedback    Feedback @relation(fields: [feedback_id], references: [id])
+  feedback    Feedback @relation(fields: [feedback_id], references: [id], onDelete: Cascade)
   feedback_id Int
 }
