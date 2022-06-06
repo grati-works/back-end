@@ -7,6 +7,7 @@
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
     "start": "node dist/shared/infra/http/server.js",
     "start:preview": "export NODE_ENV=preview&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_preview?schema=public&& prisma migrate reset --force&& node dist/shared/infra/http/server.js",
+    "start:preview:prod": "export NODE_ENV=preview&& prisma migrate reset --force&& node dist/shared/infra/http/server.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn --exit-child --poll .",
     "debug": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn .",
     "lint": "npx eslint . --fix",
