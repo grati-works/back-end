@@ -19,6 +19,7 @@ export async function createFakeUser(activated = true): Promise<FakeUser> {
     email: faker.internet.email(name),
     password: encryptedPassword,
     activated,
+    profile_picture_public_id: faker.image.avatar().split('https://')[1],
   };
 
   return { ...user, originalPassword: password };
@@ -73,6 +74,12 @@ export async function createFakeProfile(organization_id = null): Promise<{
     data: {
       user_id: createdUser.id,
       organization_id: organization.id,
+      vinculed_accounts: {
+        create: {
+          account: user.username,
+          provider: 'github',
+        },
+      },
     },
   });
 

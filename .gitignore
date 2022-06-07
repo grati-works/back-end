@@ -5,3 +5,7 @@ coverage/
 dist/
 .gitignore
 .vscode/settings.json
+Dockerfilee
+.gitignore
+docker-compose.yml
+teste.ts

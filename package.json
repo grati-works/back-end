@@ -6,14 +6,14 @@
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
     "start": "node dist/shared/infra/http/server.js",
-    "start:preview": "export NODE_ENV=preview&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_preview?schema=public&& prisma migrate reset --force&& node dist/shared/infra/http/server.js",
-    "start:preview:prod": "export NODE_ENV=preview&& prisma migrate reset --force&& node dist/shared/infra/http/server.js",
+    "start:preview": "set NODE_ENV=preview&& set DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_preview?schema=public&& prisma migrate reset --force&& node dist/shared/infra/http/server.js",
+    "start:preview:prod": "set NODE_ENV=preview&& prisma migrate reset --force&& node dist/shared/infra/http/server.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn --exit-child --poll .",
     "debug": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn .",
     "lint": "npx eslint . --fix",
-    "test": "export NODE_ENV=test&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& prisma migrate reset --force&& jest --runInBand",
-    "test:cov": "export NODE_ENV=test&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& prisma migrate reset --force&& jest --coverage --runInBand",
-    "test:watch": "export NODE_ENV=test&& export DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& jest --no-cache --watchAll --runInBand"
+    "test": "set NODE_ENV=test&& set DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& prisma migrate reset --force&& jest --runInBand",
+    "test:cov": "set NODE_ENV=test&& set DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& prisma migrate reset --force&& jest --max-old-space-size=8192 --coverage --runInBand",
+    "test:watch": "set NODE_ENV=test&& set DATABASE_URL=postgresql://postgres:docker@localhost:5432/grati_test?schema=public&& jest --no-cache --watchAll --runInBand"
   },
   "repository": {
     "type": "git",

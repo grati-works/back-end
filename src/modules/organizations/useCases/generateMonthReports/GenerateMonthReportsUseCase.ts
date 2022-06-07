@@ -19,6 +19,7 @@ class GenerateMonthReportsUseCase {
     organization_id: string,
     start_date: Date,
     end_date: Date,
+    deleteAfterMs = 1000 * 60 * 5, // 5 minutes
   ): Promise<string> {
     const organization = await this.organizationsRepository.findById(
       Number(organization_id),
@@ -56,8 +57,6 @@ class GenerateMonthReportsUseCase {
 
       await fs.writeFileSync(`./tmp/${fileName}`, pdfBuffer);
       const file = await this.storageProvider.save(fileName, 'reports');
-
-      const deleteAfterMs = 1000 * 60 * 5; // 5 minutes
 
       setTimeout(() => {
         this.storageProvider.delete(file.public_id, 'reports');

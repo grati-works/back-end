@@ -24,7 +24,7 @@ class SendMessageUseCase {
     private notificationsRepository: INotificationsRepository,
   ) {}
 
-  async execute(data: SendArgs): Promise<void> {
+  async execute(data: SendArgs): Promise<number> {
     const { author_id, organization_id } = data;
     const author =
       await this.profilesRepository.findProfileByUserAndOrganizationId(
@@ -55,18 +55,19 @@ class SendMessageUseCase {
       data.groups = [];
     }
 
-    await this.messagesRepository.send(data).then(async feedback => {
-      await this.profilesRepository.addPoints(feedback.sender_id, 5);
-      data.receivers_usernames.map(async receiver_username => {
-        const receiver =
-          await this.profilesRepository.findProfileByUsernameAndOrganizationId(
-            receiver_username,
-            organization_id,
-          );
-        await this.profilesRepository.addPoints(receiver.id, 10);
-        await this.notificationsRepository.create(receiver.id, feedback.id);
-      });
+    const feedback = await this.messagesRepository.send(data);
+    await this.profilesRepository.addPoints(feedback.sender_id, 5);
+    data.receivers_usernames.map(async receiver_username => {
+      const receiver =
+        await this.profilesRepository.findProfileByUsernameAndOrganizationId(
+          receiver_username,
+          organization_id,
+        );
+      await this.profilesRepository.addPoints(receiver.id, 10);
+      await this.notificationsRepository.create(receiver.id, feedback.id);
     });
+
+    return feedback.id;
   }
 }
 

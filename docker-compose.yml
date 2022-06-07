@@ -21,21 +21,56 @@ services:
     environment:
       RUST_BACKTRACE: "full"
     volumes:
-      - ~/Desktop/Grati/repos/search-microservice/src/sonic/config.cfg:/etc/sonic.cfg
-      - ~/Desktop/Grati/repos/search-microservice/src/sonic/store/:/var/lib/sonic/store/
-  backend:
+      - ~/Projetos/Senai/grati/search-microservice/src/sonic/config.cfg:/etc/sonic.cfg
+      - ~/Projetos/Senai/grati/search-microservice/src/sonic/store/:/var/lib/sonic/store/
+  cluster_aura:
     build: .
-    container_name: backend
+    container_name: cluster-aura
     ports:
       - 3333:3333
     volumes:
-      - .:/usr/backend
+      - .:/usr/backend/clusters/aura
     links:
       - database
+      - microservice_search
     depends_on: 
       - database
+      - microservice_search
     environment:
       DATABASE_URL: postgresql://postgres:docker@host.docker.internal:5432/grati
+      PORT: 3333
+  cluster_highlight:
+    build: .
+    container_name: cluster-highlight
+    ports:
+      - 3334:3334
+    volumes:
+      - .:/usr/backend/clusters/highlight
+    links:
+      - database
+      - microservice_search
+    depends_on: 
+      - database
+      - microservice_search
+    environment:
+      DATABASE_URL: postgresql://postgres:docker@host.docker.internal:5432/grati
+      PORT: 3334
+  cluster_spark:
+    build: .
+    container_name: cluster-spark
+    ports:
+      - 3335:3335
+    volumes:
+      - .:/usr/backend/clusters/spark
+    links:
+      - database
+      - microservice_search
+    depends_on: 
+      - database
+      - microservice_search
+    environment:
+      DATABASE_URL: postgresql://postgres:docker@host.docker.internal:5432/grati
+      PORT: 3335
 
 volumes:
   pgdata:

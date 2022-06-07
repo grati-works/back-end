@@ -1,5 +1,134 @@
 import { client } from '@shared/infra/prisma';
 
+const erickNathanData = {
+  description: `Com 13 anos tive o meu primeiro contato com tecnologia e programação ao me descobrir no mundo de desenvolvimento, onde fiquei fascinado, buscando muitos materiais sobre tecnologia como HTML, CSS e Javascript, principalmente em plataformas audiovisuais como o Youtube. \n\n        Com isso, sempre levei a tecnologia e essa paixão pelos códigos como hobby, e mesmo que, com o passar dos anos, as linguagens ficassem em segundo plano para dar vasão à vida acadêmica, sempre me mantive focado em me aprofundar e conseguir impactar milhares e/ou milhões de pessoas com novas tecnologias, e de alguma forma conseguir facilitar o dia a dia usando essa habilidade tão especial, de construir facilitadores utilizando códigos.\n\nAgora, me vejo aprimorando cada vez mais meus conhecimentos técnicos e pronto para conseguir impactar cada vez mais vidas e rotinas utilizando a programação!`,
+  graduations: `
+    <ul>
+      <li>
+        <strong>Curso:</strong> Análise e Desenvolvimento de Sistemas
+      </li>
+      <li>
+        <strong>Instituição:</strong> SENAI Jandira
+      </li>
+      <li>
+        <strong>Ano:</strong> 2022
+      </li>
+    </ul>
+  `,
+  skills: `
+    <ul>
+      <li>Autodidata</li>
+      <li>Empatia</li>
+      <li>Resiliência</li>
+      <li>Comunicação</li>
+      <li>Persistência</li>
+    </ul>
+  `,
+};
+
+const gabrielLucenaData = {
+  description: `Com 13 anos tive o meu primeiro contato com tecnologia e programação ao me descobrir no mundo de desenvolvimento, onde fiquei fascinado, buscando muitos materiais sobre tecnologia como HTML, CSS e Javascript, principalmente em plataformas audiovisuais como o Youtube. \n\n        Com isso, sempre levei a tecnologia e essa paixão pelos códigos como hobby, e mesmo que, com o passar dos anos, as linguagens ficassem em segundo plano para dar vasão à vida acadêmica, sempre me mantive focado em me aprofundar e conseguir impactar milhares e/ou milhões de pessoas com novas tecnologias, e de alguma forma conseguir facilitar o dia a dia usando essa habilidade tão especial, de construir facilitadores utilizando códigos.\n\nAgora, me vejo aprimorando cada vez mais meus conhecimentos técnicos e pronto para conseguir impactar cada vez mais vidas e rotinas utilizando a programação!`,
+  graduations: `
+    <ul>
+      <li>
+        <strong>Curso:</strong> Análise e Desenvolvimento de Sistemas
+      </li>
+      <li>
+        <strong>Instituição:</strong> SENAI Informática - Santa Cecília
+      </li>
+      <li>
+        <strong>Ano:</strong> 2019
+      </li>
+    </ul>
+  `,
+  skills: `
+    <ul>
+      <li>Comunicação</li>
+      <li>Persistência</li>
+      <li>Resiliência</li>
+      <li>Autodidata</li>
+    </ul>
+  `,
+};
+
+const lauraData = {
+  description:
+    'Entrei na Universidade Tecnológica Federal do Paraná no segundo semestre de 2019 para cursar Tecnologia em Análise e Desenvolvimento de Sistemas e senti uma necessidade de compartilhar a minha rotina como estudante de desenvolvimento. Então, eu criei um twitter onde eu postava as coisas que eu fazia e aprendia no dia, tarefas do curso e coisas do tipo. Esse foi o meu primeiro contato com criação de conteúdo voltada para tecnologia e programação.\n\nEm 2020, com a pandemia, a universidade parou com as aulas. E sem essas aulas, me sobrou bastante tempo livre. Então, eu decidi começar a estudar front-end, desde então, esse tem sido o meu foco como desenvolvedora. Paralelamente a isso, eu comecei a fazer live coding e compartilhar todo esse meu processo de aprendizagem e evolução em diversas redes sociais.',
+  graduations: `
+    <ul>
+      <li>
+        <strong>Curso:</strong> Análise e Desenvolvimento de Sistemas
+      </li>
+      <li>
+        <strong>Instituição:</strong> Universidade Tecnológica Federal do Paraná
+      </li>
+      <li>
+        <strong>Ano:</strong> 2019
+      </li>
+    </ul>
+  `,
+  skills: `
+    <ul>
+      <li>Resiliência</li>
+      <li>Presença em comunidades</li>
+      <li>Criação de conteúdos</li>
+      <li>Github Star Creator</li>
+      <li>Autodidata</li>
+    </ul>
+  `,
+};
+
+const cauaData = {
+  description:
+    'Atualmente, sou um estudante em Redes de Computadores e busco me aprofundar cada vez mais na área. Sou dedicado e esforçado, sempre buscando evoluir minhas Hard e Soft Skills através de capacitações, palestras e até mesmo uma simples conversa. Gosto de ajudar e ensinar as pessoas, contribuindo cada vez mais para a evolução da equipe.',
+  graduations: `
+    <ul>
+      <li>
+        <strong>Curso:</strong> Redes de Computadores
+      </li>
+      <li>
+        <strong>Instituição:</strong> SENAI Jandira
+      </li>
+      <li>
+        <strong>Ano:</strong> 2021
+      </li>
+    </ul>
+  `,
+  skills: `
+    <ul>
+      <li>Comunicação</li>
+      <li>Empatia</li>
+      <li>Persistência</li>
+    </ul>
+  `,
+};
+
+const otherData = {
+  description:
+    'Desenvolvedor de Software com 6 anos de experiência em uma carreira construída em mais de 10 anos de experiência trabalhando em grandes instituições (Desenvolvedor de Software, Analista de Sistemas e Analista de Suporte), com experiência em Chatbot com IBM Watson, Backend e sólida experiência em Node.JS - Express e NestJs, Python - Flask. com bacharelado em Ciência da Computação.',
+  graduations: `
+    <ul>
+      <li>
+        <strong>Curso:</strong> Ciência da Computação
+      </li>
+      <li>
+        <strong>Instituição:</strong> Pontifícia Universidade Católica do Paraná
+      </li>
+      <li>
+        <strong>Ano:</strong> 2010
+      </li>
+    </ul>
+  `,
+  skills: `
+    <ul>
+      <li>Comunicação</li>
+      <li>Persistência</li>
+      <li>Resiliência</li>
+      <li>Autodidata</li>
+    </ul>
+  `,
+};
+
 export default async function createFakeData() {
   await client.user.createMany({
     data: [
@@ -154,44 +283,38 @@ export default async function createFakeData() {
     data: [
       {
         id: 1,
-        name: 'SENAI Jandira',
-        owner_id: 1,
-        color: '#DD473B',
+        name: 'EDSOFT IT',
+        owner_id: 2,
+        color: '#006696',
         mode_id: 1,
       },
       {
         id: 2,
-        name: 'SENAI Campinas',
-        owner_id: 2,
-        color: '#00AAAA',
+        name: 'Fortbras',
+        owner_id: 3,
+        color: '#1455a6',
         mode_id: 1,
       },
       {
         id: 3,
-        name: 'Microsoft',
-        owner_id: 1,
-        color: '#0078D4',
+        name: 'Pagtel',
+        owner_id: 4,
+        color: '#62aaf1',
         mode_id: 1,
       },
       {
         id: 4,
-        name: 'Google',
-        owner_id: 3,
-        color: '#4285F4',
+        name: 'Tailored Resources',
+        owner_id: 5,
+        color: '#00bfd8',
         mode_id: 1,
       },
       {
         id: 5,
-        name: 'Facebook',
-        owner_id: 3,
-        color: '#3B5998',
+        name: 'Warren',
+        owner_id: 6,
+        color: '#e02b57',
         mode_id: 1,
-      },
-      {
-        id: 6,
-        name: 'Uber',
-        owner_id: 2,
-        color: '#000000',
       },
     ],
   });
@@ -201,59 +324,39 @@ export default async function createFakeData() {
         id: 1,
         organization_id: 1,
         user_id: 1,
-        description: `Similique non qui tempora delectus et a occaecati. Et nisi id nemo sequi voluptatem vero molestiae non dolor. Aliquam ducimus voluptatum assumenda libero sequi officiis consectetur. Ipsa nihil sunt necessitatibus culpa totam dolor saepe minima est.\nQui numquam fugit repellendus sed. Rem inventore voluptatem. Ea quia eligendi velit est pariatur laborum aperiam quod. Enim consequuntur accusantium tempore beatae debitis recusandae quaerat et. Aut aut qui non dolor aliquid dolores aut voluptatem.\nNon eligendi animi. Rem occaecati ut et dolores sunt alias. Ipsam ut sunt fugiat ullam.`,
-        graduations: `
-          <ul>
-            <li>
-              <strong>Curso:</strong> Análise e Desenvolvimento de Sistemas
-            </li>
-            <li>
-              <strong>Instituição:</strong> SENAI Jandira
-            </li>
-            <li>
-              <strong>Ano:</strong> 2019
-            </li>
-          </ul>
-        `,
-        skills: `
-          <ul>
-            <li>Autodidata</li>
-            <li>Empatia</li>
-            <li>Resiliência</li>
-            <li>Comunicação</li>
-            <li>Persistência</li>
-          </ul>
-        `,
+        ...erickNathanData,
         points: 120,
         responsibility: 'CTO',
       },
       {
-        id: 2,
+        id: 8,
         organization_id: 2,
         user_id: 1,
-        description: `Similique non qui tempora delectus et a occaecati. Et nisi id nemo sequi voluptatem vero molestiae non dolor. Aliquam ducimus voluptatum assumenda libero sequi officiis consectetur. Ipsa nihil sunt necessitatibus culpa totam dolor saepe minima est.\nQui numquam fugit repellendus sed. Rem inventore voluptatem. Ea quia eligendi velit est pariatur laborum aperiam quod. Enim consequuntur accusantium tempore beatae debitis recusandae quaerat et. Aut aut qui non dolor aliquid dolores aut voluptatem.\nNon eligendi animi. Rem occaecati ut et dolores sunt alias. Ipsam ut sunt fugiat ullam.`,
-        graduations: `
-          <ul>
-            <li>
-              <strong>Curso:</strong> Análise e Desenvolvimento de Sistemas
-            </li>
-            <li>
-              <strong>Instituição:</strong> SENAI Jandira
-            </li>
-            <li>
-              <strong>Ano:</strong> 2019
-            </li>
-          </ul>
-        `,
-        skills: `
-          <ul>
-            <li>Autodidata</li>
-            <li>Empatia</li>
-            <li>Resiliência</li>
-            <li>Comunicação</li>
-            <li>Persistência</li>
-          </ul>
-        `,
+        ...erickNathanData,
+        points: 120,
+        responsibility: 'DevRel',
+      },
+      {
+        id: 9,
+        organization_id: 3,
+        user_id: 1,
+        ...erickNathanData,
+        points: 120,
+        responsibility: 'Recusos Humanos',
+      },
+      {
+        id: 10,
+        organization_id: 4,
+        user_id: 1,
+        ...erickNathanData,
+        points: 120,
+        responsibility: 'UI/UX Designer',
+      },
+      {
+        id: 2,
+        organization_id: 5,
+        user_id: 1,
+        ...erickNathanData,
         points: 0,
         responsibility: 'Back-end Developer',
       },
@@ -261,10 +364,7 @@ export default async function createFakeData() {
         id: 3,
         organization_id: 2,
         user_id: 2,
-        description:
-          'Ipsam pariatur quae ex non delectus deserunt repudiandae. Aut laboriosam et. Sint quia at assumenda. Dolores nam veniam. Omnis dolor et corporis rem voluptas.\nSint occaecati corrupti est voluptatibus porro ab quisquam et. Aspernatur aliquam enim illo ipsum. Accusantium exercitationem atque. Sit vel veniam alias quo totam sapiente ducimus. Vel sunt vel officiis itaque ut vel id. Praesentium sunt aut ut dignissimos culpa neque consequatur non.\nIn reiciendis aliquam omnis omnis. Ad ratione ex vitae ipsam voluptatem rem. At harum ut asperiores laudantium ex suscipit consectetur atque.',
-        graduations: 'Graduações de Gabriel Lucena',
-        skills: 'Skills de Gabriel Lucena',
+        ...gabrielLucenaData,
         points: 0,
         responsibility: 'CEO',
       },
@@ -272,10 +372,7 @@ export default async function createFakeData() {
         id: 4,
         organization_id: 2,
         user_id: 3,
-        description:
-          'Facere deleniti ipsa quia quisquam et perferendis. Quia sit aliquam soluta totam. Sequi inventore delectus eaque tempora repudiandae. Itaque error iure. Labore mollitia rem animi et et iure culpa voluptatem.\nOccaecati fugit deserunt. Voluptatem voluptatem vero. Facere suscipit facere a expedita omnis ut veniam non. Provident fugit quidem minima ut quos. Exercitationem fugit laboriosam dolores aut sed debitis laborum. Rerum aut nihil et consectetur maiores.\nIste eligendi dolor. Corporis in tenetur itaque non iure qui ut. Qui cupiditate eos ut explicabo deserunt dolorum in nesciunt quia. Qui quia nisi eaque ipsam voluptate ad magnam error. Mollitia a sequi rem tenetur.',
-        graduations: 'Graduações de Caua Henrique',
-        skills: 'Skills de Caua Henrique',
+        ...cauaData,
         points: 0,
         responsibility: 'Front-end developer',
       },
@@ -283,10 +380,7 @@ export default async function createFakeData() {
         id: 5,
         organization_id: 2,
         user_id: 4,
-        description:
-          'Alias aut blanditiis hic aut dolorem nostrum culpa ipsa quo. Accusamus quia similique. Laboriosam minima tenetur eos vel consequatur aspernatur explicabo. Eius voluptatem corporis architecto. Blanditiis optio molestiae odio sapiente eveniet consequatur repudiandae.\nModi dolore unde labore. Deleniti doloremque minima explicabo quidem illum. Quos quis odio magnam nobis ea.\nMolestias mollitia doloremque nam numquam error autem laudantium. Accusamus qui modi est molestiae id facilis. Temporibus repudiandae excepturi et deleniti sunt consequatur aperiam.',
-        graduations: 'Graduações de Vitor Campos',
-        skills: 'Skills de Vitor Campos',
+        ...lauraData,
         points: 0,
         responsibility: 'DBA',
       },
@@ -294,8 +388,7 @@ export default async function createFakeData() {
         id: 6,
         organization_id: 2,
         user_id: 5,
-        description:
-          'Suscipit non occaecati dolor harum explicabo. Et non veniam. Corrupti aspernatur accusamus cupiditate molestias est. Est voluptas enim autem quia aut eaque voluptatem. Sint doloremque facilis. Velit est atque cumque veritatis quos earum recusandae provident.\nReprehenderit est laborum. Perferendis quia fuga. Voluptatem est vel. Distinctio ipsa mollitia in voluptas.\nVoluptatem consequuntur reprehenderit expedita saepe. Vel et iure assumenda. Rem aliquam voluptatem quis sequi. Eum ex blanditiis adipisci.',
+        ...otherData,
       },
     ],
   });
@@ -327,14 +420,7 @@ export default async function createFakeData() {
       },
     },
   });
-  console.log(
-    await client.profile.findFirst({
-      where: { id: 1 },
-      include: {
-        vinculed_accounts: true,
-      },
-    }),
-  );
+
   await client.group.createMany({
     data: [
       {
@@ -354,6 +440,42 @@ export default async function createFakeData() {
         name: 'Squad Board',
         organization_id: 2,
         color: '#7b5444',
+      },
+      {
+        id: 4,
+        name: 'Squad Riders',
+        organization_id: 1,
+        color: '#E62C67',
+      },
+      {
+        id: 5,
+        name: 'Squad Earth',
+        organization_id: 3,
+        color: '#97D5FA',
+      },
+      {
+        id: 6,
+        name: 'Squad Fear',
+        organization_id: 4,
+        color: '#31ED86',
+      },
+      {
+        id: 7,
+        name: 'Squad Plant',
+        organization_id: 5,
+        color: '#A6C181',
+      },
+      {
+        id: 8,
+        name: 'Squad Fine',
+        organization_id: 5,
+        color: '#0187F4',
+      },
+      {
+        id: 9,
+        name: 'Squad Ignite',
+        organization_id: 1,
+        color: '#000000',
       },
     ],
   });

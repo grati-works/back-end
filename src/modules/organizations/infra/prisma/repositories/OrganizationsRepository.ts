@@ -27,11 +27,13 @@ class OrganizationsRepository implements IOrganizationsRepository {
   async update(
     organization_id: number,
     data: Prisma.OrganizationUpdateInput,
-  ): Promise<void> {
-    await client.organization.update({
+  ): Promise<Organization> {
+    const updatedOrganization = await client.organization.update({
       where: { id: organization_id },
       data,
     });
+
+    return updatedOrganization;
   }
 
   async addUser(

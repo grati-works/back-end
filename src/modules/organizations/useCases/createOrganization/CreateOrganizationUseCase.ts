@@ -1,4 +1,4 @@
-import { inject, injectable, container } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { IOrganizationsRepository } from '@modules/organizations/repositories/IOrganizationsRepository';
 import { AppError } from '@shared/errors/AppError';
@@ -13,6 +13,7 @@ class CreateOrganizationUseCase {
     private organizationsRepository: IOrganizationsRepository,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+    private mailProvider?: SendOrganizationCreateMailUseCase,
   ) {}
 
   async execute(authorId: string, name: string): Promise<Organization | void> {
@@ -27,29 +28,20 @@ class CreateOrganizationUseCase {
     }
 
     try {
-      await this.organizationsRepository
-        .create({
-          name,
-          owner: {
-            connect: {
-              id: Number(owner.id),
-            },
+      const organization = await this.organizationsRepository.create({
+        name,
+        owner: {
+          connect: {
+            id: Number(owner.id),
           },
-        })
-        .then(async organization => {
-          await this.organizationsRepository.addUser(organization.id, owner);
-          const userMail = owner.email;
-          const sendOrganizationCreateMailUseCase = container.resolve(
-            SendOrganizationCreateMailUseCase,
-          );
-          await sendOrganizationCreateMailUseCase.execute(
-            userMail,
-            name,
-            organization.id,
-          );
+        },
+      });
 
-          return organization;
-        });
+      await this.organizationsRepository.addUser(organization.id, owner);
+      const userMail = owner.email;
+      await this.mailProvider.execute(userMail, name, organization.id);
+
+      return organization;
     } catch ({ message }) {
       throw new AppError(message);
     }

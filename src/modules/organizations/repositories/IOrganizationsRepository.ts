@@ -11,7 +11,7 @@ interface IOrganizationsRepository {
   update(
     organization_id: number,
     data: Prisma.OrganizationUpdateInput,
-  ): Promise<void>;
+  ): Promise<Organization>;
   addUser(
     organization_id: number,
     { email }: IAddUserDTO,

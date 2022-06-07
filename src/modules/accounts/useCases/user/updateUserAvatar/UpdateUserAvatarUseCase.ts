@@ -19,11 +19,13 @@ class UpdateUserAvatarUseCase {
   async execute({ user_id, avatar_file }: IRequest): Promise<void> {
     const user = await this.usersRepository.findById(Number(user_id));
 
+    /* istanbul ignore next */
     if (user.profile_picture && user.profile_picture_public_id)
       await this.storageProvider.delete(
         user.profile_picture_public_id,
         'avatar',
       );
+
     const file = await this.storageProvider.save(avatar_file, 'avatars');
 
     const avatar_url = file.url;

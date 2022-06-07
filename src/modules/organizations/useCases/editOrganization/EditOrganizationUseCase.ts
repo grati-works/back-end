@@ -3,7 +3,7 @@ import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepositor
 import { IOrganizationsRepository } from '@modules/organizations/repositories/IOrganizationsRepository';
 import { AppError } from '@shared/errors/AppError';
 
-import { Prisma } from '@prisma/client';
+import { Organization, Prisma } from '@prisma/client';
 
 @injectable()
 class EditOrganizationUseCase {
@@ -18,7 +18,7 @@ class EditOrganizationUseCase {
     author_id: string,
     organization_id: string,
     data: Prisma.OrganizationUpdateInput,
-  ): Promise<void> {
+  ): Promise<Organization> {
     if (!organization_id) {
       throw new AppError(
         'Organization id is required',
@@ -52,7 +52,12 @@ class EditOrganizationUseCase {
       };
     }
 
-    await this.organizationsRepository.update(Number(organization_id), data);
+    const updatedOrganization = await this.organizationsRepository.update(
+      Number(organization_id),
+      data,
+    );
+
+    return updatedOrganization;
   }
 }
 

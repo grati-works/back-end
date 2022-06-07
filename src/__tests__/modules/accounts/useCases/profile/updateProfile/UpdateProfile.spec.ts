@@ -40,8 +40,38 @@ describe('Update user profile', () => {
       organization.id.toString(),
       createdUser.id.toString(),
       true,
+      true,
     );
 
     expect(updatedProfile.points).toEqual(10);
+  });
+
+  it('should be able to delete vinculed_accounts', async () => {
+    const { createdUser, organization } = await createFakeProfile();
+
+    const gettedProfile = await getUserProfileUseCase.execute(
+      organization.id.toString(),
+      createdUser.id.toString(),
+      true,
+      true,
+    );
+
+    await updateProfileUseCase.execute(gettedProfile.id, {
+      vinculed_accounts: {
+        create: {
+          account: createdUser.username,
+          provider: 'dribbble',
+        },
+      },
+    });
+
+    const updatedProfile = await getUserProfileUseCase.execute(
+      organization.id.toString(),
+      createdUser.id.toString(),
+      true,
+      true,
+    );
+
+    expect(updatedProfile.vinculed_accounts.length).toEqual(1);
   });
 });
