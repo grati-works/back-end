@@ -1,5 +1,5 @@
 import { RemoveUserUseCase } from '@modules/organizations/useCases/removeUser/RemoveUserUseCase';
-import { createFakeGroup, createFakeProfile } from '@utils/testUtils';
+import { createFakeProfile } from '@utils/testUtils';
 import { IOrganizationsRepository } from '@modules/organizations/repositories/IOrganizationsRepository';
 import { OrganizationsRepository } from '@modules/organizations/infra/prisma/repositories/OrganizationsRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';

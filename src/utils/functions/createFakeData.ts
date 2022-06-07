@@ -1,4 +1,5 @@
 import { client } from '@shared/infra/prisma';
+import axios from 'axios';
 
 const erickNathanData = {
   description: `Com 13 anos tive o meu primeiro contato com tecnologia e programação ao me descobrir no mundo de desenvolvimento, onde fiquei fascinado, buscando muitos materiais sobre tecnologia como HTML, CSS e Javascript, principalmente em plataformas audiovisuais como o Youtube. \n\n        Com isso, sempre levei a tecnologia e essa paixão pelos códigos como hobby, e mesmo que, com o passar dos anos, as linguagens ficassem em segundo plano para dar vasão à vida acadêmica, sempre me mantive focado em me aprofundar e conseguir impactar milhares e/ou milhões de pessoas com novas tecnologias, e de alguma forma conseguir facilitar o dia a dia usando essa habilidade tão especial, de construir facilitadores utilizando códigos.\n\nAgora, me vejo aprimorando cada vez mais meus conhecimentos técnicos e pronto para conseguir impactar cada vez mais vidas e rotinas utilizando a programação!`,
@@ -584,5 +585,25 @@ export default async function createFakeData() {
       },
       sender_id: 2,
     },
+  });
+
+  const profiles = await client.profile.findMany({
+    include: {
+      user: true,
+    },
+  });
+
+  profiles.forEach(async profile => {
+    await axios.post(
+      `${process.env.SEARCH_SERVICE_URL}/user/${profile.organization_id}/${profile.id}`,
+      {
+        name: profile.user.name,
+        username: profile.user.username,
+        responsibility: profile.responsibility,
+        about: profile.description.replace(/(<([^>]+)>)/gi, ''),
+        skills: profile.skills.replace(/(<([^>]+)>)/gi, ''),
+        graduations: profile.graduations.replace(/(<([^>]+)>)/gi, ''),
+      },
+    );
   });
 }

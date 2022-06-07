@@ -23,8 +23,9 @@ afterAll(async () => {
   await client.notification.deleteMany();
   await client.reaction.deleteMany();
   await client.feedback.deleteMany();
-  await client.vinculedAccount.deleteMany();
-  await client.profile.deleteMany();
+  await client.vinculedAccount
+    .deleteMany()
+    .then(async () => client.profile.deleteMany());
   await client.group.deleteMany();
   await client.organization.deleteMany();
   await client.userTokens.deleteMany();

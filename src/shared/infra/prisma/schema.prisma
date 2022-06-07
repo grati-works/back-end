@@ -21,7 +21,7 @@ model Feedback {
   created_at      DateTime       @default(now())
   tags            Tag[]
   reactions       Reaction[]
-  organization    Organization   @relation("Organization", fields: [organization_id], references: [id])
+  organization    Organization   @relation("Organization", fields: [organization_id], references: [id], onDelete: Cascade)
   organization_id Int
   notifications   Notification[]
   groups          Group[]
@@ -46,7 +46,7 @@ model User {
 
 model Profile {
   id                 Int               @id @unique @default(autoincrement())
-  user               User              @relation(fields: [user_id], references: [id])
+  user               User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id            Int
   groups             Group[]
   responsibility     String?
@@ -54,7 +54,7 @@ model Profile {
   skills             String?
   graduations        String?
   vinculed_accounts  VinculedAccount[]
-  organization       Organization      @relation(fields: [organization_id], references: [id])
+  organization       Organization      @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   organization_id    Int
   sended_feedbacks   Feedback[]        @relation("Send")
   received_feedbacks Feedback[]        @relation("Receive")
@@ -65,7 +65,7 @@ model Profile {
 
 model Organization {
   id           Int           @id @unique @default(autoincrement())
-  owner        User          @relation("OwnedOrganizations", fields: [owner_id], references: [id])
+  owner        User          @relation("OwnedOrganizations", fields: [owner_id], references: [id], onDelete: Cascade)
   owner_id     Int
   name         String
   subscription Subscription?
@@ -101,7 +101,7 @@ model Group {
   name            String
   color           String?      @default("#000000")
   users           Profile[]
-  organization    Organization @relation(fields: [organization_id], references: [id])
+  organization    Organization @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   permissions     Permission[]
   organization_id Int
   objective       Objective?
@@ -127,15 +127,15 @@ model Objective {
 model Reaction {
   id          Int      @id @unique @default(autoincrement())
   emoji       String
-  feedback    Feedback @relation(fields: [feedback_id], references: [id])
+  feedback    Feedback @relation(fields: [feedback_id], references: [id], onDelete: Cascade)
   feedback_id Int
-  user        Profile  @relation(fields: [profile_id], references: [id])
+  user        Profile  @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id  Int
 }
 
 model VinculedAccount {
   id       Int     @id @unique @default(autoincrement())
-  user     Profile @relation(fields: [user_id], references: [id])
+  user     Profile @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id  Int
   account  String
   provider String

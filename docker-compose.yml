@@ -21,8 +21,18 @@ services:
     environment:
       RUST_BACKTRACE: "full"
     volumes:
-      - ~/Projetos/Senai/grati/search-microservice/src/sonic/config.cfg:/etc/sonic.cfg
-      - ~/Projetos/Senai/grati/search-microservice/src/sonic/store/:/var/lib/sonic/store/
+      - ~/Desktop/Grati/repos/search-microservice/src/sonic/config.cfg:/etc/sonic.cfg
+      - ~/Desktop/Grati/repos/search-microservice/src/sonic/store/:/var/lib/sonic/store/
+  # load_balancer:
+  #   image: nginx
+  #   ports:
+  #     - "127.0.0.1:8080:8080"
+  #   build:
+  #     dockerfile: ./loadbalancer/Dockerfile
+  #     context: .
+  #   container_name: load-balancer
+  #   ports:
+  #     - 8080:8080
   cluster_aura:
     build: .
     container_name: cluster-aura
@@ -39,38 +49,42 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:docker@host.docker.internal:5432/grati
       PORT: 3333
-  cluster_highlight:
-    build: .
-    container_name: cluster-highlight
-    ports:
-      - 3334:3334
-    volumes:
-      - .:/usr/backend/clusters/highlight
-    links:
-      - database
-      - microservice_search
-    depends_on: 
-      - database
-      - microservice_search
-    environment:
-      DATABASE_URL: postgresql://postgres:docker@host.docker.internal:5432/grati
-      PORT: 3334
-  cluster_spark:
-    build: .
-    container_name: cluster-spark
-    ports:
-      - 3335:3335
-    volumes:
-      - .:/usr/backend/clusters/spark
-    links:
-      - database
-      - microservice_search
-    depends_on: 
-      - database
-      - microservice_search
-    environment:
-      DATABASE_URL: postgresql://postgres:docker@host.docker.internal:5432/grati
-      PORT: 3335
+  # cluster_highlight:
+  #   build: .
+  #   container_name: cluster-highlight
+  #   ports:
+  #     - 3334:3334
+  #   volumes:
+  #     - .:/usr/backend/clusters/highlight
+  #   links:
+  #     - database
+  #     - microservice_search
+  #     - load_balancer
+  #   depends_on: 
+  #     - database
+  #     - microservice_search
+  #     - load_balancer
+  #   environment:
+  #     DATABASE_URL: postgresql://postgres:docker@host.docker.internal:5432/grati
+  #     PORT: 3334
+  # cluster_spark:
+  #   build: .
+  #   container_name: cluster-spark
+  #   ports:
+  #     - 3335:3335
+  #   volumes:
+  #     - .:/usr/backend/clusters/spark
+  #   links:
+  #     - database
+  #     - microservice_search
+  #     - load_balancer
+  #   depends_on: 
+  #     - database
+  #     - microservice_search
+  #     - load_balancer
+  #   environment:
+  #     DATABASE_URL: postgresql://postgres:docker@host.docker.internal:5432/grati
+  #     PORT: 3335
 
 volumes:
   pgdata:
