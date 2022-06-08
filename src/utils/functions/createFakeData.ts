@@ -130,133 +130,385 @@ const otherData = {
   `,
 };
 
-export default async function createFakeData() {
-  await client.user.createMany({
-    data: [
+const roles = [
+  'CTO',
+  'Back-end developer',
+  'Front-end developer',
+  'Full-stack developer',
+  'CEO',
+  'Product Manager',
+  'Human Resources',
+  'UX/UI Designer',
+];
+
+const users = [
+  {
+    id: 1,
+    email: 'erick.capito@hotmail.com',
+    name: 'Erick Nathan',
+    username: 'ericknathan',
+    profile_picture:
+      'http://res.cloudinary.com/grati-works/image/upload/v1653656614/avatars/7800ec4f3d18cf8b3f52f2e781e3fe0b-Frame%201%281%29.png.png',
+    profile_picture_public_id:
+      'avatars/7800ec4f3d18cf8b3f52f2e781e3fe0b-Frame 1(1).png',
+    stripe_customer_id: 'cus_LaJwopd88aW4qn',
+    profile: {
+      ...erickNathanData,
+      points: () => parseInt((Math.random() * 100).toString()),
+      responsibility: () => roles[Math.floor(Math.random() * roles.length)],
+    },
+  },
+  {
+    id: 2,
+    email: 'ga.lucena@gmail.com',
+    name: 'Gabriel Lucena',
+    username: 'gabriel.lucena',
+    password: '$2a$08$9VR70V96u8/.8jtFZytLyuwdcB0As91rOCMGYNFASeIti8fx6.6bi',
+    profile_picture:
+      'https://res.cloudinary.com/grati-works/image/upload/v1653910466/avatars/Rectangle_3535_kkjfjc.png',
+    profile_picture_public_id: 'avatars/Rectangle_3535_kkjfjc.png',
+    profile: {
+      ...gabrielLucenaData,
+      points: () => parseInt((Math.random() * 100).toString()),
+      responsibility: () => roles[Math.floor(Math.random() * roles.length)],
+    },
+  },
+  {
+    id: 3,
+    email: 'cauasinho656@gmail.com',
+    username: 'caua',
+    name: 'Caua Henrique',
+    password: '$2a$08$utdt5BaXEsfoNZtthg7ua.2qGEI7s2FVINObfFSErNZlWjwo70/2q',
+    profile_picture:
+      'http://res.cloudinary.com/grati-works/image/upload/v1651230938/avatars/54bc5f700dd4bf2e6dcdef1ef0abdf51-imgperfilCaua.jpeg.jpg',
+    profile_picture_public_id:
+      'avatars/54bc5f700dd4bf2e6dcdef1ef0abdf51-imgperfilCaua.jpeg',
+    profile: {
+      ...cauaData,
+      points: () => parseInt((Math.random() * 100).toString()),
+      responsibility: () => roles[Math.floor(Math.random() * roles.length)],
+    },
+  },
+  {
+    id: 4,
+    email: 'laura.bernier@yahoo.com',
+    name: 'Laura Bernier',
+    username: 'laura.bernier',
+    password: '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
+    profile_picture:
+      'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3533_kdu6um.png',
+    profile_picture_public_id: 'avatars/Rectangle_3533_kdu6um.png',
+    profile: {
+      ...lauraData,
+      points: () => parseInt((Math.random() * 100).toString()),
+      responsibility: () => roles[Math.floor(Math.random() * roles.length)],
+    },
+  },
+  {
+    id: 5,
+    email: 'marciasanchess@hotmail.com',
+    name: 'Marcia Sanches',
+    username: 'marciasanches',
+    password: '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
+    profile_picture:
+      'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3531_uolsik.png',
+    profile_picture_public_id: 'avatars/Rectangle_3531_uolsik.png',
+    profile: {
+      ...otherData,
+      points: () => parseInt((Math.random() * 100).toString()),
+      responsibility: () => roles[Math.floor(Math.random() * roles.length)],
+    },
+  },
+  {
+    id: 6,
+    email: 'gihermann@outlook.com',
+    name: 'Giovanne Hermann',
+    username: 'giovanne.hermann',
+    password: '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
+    profile_picture:
+      'https://res.cloudinary.com/grati-works/image/upload/v1653910466/avatars/Rectangle_3534_qhuytk.png',
+    profile_picture_public_id: 'avatars/Rectangle_3534_qhuytk.png',
+    profile: {
+      ...otherData,
+      points: () => parseInt((Math.random() * 100).toString()),
+      responsibility: () => roles[Math.floor(Math.random() * roles.length)],
+    },
+  },
+  {
+    id: 7,
+    email: 'gui.bernardo@gmail.com',
+    name: 'Guilherme Bernardo',
+    username: 'guibernardo',
+    password: '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
+    profile_picture:
+      'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3530_mruo4g.png',
+    profile_picture_public_id: 'avatars/Rectangle_3530_mruo4g.png',
+    profile: {
+      ...otherData,
+      points: () => parseInt((Math.random() * 100).toString()),
+      responsibility: () => roles[Math.floor(Math.random() * roles.length)],
+    },
+  },
+  {
+    id: 8,
+    email: 'jeansilva@gmail.com',
+    name: 'Jean Silva',
+    username: 'jean_silva',
+    password: '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
+    profile_picture:
+      'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3532_emolvs.png',
+    profile_picture_public_id: 'avatars/Rectangle_3532_emolvs.png',
+    profile: {
+      ...otherData,
+      points: () => parseInt((Math.random() * 100).toString()),
+      responsibility: () => roles[Math.floor(Math.random() * roles.length)],
+    },
+  },
+  {
+    id: 9,
+    email: 'juliabos@gmail.com',
+    name: 'Julia Bosco',
+    username: 'julia.bosco',
+    password: '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
+    profile_picture:
+      'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3529_gth64i.png',
+    profile_picture_public_id: 'avatars/Rectangle_3529_gth64i.png',
+    profile: {
+      ...otherData,
+      points: () => parseInt((Math.random() * 100).toString()),
+      responsibility: () => roles[Math.floor(Math.random() * roles.length)],
+    },
+  },
+  {
+    id: 10,
+    email: 'vitoria.camposs@terra.com.br',
+    name: 'Vitoria Campos',
+    username: 'vitoria.campos',
+    password: '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
+    profile_picture:
+      'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3528_vapnms.png',
+    profile_picture_public_id: 'avatars/Rectangle_3528_vapnms.png',
+    profile: {
+      ...otherData,
+      points: () => parseInt((Math.random() * 100).toString()),
+      responsibility: () => roles[Math.floor(Math.random() * roles.length)],
+    },
+  },
+];
+
+const organizations = [
+  {
+    id: 1,
+    name: 'EDSOFT IT',
+    owner_id: 2,
+    color: '#006696',
+    users: [
+      ...users.slice(
+        Math.floor(Math.random() * users.length),
+        Math.floor(Math.random() * users.length) + 5,
+      ),
+      users.find(user => user.id === 2),
+    ],
+    groups: [
       {
-        id: 1,
-        email: 'erick.capito@hotmail.com',
-        name: 'Erick Nathan',
-        username: 'ericknathan',
-        activated: true,
-        profile_picture:
-          'http://res.cloudinary.com/grati-works/image/upload/v1653656614/avatars/7800ec4f3d18cf8b3f52f2e781e3fe0b-Frame%201%281%29.png.png',
-        profile_picture_public_id:
-          'avatars/7800ec4f3d18cf8b3f52f2e781e3fe0b-Frame 1(1).png',
-        password:
-          '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
-        stripe_customer_id: 'cus_LaJwopd88aW4qn',
-      },
-      {
-        id: 2,
-        email: 'ga.lucena@gmail.com',
-        name: 'Gabriel Lucena',
-        username: 'gabriel.lucena',
-        activated: true,
-        password:
-          '$2a$08$9VR70V96u8/.8jtFZytLyuwdcB0As91rOCMGYNFASeIti8fx6.6bi',
-        profile_picture:
-          'https://res.cloudinary.com/grati-works/image/upload/v1653910466/avatars/Rectangle_3535_kkjfjc.png',
-        profile_picture_public_id: 'avatars/Rectangle_3535_kkjfjc.png',
-      },
-      {
-        id: 3,
-        email: 'cauasinho656@gmail.com',
-        username: 'caua',
-        name: 'Caua Henrique',
-        password:
-          '$2a$08$utdt5BaXEsfoNZtthg7ua.2qGEI7s2FVINObfFSErNZlWjwo70/2q',
-        activated: true,
-        profile_picture:
-          'http://res.cloudinary.com/grati-works/image/upload/v1651230938/avatars/54bc5f700dd4bf2e6dcdef1ef0abdf51-imgperfilCaua.jpeg.jpg',
-        profile_picture_public_id:
-          'avatars/54bc5f700dd4bf2e6dcdef1ef0abdf51-imgperfilCaua.jpeg',
-      },
-      {
-        id: 4,
-        email: 'laura.bernier@yahoo.com',
-        name: 'Laura Bernier',
-        username: 'laura.bernier',
-        activated: true,
-        password:
-          '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
-        profile_picture:
-          'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3533_kdu6um.png',
-        profile_picture_public_id: 'avatars/Rectangle_3533_kdu6um.png',
-      },
-      {
-        id: 5,
-        email: 'marciasanchess@hotmail.com',
-        name: 'Marcia Sanches',
-        username: 'marciasanches',
-        activated: true,
-        password:
-          '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
-        profile_picture:
-          'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3531_uolsik.png',
-        profile_picture_public_id: 'avatars/Rectangle_3531_uolsik.png',
-      },
-      {
-        id: 6,
-        email: 'gihermann@outlook.com',
-        name: 'Giovanne Hermann',
-        username: 'giovanne.hermann',
-        activated: true,
-        password:
-          '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
-        profile_picture:
-          'https://res.cloudinary.com/grati-works/image/upload/v1653910466/avatars/Rectangle_3534_qhuytk.png',
-        profile_picture_public_id: 'avatars/Rectangle_3534_qhuytk.png',
-      },
-      {
-        id: 7,
-        email: 'gui.bernardo@gmail.com',
-        name: 'Guilherme Bernardo',
-        username: 'guibernardo',
-        activated: true,
-        password:
-          '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
-        profile_picture:
-          'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3530_mruo4g.png',
-        profile_picture_public_id: 'avatars/Rectangle_3530_mruo4g.png',
-      },
-      {
-        id: 8,
-        email: 'jeansilva@gmail.com',
-        name: 'Jean Silva',
-        username: 'jean_silva',
-        activated: true,
-        password:
-          '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
-        profile_picture:
-          'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3532_emolvs.png',
-        profile_picture_public_id: 'avatars/Rectangle_3532_emolvs.png',
-      },
-      {
-        id: 9,
-        email: 'juliabos@gmail.com',
-        name: 'Julia Bosco',
-        username: 'julia.bosco',
-        activated: true,
-        password:
-          '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
-        profile_picture:
-          'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3529_gth64i.png',
-        profile_picture_public_id: 'avatars/Rectangle_3529_gth64i.png',
-      },
-      {
-        id: 10,
-        email: 'vitoria.camposs@terra.com.br',
-        name: 'Vitoria Campos',
-        username: 'vitoria.campos',
-        activated: true,
-        password:
-          '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
-        profile_picture:
-          'https://res.cloudinary.com/grati-works/image/upload/v1653910465/avatars/Rectangle_3528_vapnms.png',
-        profile_picture_public_id: 'avatars/Rectangle_3528_vapnms.png',
+        name: 'Squad Earth',
+        color: '#97D5FA',
       },
     ],
+    randomNumber: Math.floor(Math.random() * 1000),
+  },
+  {
+    id: 2,
+    name: 'Fortbras',
+    owner_id: 3,
+    color: '#1455a6',
+    users: [
+      ...users.slice(
+        Math.floor(Math.random() * users.length),
+        Math.floor(Math.random() * users.length) + 5,
+      ),
+      users.find(user => user.id === 3),
+    ],
+    groups: [
+      {
+        name: 'Administração',
+        color: '#066c8f',
+      },
+      {
+        name: 'Squad Turtle',
+        color: '#0A9A8f',
+      },
+      {
+        name: 'Squad Board',
+        color: '#7b5444',
+      },
+    ],
+    randomNumber: Math.floor(Math.random() * 1000),
+  },
+  {
+    id: 3,
+    name: 'Pagtel',
+    owner_id: 4,
+    color: '#62aaf1',
+    users: [
+      ...users.slice(
+        Math.floor(Math.random() * users.length),
+        Math.floor(Math.random() * users.length) + 5,
+      ),
+      users.find(user => user.id === 4),
+    ],
+    groups: [
+      {
+        name: 'Squad Riders',
+        color: '#E62C67',
+      },
+      {
+        name: 'Squad Ignite',
+        color: '#000000',
+      },
+    ],
+    randomNumber: Math.floor(Math.random() * 1000),
+  },
+  {
+    id: 4,
+    name: 'Tailored Resources',
+    owner_id: 5,
+    color: '#00bfd8',
+    users: [
+      ...users.slice(
+        Math.floor(Math.random() * users.length),
+        Math.floor(Math.random() * users.length) + 5,
+      ),
+      users.find(user => user.id === 5),
+    ],
+    groups: [
+      {
+        name: 'Squad Fear',
+        color: '#31ED86',
+      },
+    ],
+    randomNumber: Math.floor(Math.random() * 1000),
+  },
+  {
+    id: 5,
+    name: 'Warren',
+    owner_id: 1,
+    color: '#e02b57',
+    users: [
+      ...users.slice(
+        Math.floor(Math.random() * users.length),
+        Math.floor(Math.random() * users.length) + 5,
+      ),
+      users.find(user => user.id === 1),
+    ],
+    groups: [
+      {
+        name: 'Squad Plant',
+        color: '#A6C181',
+      },
+      {
+        name: 'Squad Fine',
+        color: '#0187F4',
+      },
+    ],
+    randomNumber: Math.floor(Math.random() * 1000),
+  },
+];
+
+const messages = [
+  {
+    message:
+      'Nos dá autonomia pra tomada de decisões, super atencioso e quer ver a melhor versão de nós mesmos, excelente líder :)',
+    tags: ['Resiliência'],
+    attachment:
+      'https://media3.giphy.com/media/3EuAsjZDUJefK/giphy.gif?cid=ecf05e4773cl9c96lbe602h7bi9ptqhzvdqavqr36i75l8uu&rid=giphy.gif&ct=g',
+  },
+  {
+    message:
+      'Entrou no time poucos dias atrás, com sua entrada o fluxo de edições e gravações ficaram muito melhor, além do ar de profissionalismo em cada vídeo. Acredito que conosco no time conseguimos atingir as metas de vídeos e gravação.',
+    tags: ['Reciprocidade'],
+    attachment:
+      'https://media2.giphy.com/media/yoJC2El7xJkYCadlWE/giphy.gif?cid=ecf05e47dry4nctr4kquhwvvhhoj4q7qzvpqx4ec6tasz7rn&rid=giphy.gif&ct=g',
+  },
+  {
+    message:
+      'Neste semestre tivemos o privilégio de ter mais um projeto concluído com sucesso, graças ao nosso gestor. Mesmo nossa equipe passando por dificuldades e problemas rotineiros, esteve ao nosso lado para nos auxiliar durante todo o trajeto.',
+    tags: ['Confiança'],
+    attachment: 'https://media4.giphy.com/media/WoRFcCl7cINtZcz7dC/giphy.webp',
+  },
+  {
+    message:
+      'Desejo que o seu retorno a empresa seja benéfico para a empresa. Espero que tenha se recuperado da sua cirurgia de catarata. E mãos a obra para mais um projeto.',
+    tags: ['Excelência'],
+    attachment:
+      'https://media1.giphy.com/media/3oz8xAFtqoOUUrsh7W/200w.webp?cid=ecf05e47xu0z8aoe028olz99q22ywziu4cyx9bjv9dpbx3bc&rid=200w.webp&ct=g',
+  },
+  {
+    message:
+      'O seu afastamento deixara nossa equipe desfavorecida pois sua presença e habilidades técnicas são incríveis e de eminentemente importância para o funcionamento da empresa.',
+    tags: ['Consideração'],
+    attachment:
+      'https://media1.giphy.com/media/ISOckXUybVfQ4/giphy.gif?cid=ecf05e47fz6dslru6tge6hx90pqtvxzfn9pcw0thlqvs17oz&rid=giphy.gif&ct=g',
+  },
+  {
+    message:
+      'O lanche que você forneceu para a pausa de ontem foi excelente. Todos nós amamos os bolinhos e a limonada Suíça que sua mãe preparou.',
+    tags: ['Afeto'],
+    attachment:
+      'https://media1.giphy.com/media/l2YWCPLrCIaNc9QT6/200.webp?cid=ecf05e47xu0z8aoe028olz99q22ywziu4cyx9bjv9dpbx3bc&rid=200.webp&ct=g',
+  },
+  {
+    message:
+      'Quero agradecer a todos vocês pela festa surpresa que preparam para mim, de verdade eu não esperava, e sou imensamente agradecida pelo carinho e afeto que tiverem e tem por mim.',
+    tags: ['Carinho'],
+    attachment: 'https://media3.giphy.com/media/9DyRSxpjO3sc2iXds2/200.webp',
+  },
+  {
+    message:
+      'Obrigado por todos os que estão aqui. Eu tenho muito orgulho de ter conseguido conectar com vocês. Eles são muito importantes para o nosso sucesso.',
+    tags: ['Agradecimento'],
+    attachment:
+      'https://media2.giphy.com/media/l4HodBpDmoMA5p9bG/200w.webp?cid=ecf05e47l943ousjz1cgt43o97hfty89mr22uicktw5knhr1&rid=200w.webp&ct=g',
+  },
+  {
+    message:
+      'Cinco adjetivos pra descrever ainda é muito pouco. Que pessoa incrível, com diversos tipos de inteligência, com um baita coração. O impacto que faz em você é só um pouquinho do que entrega pro mundo.',
+    tags: ['Impacto'],
+    attachment: 'https://media2.giphy.com/media/51msWHqr8drws/200w.webp',
+  },
+  {
+    message:
+      'Manda muito na UI! Muito criativo, sempre traz novas ideias e as telas ficam impecáveis. Ele faz até parecer fácil (mas não é haha)',
+    tags: ['Profissionalismo'],
+    attachment:
+      'https://media4.giphy.com/media/MaHrgxlveq1yMVlr24/200.webp?cid=ecf05e47uj42w6wd95ykyw3ben8ddmgr1lx9ykz8jwk3fcbi&rid=200.webp&ct=g',
+  },
+];
+
+const reactions = ['thumbsup', 'mage', 'grin', 'heart'];
+
+export default async function createFakeData() {
+  await client.user.createMany({
+    data: users.map(
+      ({
+        id,
+        email,
+        name,
+        username,
+        profile_picture,
+        profile_picture_public_id,
+      }) => ({
+        id,
+        email,
+        name,
+        username,
+        password:
+          '$2a$08$meG9k3g7/P.kSfAowZofauyTt95PKghvRJkUfcpmdkYlPBdhutu4u',
+        activated: true,
+        profile_picture,
+        profile_picture_public_id,
+      }),
+    ),
   });
 
   try {
@@ -280,311 +532,140 @@ export default async function createFakeData() {
     // eslint-disable-next-line no-empty
   } catch (error) {}
 
-  await client.organization.createMany({
-    data: [
-      {
-        id: 1,
-        name: 'EDSOFT IT',
-        owner_id: 2,
-        color: '#006696',
-        mode_id: 1,
-      },
-      {
-        id: 2,
-        name: 'Fortbras',
-        owner_id: 3,
-        color: '#1455a6',
-        mode_id: 1,
-      },
-      {
-        id: 3,
-        name: 'Pagtel',
-        owner_id: 4,
-        color: '#62aaf1',
-        mode_id: 1,
-      },
-      {
-        id: 4,
-        name: 'Tailored Resources',
-        owner_id: 5,
-        color: '#00bfd8',
-        mode_id: 1,
-      },
-      {
-        id: 5,
-        name: 'Warren',
-        owner_id: 6,
-        color: '#e02b57',
-        mode_id: 1,
-      },
-    ],
-  });
-  await client.profile.createMany({
-    data: [
-      {
-        id: 1,
-        organization_id: 1,
-        user_id: 1,
-        ...erickNathanData,
-        points: 120,
-        responsibility: 'CTO',
-      },
-      {
-        id: 8,
-        organization_id: 2,
-        user_id: 1,
-        ...erickNathanData,
-        points: 120,
-        responsibility: 'DevRel',
-      },
-      {
-        id: 9,
-        organization_id: 3,
-        user_id: 1,
-        ...erickNathanData,
-        points: 120,
-        responsibility: 'Recusos Humanos',
-      },
-      {
-        id: 10,
-        organization_id: 4,
-        user_id: 1,
-        ...erickNathanData,
-        points: 120,
-        responsibility: 'UI/UX Designer',
-      },
-      {
-        id: 2,
-        organization_id: 5,
-        user_id: 1,
-        ...erickNathanData,
-        points: 0,
-        responsibility: 'Back-end Developer',
-      },
-      {
-        id: 3,
-        organization_id: 2,
-        user_id: 2,
-        ...gabrielLucenaData,
-        points: 0,
-        responsibility: 'CEO',
-      },
-      {
-        id: 4,
-        organization_id: 2,
-        user_id: 3,
-        ...cauaData,
-        points: 0,
-        responsibility: 'Front-end developer',
-      },
-      {
-        id: 5,
-        organization_id: 2,
-        user_id: 4,
-        ...lauraData,
-        points: 0,
-        responsibility: 'DBA',
-      },
-      {
-        id: 6,
-        organization_id: 2,
-        user_id: 5,
-        ...otherData,
-      },
-    ],
-  });
-  await client.profile.update({
-    where: {
-      id: 1,
-    },
-    data: {
-      vinculed_accounts: {
-        createMany: {
-          data: [
-            {
-              id: 1,
-              account: 'ericknathan',
-              provider: 'github',
-            },
-            {
-              id: 2,
-              account: 'ericknathan',
-              provider: 'linkedin',
-            },
-            {
-              id: 3,
-              account: 'ericknathan',
-              provider: 'dribbble',
-            },
-          ],
-        },
-      },
-    },
-  });
+  for (const organization of organizations) {
+    // console.log(
+    //   organization.groups.map(
+    //     (group, index) =>
+    //       Math.round(organization.id * 2) + index + organization.randomNumber,
+    //   ),
+    // );
+    // console.log(
+    //   organization.users.map(
+    //     user =>
+    //       Math.round(organization.id * 2) + user.id + organization.randomNumber,
+    //   ),
+    // );
 
-  await client.group.createMany({
-    data: [
-      {
-        id: 1,
-        name: 'Administração',
-        organization_id: 2,
-        color: '#066c8f',
+    await client.organization.create({
+      data: {
+        id: organization.id,
+        name: organization.name,
+        owner_id: organization.owner_id,
+        color: organization.color,
+        mode_id: 1,
+        users: {
+          createMany: {
+            data: organization.users.map(user => ({
+              id:
+                Math.round(organization.id * 2) +
+                user.id +
+                organization.randomNumber,
+              user_id: user.id,
+              description: user.profile.description,
+              graduations: user.profile.graduations,
+              skills: user.profile.graduations,
+              responsibility: user.profile.responsibility(),
+              points: user.profile.points(),
+            })),
+            skipDuplicates: true,
+          },
+        },
+        groups: {
+          createMany: {
+            data: organization.groups.map((group, index) => ({
+              id:
+                Math.round(organization.id * 2) +
+                index +
+                organization.randomNumber,
+              name: group.name,
+              color: group.color,
+            })),
+            skipDuplicates: true,
+          },
+        },
       },
-      {
-        id: 2,
-        name: 'Squad Turtle',
-        organization_id: 2,
-        color: '#0A9A8f',
-      },
-      {
-        id: 3,
-        name: 'Squad Board',
-        organization_id: 2,
-        color: '#7b5444',
-      },
-      {
-        id: 4,
-        name: 'Squad Riders',
-        organization_id: 1,
-        color: '#E62C67',
-      },
-      {
-        id: 5,
-        name: 'Squad Earth',
-        organization_id: 3,
-        color: '#97D5FA',
-      },
-      {
-        id: 6,
-        name: 'Squad Fear',
-        organization_id: 4,
-        color: '#31ED86',
-      },
-      {
-        id: 7,
-        name: 'Squad Plant',
-        organization_id: 5,
-        color: '#A6C181',
-      },
-      {
-        id: 8,
-        name: 'Squad Fine',
-        organization_id: 5,
-        color: '#0187F4',
-      },
-      {
-        id: 9,
-        name: 'Squad Ignite',
-        organization_id: 1,
-        color: '#000000',
-      },
-    ],
-  });
-  await client.feedback.create({
-    data: {
-      organization_id: 2,
-      attachment:
-        'https://media3.giphy.com/media/3EuAsjZDUJefK/giphy.gif?cid=ecf05e4773cl9c96lbe602h7bi9ptqhzvdqavqr36i75l8uu&rid=giphy.gif&ct=g',
-      created_at: '2022-05-29T00:00:00.000Z',
-      deleted_by: null,
-      notifications: {
-        createMany: {
-          data: [
+    });
+
+    console.log('Created organization: ', organization.name);
+  }
+
+  messages.map(async message => {
+    console.log('Creating message: ', message.tags[0]);
+    const organization =
+      organizations[Math.floor(Math.random() * organizations.length)];
+    const randomReceiver =
+      organization.users[Math.floor(Math.random() * organization.users.length)];
+    const randomSender =
+      organization.users[Math.floor(Math.random() * organization.users.length)];
+
+    if (!randomSender) {
+      return;
+    }
+
+    const randomReceiverProfileId =
+      Math.round(organization.id * 2) +
+      randomReceiver.id +
+      organization.randomNumber;
+    const randomSenderProfileId =
+      Math.round(organization.id * 2) +
+      randomSender.id +
+      organization.randomNumber;
+
+    await client.feedback.create({
+      data: {
+        organization_id: organization.id,
+        attachment: message.attachment,
+        created_at: '2022-05-29T00:00:00.000Z',
+        deleted_by: null,
+        notifications: {
+          create: {
+            user: {
+              connect: {
+                id: randomReceiver.id,
+              },
+            },
+          },
+        },
+        reactions: {
+          createMany: {
+            data: [
+              {
+                emoji: reactions[Math.floor(Math.random() * reactions.length)],
+                profile_id: randomSenderProfileId,
+              },
+            ],
+          },
+        },
+        message: message.message,
+        emoji: reactions[Math.floor(Math.random() * reactions.length)],
+        groups: {
+          connect: [
             {
-              user_id: 1,
+              id:
+                Math.round(organization.id * 2) +
+                Math.floor(Math.random() * organization.groups.length) +
+                organization.randomNumber,
             },
           ],
         },
-      },
-      reactions: {
-        createMany: {
-          data: [
-            {
-              emoji: 'thumbsup',
-              profile_id: 1,
-            },
-          ],
-        },
-      },
-      message:
-        'Nos dá autonomia pra tomada de decisões, super atencioso e quer ver a melhor versão de nós mesmos, excelente líder :)',
-      emoji: 'mage',
-      groups: {
-        connect: [
-          {
-            id: 2,
+        receivers: {
+          connect: {
+            id: randomReceiverProfileId,
           },
-        ],
-      },
-      receivers: {
-        connect: [
-          {
-            id: 1,
-          },
-        ],
-      },
-      tags: {
-        create: {
-          name: 'Resiliência',
         },
-      },
-      sender_id: 4,
-    },
-  });
-  await client.feedback.create({
-    data: {
-      organization_id: 2,
-      attachment:
-        'https://media2.giphy.com/media/yoJC2El7xJkYCadlWE/giphy.gif?cid=ecf05e47dry4nctr4kquhwvvhhoj4q7qzvpqx4ec6tasz7rn&rid=giphy.gif&ct=g',
-      created_at: '2022-05-30T00:00:00.000Z',
-      deleted_by: null,
-      notifications: {
-        createMany: {
-          data: [
-            {
-              user_id: 5,
+        tags: {
+          connectOrCreate: {
+            create: {
+              name: message.tags[0],
             },
-          ],
-        },
-      },
-      reactions: {
-        createMany: {
-          data: [
-            {
-              emoji: 'mage',
-              profile_id: 2,
+            where: {
+              name: message.tags[0],
             },
-            {
-              emoji: 'mage',
-              profile_id: 3,
-            },
-          ],
-        },
-      },
-      message:
-        'Laura entrou no time poucos dias atrás, com a entrada dela o fluxo de edições e gravações ficaram muito melhor, além do ar de profissionalismo em cada vídeo. Acredito que com ela no time conseguimos atingir as metas de vídeos e gravação.',
-      emoji: 'thumbsup',
-      groups: {
-        connect: [
-          {
-            id: 2,
           },
-        ],
-      },
-      receivers: {
-        connect: [
-          {
-            id: 5,
-          },
-        ],
-      },
-      tags: {
-        create: {
-          name: 'Profissionalismo',
         },
+        sender_id: randomSenderProfileId,
       },
-      sender_id: 2,
-    },
+    });
   });
 
   const profiles = await client.profile.findMany({
